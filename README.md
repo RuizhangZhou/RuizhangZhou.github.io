@@ -1,6 +1,7 @@
 # Ruizhang Zhou — Resume + Personal Site (Starter)
 
 This repo contains:
+
 - `resume/` — Typst sources for **English** and **German** CVs.
 - `index.html` — a minimal homepage linking to the generated PDFs.
 - GitHub Actions workflow to compile PDFs and publish everything to **GitHub Pages**.
@@ -23,4 +24,3 @@ This repo contains:
 - Prefer concise bullet points with **action → impact**.
 - Keep each CV **1 page** if possible.
 - For a GUI builder alternative, try **Reactive Resume** or **FlowCV** and then drop exported PDFs into the repo.
-

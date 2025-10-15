@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ruizhang Zhou — Personal Site</title>
+  <style>
+    body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin:0; color:#111;}
+    header{padding:48px 20px; background:#f6f7fb;}
+    .wrap{max-width:920px;margin:0 auto;}
+    h1{margin:0 0 6px 0; font-size:32px;}
+    h2{font-size:20px; margin-top:32px;}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+    a{color:#0a66c2; text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    .card{border:1px solid #e7e7e7; border-radius:14px; padding:16px; background:white; box-shadow:0 1px 2px rgba(0,0,0,.04);}
+    footer{padding:24px 20px; color:#666;}
+    .pill{display:inline-block; padding:6px 10px; border-radius:999px; background:#eef3f8; font-size:12px; margin-right:6px;}
+    .btn{display:inline-block; padding:10px 14px; border-radius:10px; background:#0a66c2; color:white; font-weight:600;}
+    .btn:visited{color:white;}
+    .muted{color:#666; font-size:14px;}
+    ul{margin-top:8px;}
+    code{background:#f3f3f3; padding:2px 6px; border-radius:6px;}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Ruizhang Zhou</h1>
+      <p class="muted">Full‑stack AI Platform Engineer — streaming chat • token & cost governance • compliance • reliability</p>
+      <p>
+        <span class="pill">C#/.NET</span>
+        <span class="pill">Vue 3</span>
+        <span class="pill">Semantic Kernel</span>
+        <span class="pill">Azure AI Inference</span>
+        <span class="pill">OpenAI .NET</span>
+        <span class="pill">MongoDB CSFLE</span>
+        <span class="pill">SignalR</span>
+        <span class="pill">Nomad</span>
+      </p>
+      <p>
+        <a class="btn" href="./Resume_EN.pdf">Download CV (EN, PDF)</a>
+        &nbsp;&nbsp;
+        <a class="btn" href="./Lebenslauf_DE.pdf">Download CV (DE, PDF)</a>
+      </p>
+      <p class="muted">Email: ruizhang.zhou@mail.com · GitHub: <a href="https://github.com/RuizhangZhou">RuizhangZhou</a> · LinkedIn: <a href="https://www.linkedin.com/in/ruizhang-zhou/">ruizhang-zhou</a></p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <section class="card">
+        <h2>Latest Role</h2>
+        <p><strong>Software Engineer (AI Platform)</strong>, KIconnect — RWTH IT Center/PDSLLabs, Aachen (09/2024 – Present)</p>
+        <ul>
+          <li>Built multi‑tenant LLM assistant with streaming, token/cost tracking, document ingestion, SSO.</li>
+          <li>Unified tokenization (text/vision) across OpenAI, Llama 3, Gemma 3, Mistral, Qwen, DeepSeek.</li>
+          <li>Admin UI (Vue 3 + Inertia), model/deployment management, quotas, reasoning effort.</li>
+          <li>Security: Shibboleth SSO, MongoDB CSFLE, EU data region; reliability with SignalR + Polly.</li>
+        </ul>
+      </section>
+      <section class="card">
+        <h2>Highlighted Tech</h2>
+        <p>C#/.NET 9, ASP.NET Core, Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, Vue 3, Inertia, Vite, MongoDB (CSFLE), SignalR, Traefik, Nomad, Hangfire.</p>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>About</h2>
+      <p>RWTH Aachen M.Sc. & B.Sc. Informatik; focus on production‑grade AI assistants with strong token accounting and compliance.</p>
+      <p class="muted">This page auto‑publishes with GitHub Pages. Edit Typst sources in <code>/resume</code>; PDFs are rebuilt by GitHub Actions.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">© Ruizhang Zhou</div>
+  </footer>
+</body>
+</html>

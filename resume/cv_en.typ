@@ -3,19 +3,19 @@
 #header(
   "Ruizhang Zhou",
   "Full-stack AI Platform Engineer - Streaming chat / Token & cost governance / Multi-tenant security / SSO",
-  "Aachen | ruizhang.zhou@mail.com | github.com/RuizhangZhou | linkedin.com/in/ruizhang-zhou/"
+  "#link(\"mailto:ruizhang.zhou@mail.com\")[ruizhang.zhou@mail.com] | #link(\"https://ruizhangzhou.github.io\")[ruizhangzhou.github.io] | #link(\"https://github.com/RuizhangZhou\")[github.com/RuizhangZhou] | #link(\"https://linkedin.com/in/ruizhang-zhou/\")[linkedin.com/in/ruizhang-zhou/]"
 )
 
 #section-title("Summary")
 Building a secure, multi-tenant LLM assistant with streaming, cost/token tracking, document ingestion, and SSO. Focus on robust text and vision tokenization, admin UI, and operational reliability.
 
 #section-title("Experience")
-*Software Engineer (AI Platform), KIconnect - RWTH IT Center / PDSLLabs, Aachen* \
+*Software Engineer (AI Platform), KIconnect - RWTH IT Center* \
 09/2024 - Present
 
 - Chat pipeline (ASP.NET Core 9 + Semantic Kernel + Azure AI Inference/OpenAI): streaming responses, title generation, strict role alternation, content-filter handling (reasoning / think tags).
 - Tokenization and costing: unified token counting (OpenAI, Llama 3, Gemma 3, Mistral, Qwen, DeepSeek); Python.NET bridge; image tokenization for VLMs; detailed cost events including cached tokens; reporting with heatmaps and metrics.
-- Admin UI (Vue 3 + Inertia): model and deployment management, parameters (temperature / top-p / penalties), reasoning effort (o1 / o3-mini), system prompts, quotas; soft-delete and restore; auto-deactivation on credential removal.
+- Admin UI (Vue 3 + Inertia): model and deployment management, parameters (temperature / top-p / penalties), system prompts, quotas; soft-delete and restore; auto-deactivation on credential removal.
 - Documents and context: upload and extraction via Microsoft KernelMemory; per-deployment and per-model token guardrails; on-demand inclusion of document text and images; daily cleanup with Hangfire.
 - Security and compliance: Shibboleth SSO; MongoDB CSFLE (local master key) for API keys; EU data-processing region; tenant and role checks.
 - Realtime and resilience: SignalR broadcasting (live UI), resilient HTTP via Polly, NLog; DevOps context with Traefik and Nomad; embedded Python runtime setup.

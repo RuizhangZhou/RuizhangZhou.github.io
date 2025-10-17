@@ -30,4 +30,5 @@ Building a secure, multi-tenant LLM assistant with streaming, cost/token trackin
 - Research Assistant - RWTH Chair of DBIS (2023.07 - 2024.03): LLM / GNN / Knowledge Graph research; GPU cluster experiments; LLaMA / Ollama chat platform.
 
 #section-title("Tech Stack")
-C# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.
+C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.
+

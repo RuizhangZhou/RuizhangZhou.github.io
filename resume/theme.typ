@@ -1,4 +1,3 @@
-
 #let section-title(title) = [
   #set text(weight: "bold", size: 12pt)
   #title
@@ -6,7 +5,7 @@
 ]
 
 #let item(text) = [
-  • #text
+  - #text
 ]
 
 #let header(name, subtitle, contacts) = [
@@ -18,4 +17,4 @@
 ]
 
 #set page(margin: 1.6cm)
-#set text(font: "Arial", size: 10pt)
+#set text(size: 10pt)

@@ -18,3 +18,4 @@
 
 #set page(margin: 1.6cm)
 #set text(size: 10pt)
+#show link: it => underline(text(fill: rgb("#0a66c2"), it))

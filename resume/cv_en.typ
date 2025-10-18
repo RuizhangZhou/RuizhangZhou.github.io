@@ -3,11 +3,8 @@
 #header(
   "Ruizhang Zhou",
   "Full-stack AI Platform Engineer - Streaming chat / Token & cost governance / Multi-tenant security / SSO",
-  [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou@mail.com] | #link("https://ruizhangzhou.github.io")[ruizhangzhou.github.io] | #link("https://github.com/RuizhangZhou")[github.com/RuizhangZhou] | #link("https://linkedin.com/in/ruizhang-zhou/")[linkedin.com/in/ruizhang-zhou/]]
+  [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou\@mail.com] | #link("https://github.com/RuizhangZhou")[GitHub] | #link("https://linkedin.com/in/ruizhang-zhou/")[LinkedIn] | #link("https://ruizhangzhou.github.io")[Website]]
 )
-
-#section-title("Summary")
-Building a secure, multi-tenant LLM assistant with streaming, cost/token tracking, document ingestion, and SSO. Focus on robust text and vision tokenization, admin UI, and operational reliability.
 
 #section-title("Experience")
 *Software Engineer (AI Platform), KIconnect - RWTH IT Center* \

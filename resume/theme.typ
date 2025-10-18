@@ -13,6 +13,7 @@
   #name \
   #set text(size: 10pt, weight: "regular")
   #subtitle \
+  #show link: it => underline(text(fill: rgb("#0a66c2"), it))
   #contacts
 ]
 

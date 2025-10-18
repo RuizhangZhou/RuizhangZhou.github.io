@@ -3,11 +3,8 @@
 #header(
   "Ruizhang Zhou",
   "Full-stack KI-Plattform-Ingenieur - Streaming-Chat / Token- und Kosten-Governance / Mandantensicherheit / SSO",
-  [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou@mail.com] | #link("https://ruizhangzhou.github.io")[ruizhangzhou.github.io] | #link("https://github.com/RuizhangZhou")[github.com/RuizhangZhou] | #link("https://linkedin.com/in/ruizhang-zhou/")[linkedin.com/in/ruizhang-zhou/]]
+  [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou\@mail.com] | #link("https://github.com/RuizhangZhou")[GitHub] | #link("https://linkedin.com/in/ruizhang-zhou/")[LinkedIn] | #link("https://ruizhangzhou.github.io")[Website]]
 )
-
-#section-title("Kurzprofil")
-Entwicklung einer sicheren, mandantenfähigen LLM-Plattform mit Streaming, Kosten- und Tokentracking, Dokumenteinbindung und SSO. Fokus auf robuste Text- und Vision-Tokenisierung, Admin-Oberfläche und zuverlässigen Betrieb.
 
 #section-title("Erfahrung")
 *Software Engineer (AI Platform), KIconnect - RWTH IT Center* \

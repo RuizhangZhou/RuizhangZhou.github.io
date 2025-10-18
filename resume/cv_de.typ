@@ -3,7 +3,7 @@
 #header(
   "Ruizhang Zhou",
   "Full-stack KI-Plattform-Ingenieur - Streaming-Chat / Token- und Kosten-Governance / Mandantensicherheit / SSO",
-  "#link(\"mailto:ruizhang.zhou@mail.com\")[ruizhang.zhou@mail.com] | #link(\"https://ruizhangzhou.github.io\")[ruizhangzhou.github.io] | #link(\"https://github.com/RuizhangZhou\")[github.com/RuizhangZhou] | #link(\"https://linkedin.com/in/ruizhang-zhou/\")[linkedin.com/in/ruizhang-zhou/]"
+  [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou@mail.com] | #link("https://ruizhangzhou.github.io")[ruizhangzhou.github.io] | #link("https://github.com/RuizhangZhou")[github.com/RuizhangZhou] | #link("https://linkedin.com/in/ruizhang-zhou/")[linkedin.com/in/ruizhang-zhou/]]
 )
 
 #section-title("Kurzprofil")

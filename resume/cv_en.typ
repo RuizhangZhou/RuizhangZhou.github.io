@@ -3,7 +3,7 @@
 #header(
   "Ruizhang Zhou",
   "Full-stack AI Platform Engineer - Streaming chat / Token & cost governance / Multi-tenant security / SSO",
-  "#link(\"mailto:ruizhang.zhou@mail.com\")[ruizhang.zhou@mail.com] | #link(\"https://ruizhangzhou.github.io\")[ruizhangzhou.github.io] | #link(\"https://github.com/RuizhangZhou\")[github.com/RuizhangZhou] | #link(\"https://linkedin.com/in/ruizhang-zhou/\")[linkedin.com/in/ruizhang-zhou/]"
+  [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou@mail.com] | #link("https://ruizhangzhou.github.io")[ruizhangzhou.github.io] | #link("https://github.com/RuizhangZhou")[github.com/RuizhangZhou] | #link("https://linkedin.com/in/ruizhang-zhou/")[linkedin.com/in/ruizhang-zhou/]]
 )
 
 #section-title("Summary")

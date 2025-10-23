@@ -1,4 +1,4 @@
-# Ruizhang Zhou — Resume + Personal Site (Starter)
+# Resume + Personal Site (Starter)
 
 This repo contains:
 
@@ -8,7 +8,7 @@ This repo contains:
 
 ## How to use
 
-1. Ensure your repository is named `<username>.github.io` (for you: `RuizhangZhou.github.io`) and **Pages** is enabled with **GitHub Actions** as the build source.
+1. Ensure your repository is named `<username>.github.io` (for me: `RuizhangZhou.github.io`) and **Pages** is enabled with **GitHub Actions** as the build source.
 2. Commit these files and push to `main` (or `master`).
 3. The workflow will install Typst, compile `resume/cv_en.typ` → `Resume_EN.pdf` and `resume/cv_de.typ` → `Lebenslauf_DE.pdf`, and publish the whole repo as a site.
 4. Edit the Typst files any time; pushing updates will rebuild PDFs automatically.

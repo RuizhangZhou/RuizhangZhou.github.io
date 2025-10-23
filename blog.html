@@ -297,24 +297,30 @@
               <p style="color: #666; margin-bottom: 20px;">
                 Comments are powered by GitHub Discussions. Sign in with your GitHub account to leave a comment.
               </p>
-              <script src="https://giscus.app/client.js"
-                data-repo="${REPO_OWNER}/${REPO_NAME}"
-                data-repo-id="R_kgDOOZBw_Q"
-                data-category="General"
-                data-category-id="DIC_kwDOOZBw_c4Cw-HI"
-                data-mapping="specific"
-                data-term="${issue.number}"
-                data-strict="0"
-                data-reactions-enabled="1"
-                data-emit-metadata="0"
-                data-input-position="top"
-                data-theme="light"
-                data-lang="en"
-                crossorigin="anonymous"
-                async>
-              <\/script>
+              <div id="giscus-container"></div>
             </div>
           `;
+
+          // Load Giscus script dynamically (innerHTML doesn't execute scripts)
+          const script = document.createElement('script');
+          script.src = 'https://giscus.app/client.js';
+          script.setAttribute('data-repo', `${REPO_OWNER}/${REPO_NAME}`);
+          script.setAttribute('data-repo-id', 'R_kgDOOZBw_Q');
+          script.setAttribute('data-category', 'General');
+          script.setAttribute('data-category-id', 'DIC_kwDOOZBw_c4Cw-HI');
+          script.setAttribute('data-mapping', 'specific');
+          script.setAttribute('data-term', issue.number.toString());
+          script.setAttribute('data-strict', '0');
+          script.setAttribute('data-reactions-enabled', '1');
+          script.setAttribute('data-emit-metadata', '0');
+          script.setAttribute('data-input-position', 'top');
+          script.setAttribute('data-theme', 'light');
+          script.setAttribute('data-lang', 'en');
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+
+          // Append script to the giscus container
+          document.getElementById('giscus-container').appendChild(script);
         } catch (error) {
           main.innerHTML = `
             <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>

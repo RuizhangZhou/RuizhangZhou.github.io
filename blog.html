@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog - Ruizhang Zhou</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        color: #111;
+        background: #f6f7fb;
+      }
+      header {
+        padding: 24px 20px;
+        background: white;
+        border-bottom: 1px solid #e7e7e7;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .wrap {
+        max-width: 920px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0;
+        font-size: 28px;
+      }
+      .nav {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      a {
+        color: #0a66c2;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .posts {
+        padding: 32px 20px;
+      }
+      .post-card {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        transition: box-shadow 0.2s;
+        cursor: pointer;
+      }
+      .post-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      .post-title {
+        font-size: 24px;
+        margin: 0 0 8px 0;
+        font-weight: 600;
+      }
+      .post-meta {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      .post-excerpt {
+        color: #333;
+        line-height: 1.6;
+      }
+      .labels {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .label {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 500;
+      }
+      .loading {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+      }
+      .error {
+        text-align: center;
+        padding: 60px 20px;
+        color: #d32f2f;
+      }
+      .empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: #666;
+      }
+      .post-detail {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 32px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .post-content {
+        line-height: 1.8;
+        font-size: 16px;
+      }
+      .post-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 16px 0;
+      }
+      .post-content pre {
+        background: #f3f3f3;
+        padding: 16px;
+        border-radius: 8px;
+        overflow-x: auto;
+      }
+      .post-content code {
+        background: #f3f3f3;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+      .post-content pre code {
+        background: none;
+        padding: 0;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #eef3f8;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 500;
+      }
+      .back-btn:hover {
+        background: #dde7f0;
+        text-decoration: none;
+      }
+      .comments-section {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 32px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .btn {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 8px;
+        background: #0a66c2;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .btn:visited {
+        color: white;
+      }
+      .btn:hover {
+        background: #094d92;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <h1>Blog</h1>
+        <div class="nav">
+          <a href="./index.html">Home</a>
+          <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new" target="_blank" class="btn">+ New Post</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap posts" id="main">
+      <div class="loading">Loading posts...</div>
+    </main>
+
+    <script>
+      const REPO_OWNER = 'RuizhangZhou';
+      const REPO_NAME = 'RuizhangZhou.github.io';
+      const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
+
+      // Get post number from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get('id');
+
+      if (postId) {
+        loadPost(postId);
+      } else {
+        loadPosts();
+      }
+
+      async function loadPosts() {
+        const main = document.getElementById('main');
+        try {
+          const response = await fetch(`${API_URL}?state=open&sort=created&direction=desc`);
+          if (!response.ok) throw new Error('Failed to fetch posts');
+
+          const issues = await response.json();
+
+          if (issues.length === 0) {
+            main.innerHTML = `
+              <div class="empty">
+                <h2>No posts yet</h2>
+                <p>Click "New Post" to create your first blog post!</p>
+              </div>
+            `;
+            return;
+          }
+
+          main.innerHTML = issues.map(issue => {
+            const excerpt = issue.body
+              ? issue.body.substring(0, 200).replace(/[#*`]/g, '') + '...'
+              : 'No content';
+
+            const labels = issue.labels.map(label =>
+              `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
+            ).join('');
+
+            return `
+              <div class="post-card" onclick="window.location.href='?id=${issue.number}'">
+                <h2 class="post-title">${issue.title}</h2>
+                <div class="post-meta">
+                  Published on ${new Date(issue.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
+                ${labels ? `<div class="labels">${labels}</div>` : ''}
+                <div class="post-excerpt">${excerpt}</div>
+              </div>
+            `;
+          }).join('');
+        } catch (error) {
+          main.innerHTML = `
+            <div class="error">
+              <h2>Failed to load posts</h2>
+              <p>${error.message}</p>
+            </div>
+          `;
+        }
+      }
+
+      async function loadPost(id) {
+        const main = document.getElementById('main');
+        try {
+          const response = await fetch(`${API_URL}/${id}`);
+          if (!response.ok) throw new Error('Failed to fetch post');
+
+          const issue = await response.json();
+
+          const labels = issue.labels.map(label =>
+            `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
+          ).join('');
+
+          // Convert markdown to HTML (basic conversion)
+          const content = markdownToHtml(issue.body || 'No content');
+
+          main.innerHTML = `
+            <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>
+            <article class="post-detail">
+              <h1 class="post-title">${issue.title}</h1>
+              <div class="post-meta">
+                Published on ${new Date(issue.created_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+                ${issue.updated_at !== issue.created_at ? ` · Updated on ${new Date(issue.updated_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}` : ''}
+              </div>
+              ${labels ? `<div class="labels">${labels}</div>` : ''}
+              <hr style="margin: 24px 0; border: none; border-top: 1px solid #e7e7e7;">
+              <div class="post-content">${content}</div>
+              <hr style="margin: 32px 0; border: none; border-top: 1px solid #e7e7e7;">
+              <p style="color: #666; font-size: 14px;">
+                <a href="${issue.html_url}" target="_blank">View on GitHub</a> ·
+                <a href="${issue.html_url}" target="_blank">Edit this post</a>
+              </p>
+            </article>
+            <div class="comments-section">
+              <h2>Comments</h2>
+              <p style="color: #666; margin-bottom: 20px;">
+                Comments are powered by GitHub Discussions. Sign in with your GitHub account to leave a comment.
+              </p>
+              <script src="https://giscus.app/client.js"
+                data-repo="${REPO_OWNER}/${REPO_NAME}"
+                data-repo-id="YOUR_REPO_ID"
+                data-category="General"
+                data-category-id="YOUR_CATEGORY_ID"
+                data-mapping="specific"
+                data-term="${issue.number}"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="light"
+                data-lang="en"
+                crossorigin="anonymous"
+                async>
+              <\/script>
+            </div>
+          `;
+        } catch (error) {
+          main.innerHTML = `
+            <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>
+            <div class="error">
+              <h2>Failed to load post</h2>
+              <p>${error.message}</p>
+            </div>
+          `;
+        }
+      }
+
+      // Basic markdown to HTML conversion
+      function markdownToHtml(markdown) {
+        let html = markdown;
+
+        // Code blocks
+        html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+
+        // Images
+        html = html.replace(/!\[([^\]]*)\]\(([^\)]+)\)/g, '<img src="$2" alt="$1" />');
+
+        // Links
+        html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+        // Headers
+        html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+        // Bold
+        html = html.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+
+        // Italic
+        html = html.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
+
+        // Inline code
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        // Line breaks
+        html = html.replace(/\n\n/g, '</p><p>');
+        html = '<p>' + html + '</p>';
+
+        return html;
+      }
+
+      // Get contrast color for label text
+      function getContrastColor(hexcolor) {
+        const r = parseInt(hexcolor.substr(0, 2), 16);
+        const g = parseInt(hexcolor.substr(2, 2), 16);
+        const b = parseInt(hexcolor.substr(4, 2), 16);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 155 ? '#000' : '#fff';
+      }
+    </script>
+  </body>
+</html>

@@ -6,11 +6,14 @@ Your blog is now ready! Here's how to use it and complete the setup.
 
 ### Creating Blog Posts
 
-1. Go to https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new
+1. Click "New Post" button on the blog page, or go to: https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog
 2. Write your post title and content (supports Markdown)
-3. Add labels to categorize your post (optional)
-4. Click "Submit new issue"
-5. Your post will automatically appear on your blog!
+3. **IMPORTANT**: Make sure the issue has the `blog` label (it will be pre-filled if you use the link above)
+4. Add additional labels to categorize your post (optional, e.g., "Tech", "Tutorial")
+5. Click "Submit new issue"
+6. Your post will automatically appear on your blog!
+
+**Note**: Only issues with the `blog` label will appear on your blog. This means you can still use regular GitHub Issues for development work without them showing up on your blog.
 
 ### Editing Posts
 
@@ -23,41 +26,36 @@ Your blog is now ready! Here's how to use it and complete the setup.
 
 - Close the issue on GitHub to hide it from the blog
 
-## Enable Comments (Giscus Setup)
+## Comments System (Giscus)
 
-To enable the comment system, follow these steps:
+The comment system is already configured! Here's how it works:
 
-### 1. Enable GitHub Discussions
+### How to Comment
+
+1. Open any blog post
+2. Scroll down to the "Comments" section
+3. The Giscus widget will load automatically (may take a few seconds)
+4. Readers need to sign in with their GitHub account to comment
+5. You (as the repo owner) will receive notifications for new comments
+
+### If Comments Don't Show Up
+
+Check that GitHub Discussions is enabled:
 
 1. Go to https://github.com/RuizhangZhou/RuizhangZhou.github.io/settings
-2. Scroll down to "Features"
-3. Check "Discussions"
+2. Scroll down to "Features" section
+3. Make sure "Discussions" is checked
+4. If it wasn't enabled, enable it and refresh your blog post
 
-### 2. Get Your Repository IDs
+The comment system uses:
+- **Repository ID**: R_kgDOOZBw_Q (already configured)
+- **Category ID**: DIC_kwDOOZBw_c4Cw-HI (already configured)
 
-1. Go to https://giscus.app
-2. Enter your repository: `RuizhangZhou/RuizhangZhou.github.io`
-3. The page will show you:
-   - Repository ID (format: `R_xxxxx`)
-   - Category ID (format: `DIC_xxxxx`)
+### Privacy
 
-### 3. Update blog.html
-
-Open `blog.html` and replace these two lines (around line 265):
-
-```javascript
-data-repo-id="YOUR_REPO_ID"
-data-category-id="YOUR_CATEGORY_ID"
-```
-
-With your actual IDs:
-
-```javascript
-data-repo-id="R_xxxxx"  // Your actual repo ID
-data-category-id="DIC_xxxxx"  // Your actual category ID
-```
-
-Save the file and commit the changes.
+- Commenters must have a GitHub account
+- Comments are stored in GitHub Discussions (public)
+- You can moderate/delete comments in your repository's Discussions tab
 
 ## Video Posts
 
@@ -80,14 +78,33 @@ Just paste the link directly in your post, or use HTML:
 
 ## Tips
 
-- Use labels to organize posts by topic (e.g., "Tech", "Personal", "Tutorial")
+- **Always add the `blog` label** to issues you want to appear on your blog
+- Regular development issues (without `blog` label) won't appear on your blog
+- Use additional labels to organize posts by topic (e.g., "Tech", "Personal", "Tutorial")
 - Use GitHub's built-in preview when writing posts
 - You can use all GitHub Flavored Markdown features
-- Pin important issues to keep them at the top of your blog
+- Pin important issues to keep them at the top
+- Close an issue to hide the post from your blog (like a draft or delete)
 - Only you can create issues (posts) - others can only comment via Giscus
 
 ## Next Steps
 
-1. Create your first blog post!
-2. Enable Discussions and configure Giscus
+1. Enable GitHub Discussions (if not already enabled):
+   - Go to https://github.com/RuizhangZhou/RuizhangZhou.github.io/settings
+   - Check "Discussions" under Features
+2. Create your first blog post with the `blog` label!
 3. Share your blog URL: https://ruizhangzhou.github.io/blog.html
+
+## FAQ
+
+**Q: Why don't I see a comment box?**
+A: Make sure GitHub Discussions is enabled. The Giscus widget may also take a few seconds to load.
+
+**Q: Can I still use GitHub Issues for development?**
+A: Yes! Only issues with the `blog` label will appear on your blog. All other issues work normally.
+
+**Q: How do I delete a blog post?**
+A: Close the corresponding GitHub issue. Closed issues won't appear on the blog.
+
+**Q: Can anonymous users comment?**
+A: No, commenters need a GitHub account. This helps prevent spam.

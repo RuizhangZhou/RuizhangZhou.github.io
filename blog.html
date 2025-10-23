@@ -176,7 +176,7 @@
         <h1>Blog</h1>
         <div class="nav">
           <a href="./index.html">Home</a>
-          <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new" target="_blank" class="btn">+ New Post</a>
+          <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog" target="_blank" class="btn">+ New Post</a>
         </div>
       </div>
     </header>
@@ -203,7 +203,7 @@
       async function loadPosts() {
         const main = document.getElementById('main');
         try {
-          const response = await fetch(`${API_URL}?state=open&sort=created&direction=desc`);
+          const response = await fetch(`${API_URL}?labels=blog&state=open&sort=created&direction=desc`);
           if (!response.ok) throw new Error('Failed to fetch posts');
 
           const issues = await response.json();

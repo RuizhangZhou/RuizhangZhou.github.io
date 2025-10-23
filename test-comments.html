@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Giscus Comments</title>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .status {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Giscus Comment System Test</h1>
+
+    <div class="status">
+        <p><strong>Repository:</strong> RuizhangZhou/RuizhangZhou.github.io</p>
+        <p><strong>Repo ID:</strong> R_kgDOOZBw_Q</p>
+        <p><strong>Category ID:</strong> DIC_kwDOOZBw_c4Cw-HI</p>
+        <p><strong>Status:</strong> <span id="status">Loading...</span></p>
+    </div>
+
+    <h2>Comments Section</h2>
+    <p style="color: #666;">If Giscus is working correctly, you should see a comment box below (after a few seconds). If you only see this text and nothing else, check the browser console for errors.</p>
+
+    <div style="margin-top: 30px; padding: 20px; border: 2px dashed #ccc; border-radius: 8px;">
+        <script src="https://giscus.app/client.js"
+            data-repo="RuizhangZhou/RuizhangZhou.github.io"
+            data-repo-id="R_kgDOOZBw_Q"
+            data-category="General"
+            data-category-id="DIC_kwDOOZBw_c4Cw-HI"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="light"
+            data-lang="en"
+            crossorigin="anonymous"
+            async>
+        </script>
+    </div>
+
+    <script>
+        // Check if Giscus loads successfully
+        setTimeout(() => {
+            const giscusFrame = document.querySelector('iframe.giscus-frame');
+            const statusEl = document.getElementById('status');
+            if (giscusFrame) {
+                statusEl.textContent = '✅ Giscus loaded successfully!';
+                statusEl.style.color = 'green';
+            } else {
+                statusEl.textContent = '❌ Giscus did not load. Check browser console (F12) for errors.';
+                statusEl.style.color = 'red';
+            }
+        }, 5000);
+    </script>
+
+    <div style="margin-top: 40px; padding: 20px; background: #fff3cd; border-radius: 8px;">
+        <h3>Troubleshooting</h3>
+        <ol>
+            <li>Open browser console (F12 → Console tab)</li>
+            <li>Look for any red error messages</li>
+            <li>Make sure GitHub Discussions is enabled in repository settings</li>
+            <li>Wait at least 5-10 seconds for the Giscus widget to load</li>
+            <li>Try refreshing the page</li>
+        </ol>
+    </div>
+</body>
+</html>

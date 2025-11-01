@@ -16,6 +16,8 @@
 - *Security & Compliance:* Shibboleth SSO; MongoDB CSFLE (local master key); EU data region; tenant/role checks.
 - *Realtime & Resilience:* SignalR broadcasting (live UI), resilient HTTP (Polly), NLog; DevOps with Traefik/Nomad; embedded Python runtime.
 
+#line(length: 100%, stroke: 0.5pt)
+
 #section-title("Education")
 *M.Sc. Computer Science* | RWTH Aachen University | Oct. 2022 - Jun. 2024 | Grade: 2.5
 - Master's Thesis: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
@@ -24,6 +26,8 @@
 *B.Sc. Computer Science* | RWTH Aachen University | Oct. 2019 - Sep. 2022 | Grade: 2.2
 
 *B.A. German Language and Literature* | Tongji University | Sep. 2014 - Aug. 2018
+
+#line(length: 100%, stroke: 0.5pt)
 
 #section-title("Selected previous roles")
 *Research Assistant (Part-time)* | RWTH Chair of Embedded Software | Aug. 2023 - Mar. 2024 (8 months)
@@ -37,6 +41,8 @@
 - Experiments on GPU cluster infrastructure for model training/evaluation
 - Developed/deployed LLaMA/Ollama-based chat platform for research purposes
 - *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, REST APIs
+
+#line(length: 100%, stroke: 0.5pt)
 
 #section-title("Tech Stack")
 C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.

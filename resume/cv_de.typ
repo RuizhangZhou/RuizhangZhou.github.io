@@ -16,6 +16,8 @@
 - *Sicherheit & Compliance:* Shibboleth-SSO; MongoDB CSFLE (lokaler Master-Key); EU-Datenregion; Mandanten-/Rollenprüfungen.
 - *Echtzeit & Stabilität:* SignalR-Broadcasting (Live-UI), resiliente HTTP-Pipelines (Polly), NLog; DevOps mit Traefik/Nomad; eingebettete Python-Runtime.
 
+#line(length: 100%, stroke: 0.5pt)
+
 #section-title("Ausbildung")
 *M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024 | Note: 2,5
 - Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
@@ -24,6 +26,8 @@
 *B.Sc. Informatik* | RWTH Aachen University | Okt. 2019 - Sep. 2022 | Note: 2,2
 
 *B.A. Germanistik* | Tongji Universität | Sep. 2014 - Aug. 2018
+
+#line(length: 100%, stroke: 0.5pt)
 
 #section-title("Ausgewählte frühere Tätigkeiten")
 *Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl Embedded Software | Aug. 2023 - Mär. 2024 (8 Monate)
@@ -37,6 +41,8 @@
 - Experimente auf GPU-Cluster-Infrastruktur für Modelltraining/-evaluierung
 - Entwicklung/Deployment einer LLaMA/Ollama-basierten Chat-Plattform für Forschungszwecke
 - *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, REST-APIs
+
+#line(length: 100%, stroke: 0.5pt)
 
 #section-title("Tech-Stack")
 C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.

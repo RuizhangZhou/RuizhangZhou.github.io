@@ -19,21 +19,15 @@
 
 #section-title("Ausbildung")
 *RWTH Aachen University - M.Sc. Informatik* \
-Oktober 2022 - Juni 2024 | Abschlussnote: 2,5 (Gut)
-- Schwerpunkt: Generative KI, Large Language Models, Machine Learning
-- Masterarbeit: [Thema im Bereich LLM/GenAI-Anwendungen]
-- Relevante Module: Deep Learning, Natural Language Processing, Wissensrepräsentation, Verteilte Systeme, Software Engineering
+Oktober 2022 - Juni 2024 | Note: 2,5
+- Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
+- Schwerpunkt KI/ML: Deep Learning, Natural Language Processing, Large Language Models, Wissensrepräsentation
 
 *RWTH Aachen University - B.Sc. Informatik* \
-Oktober 2019 - September 2022 | Abschlussnote: 2,2 (Gut)
-- Schwerpunkt: Software Engineering, Algorithmen und Datenstrukturen, Datenbanksysteme
-- Bachelorarbeit: [Thema im Bereich Softwareentwicklung/Systeme]
-- Relevante Module: Objektorientierte Programmierung, Web-Technologien, Rechnernetze, Betriebssysteme
+Oktober 2019 - September 2022 | Note: 2,2
 
 *Tongji Universität - B.A. Germanistik* \
 September 2014 - August 2018
-- Fundierte Deutschkenntnisse, die effektive Kommunikation in deutschsprachigen Arbeitsumgebungen ermöglichen
-- Interkulturelle Kompetenz und sprachliche Fähigkeiten in akademischen und beruflichen Kontexten
 
 #section-title("Ausgewählte frühere Tätigkeiten")
 *Wissenschaftliche Hilfskraft (Teilzeit), RWTH Lehrstuhl Embedded Software* \

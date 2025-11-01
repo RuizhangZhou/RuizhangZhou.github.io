@@ -19,21 +19,15 @@
 
 #section-title("Education")
 *RWTH Aachen University - M.Sc. Computer Science* \
-October 2022 - June 2024 | Final Grade: 2.5 (Good)
-- Focus: Generative AI, Large Language Models, Machine Learning
-- Master's Thesis: [Topic related to LLM/GenAI applications]
-- Relevant Coursework: Deep Learning, Natural Language Processing, Knowledge Representation, Distributed Systems, Software Engineering
+October 2022 - June 2024 | Grade: 2.5
+- Master's Thesis: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
+- Focus on AI/ML: Deep Learning, Natural Language Processing, Large Language Models, Knowledge Representation
 
 *RWTH Aachen University - B.Sc. Computer Science* \
-October 2019 - September 2022 | Final Grade: 2.2 (Good)
-- Focus: Software Engineering, Algorithms and Data Structures, Database Systems
-- Bachelor's Thesis: [Topic related to software development/systems]
-- Relevant Coursework: Object-Oriented Programming, Web Technologies, Computer Networks, Operating Systems
+October 2019 - September 2022 | Grade: 2.2
 
 *Tongji University - B.A. German Language and Literature* \
 September 2014 - August 2018
-- Strong foundation in German language proficiency, enabling effective communication in German-speaking work environments
-- Cross-cultural competence and linguistic skills applied in academic and professional contexts
 
 #section-title("Selected previous roles")
 *Research Assistant (Part-time), RWTH Chair of Embedded Software* \

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ML Research - Ruizhang Zhou</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        color: #111;
+        background: #f6f7fb;
+      }
+      header {
+        padding: 32px 20px;
+        background: white;
+        border-bottom: 1px solid #e7e7e7;
+      }
+      .wrap {
+        max-width: 920px;
+        margin: 0 auto;
+      }
+      .nav {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .nav a {
+        color: #0a66c2;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+      }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+      }
+      .subtitle {
+        color: #666;
+        margin-top: 8px;
+      }
+      main {
+        padding: 32px 20px;
+      }
+      .project {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .project h2 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+      }
+      .project-meta {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eef3f8;
+        font-size: 12px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+      }
+      .conference-badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #d4edda;
+        color: #155724;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 6px;
+        margin-bottom: 6px;
+      }
+      .section-title {
+        font-weight: 600;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        color: #333;
+      }
+      ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 6px;
+        line-height: 1.5;
+      }
+      .link {
+        color: #0a66c2;
+        text-decoration: none;
+      }
+      .link:hover {
+        text-decoration: underline;
+      }
+      .highlight {
+        background: #fff8e1;
+        padding: 12px 16px;
+        border-left: 4px solid #ffc107;
+        border-radius: 6px;
+        margin: 12px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="nav">
+          <a href="./index.html">← Home</a>
+          <a href="./ml-ai-engineer.html">ML/AI Engineer</a>
+          <a href="./fullstack-engineer.html">Fullstack Engineer</a>
+          <a href="./data-engineer.html">Data Engineer</a>
+        </div>
+        <h1>ML Research</h1>
+        <p class="subtitle">Academic research in LLMs, GNNs, computer vision, and published work in top-tier conferences</p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- Research Overview -->
+      <div class="project">
+        <h2>Research Focus & Publications</h2>
+        <p class="project-meta">Academic Research | 2021 - Present</p>
+
+        <div class="section-title">Research Interests</div>
+        <ul>
+          <li><strong>Large Language Models (LLMs):</strong> Instruction tuning, RLHF, knowledge integration</li>
+          <li><strong>Graph Neural Networks (GNNs):</strong> Knowledge graphs, graph reasoning, community detection</li>
+          <li><strong>Generative Models:</strong> GANs, Diffusion Models, time series generation</li>
+          <li><strong>Computer Vision:</strong> Vision-language models, medical image analysis</li>
+          <li><strong>Reinforcement Learning:</strong> RLHF for LLMs, learning-based control</li>
+        </ul>
+
+        <div class="section-title">Conference Publications & Implementations</div>
+        <div class="highlight">
+          <span class="conference-badge">ICLR 2024</span> Diffusion-TS: Time Series Diffusion Model<br>
+          <span class="conference-badge">ICLR 2022 Spotlight</span> GreaseLM: Graph Reasoning Enhanced LLM<br>
+          <span class="conference-badge">NeurIPS 2022</span> DRAGON: Deep Bidirectional Language-Knowledge Graph Pretraining<br>
+          <span class="conference-badge">NeurIPS 2019</span> TimeGAN: Time-series Generative Adversarial Networks
+        </div>
+      </div>
+
+      <!-- DBIS Research -->
+      <div class="project">
+        <h2>LLM & GNN Research for Medical Imaging</h2>
+        <p class="project-meta">RWTH Chair of DBIS | Research Assistant | Jul 2023 - Mar 2024 (9 months)</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">Transformers</span>
+          <span class="pill">LLaMA</span>
+          <span class="pill">BLIP</span>
+          <span class="pill">PyG (PyTorch Geometric)</span>
+          <span class="pill">Knowledge Graphs</span>
+          <span class="pill">GPU Cluster</span>
+        </div>
+
+        <div class="section-title">Research Contributions</div>
+        <ul>
+          <li><strong>Medical Report Generation:</strong> Working on research paper combining BLIP vision-language model with LLMs for automated chest X-ray report generation</li>
+          <li><strong>Knowledge Graph Integration:</strong> Investigated integrating medical knowledge graphs with GNNs to improve diagnostic accuracy and clinical relevance</li>
+          <li><strong>LLM Deployment:</strong> Deployed and fine-tuned LLaMA models using Ollama for efficient inference in research settings</li>
+          <li><strong>Large-scale Experimentation:</strong> Conducted experiments on GPU cluster infrastructure, managing distributed training and hyperparameter optimization</li>
+          <li><strong>Regular Research Presentations:</strong> Presented findings weekly at DBIS group meetings, discussing latest developments in LLMs and GNNs</li>
+        </ul>
+
+        <div class="section-title">Research Impact</div>
+        <div class="highlight">
+          ✓ Paper in preparation on LLM-based medical report generation<br>
+          ✓ Demonstrated feasibility of knowledge graph-enhanced medical AI<br>
+          ✓ Contributed to understanding of multi-modal LLM applications
+        </div>
+      </div>
+
+      <!-- GreaseLM -->
+      <div class="project">
+        <h2>GreaseLM: Graph Reasoning Enhanced Language Models</h2>
+        <p class="project-meta">ICLR 2022 Spotlight Paper | Implementation Study</p>
+        <span class="conference-badge">ICLR 2022 Spotlight</span>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">Transformers</span>
+          <span class="pill">PyG</span>
+          <span class="pill">Knowledge Graphs</span>
+        </div>
+
+        <div class="section-title">Research Overview</div>
+        <p>GreaseLM enhances pre-trained language models with graph neural networks for structured knowledge reasoning. The model jointly encodes text and knowledge graph structures to improve performance on knowledge-intensive tasks.</p>
+
+        <div class="section-title">Key Contributions</div>
+        <ul>
+          <li>Fusion architecture combining BERT-style LMs with graph neural networks</li>
+          <li>Effective integration of structured knowledge from ConceptNet and other KGs</li>
+          <li>Significant improvements on commonsense reasoning benchmarks (CommonsenseQA, OpenbookQA)</li>
+          <li>Demonstrated value of explicit graph reasoning for language understanding</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/GreaseLM" class="link" target="_blank">GitHub Repository</a> | <a href="https://openreview.net/forum?id=41e9o6cQPj" class="link" target="_blank">ICLR 2022 Paper</a></p>
+      </div>
+
+      <!-- DRAGON -->
+      <div class="project">
+        <h2>DRAGON: Deep Bidirectional Language-Knowledge Graph Pretraining</h2>
+        <p class="project-meta">NeurIPS 2022 | Implementation Study</p>
+        <span class="conference-badge">NeurIPS 2022</span>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">Transformers</span>
+          <span class="pill">GNN</span>
+          <span class="pill">Knowledge Graphs</span>
+        </div>
+
+        <div class="section-title">Research Overview</div>
+        <p>DRAGON presents a self-supervised approach for jointly pre-training language models and graph neural networks on text-KG pairs. Enables deep bidirectional interaction between language and structured knowledge.</p>
+
+        <div class="section-title">Key Innovations</div>
+        <ul>
+          <li>Bidirectional pretraining objectives for text-KG alignment</li>
+          <li>Cross-modal attention mechanisms for deep LM-KG integration</li>
+          <li>State-of-the-art results on knowledge-grounded tasks</li>
+          <li>Effective knowledge transfer from KGs to language understanding</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/dragon" class="link" target="_blank">GitHub Repository</a> | <a href="https://arxiv.org/abs/2210.09338" class="link" target="_blank">NeurIPS 2022 Paper</a></p>
+      </div>
+
+      <!-- Diffusion-TS -->
+      <div class="project">
+        <h2>Diffusion-TS: Interpretable Diffusion for Time Series Forecasting</h2>
+        <p class="project-meta">ICLR 2024 | Implementation Study</p>
+        <span class="conference-badge">ICLR 2024</span>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">Diffusion Models</span>
+          <span class="pill">Time Series</span>
+        </div>
+
+        <div class="section-title">Research Overview</div>
+        <p>Diffusion-TS applies diffusion probabilistic models to time series forecasting, providing an interpretable generative approach with strong performance on temporal prediction tasks.</p>
+
+        <div class="section-title">Key Contributions</div>
+        <ul>
+          <li>Adapted denoising diffusion models for time series data</li>
+          <li>Interpretable architecture with temporal decomposition</li>
+          <li>Strong performance on multivariate forecasting benchmarks</li>
+          <li>Conditional generation for controllable forecasting</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/Diffusion-TS" class="link" target="_blank">GitHub Repository</a> | <a href="https://openreview.net/forum?id=3k-7CqqMkCd" class="link" target="_blank">ICLR 2024 Paper</a></p>
+      </div>
+
+      <!-- GNN-FakeNews -->
+      <div class="project">
+        <h2>GNN-based Fake News Detection</h2>
+        <p class="project-meta">Research Project | Graph Neural Networks</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">PyG</span>
+          <span class="pill">Graph Neural Networks</span>
+          <span class="pill">Social Network Analysis</span>
+        </div>
+
+        <div class="section-title">Research Overview</div>
+        <p>Developed graph neural network models for detecting fake news by modeling propagation patterns in social networks. Leverages both content features and network structure for improved detection accuracy.</p>
+
+        <div class="section-title">Approach</div>
+        <ul>
+          <li>Graph construction from news propagation cascades on social media</li>
+          <li>GNN architectures (GCN, GAT, GraphSAGE) for fake news classification</li>
+          <li>Joint modeling of content semantics and propagation dynamics</li>
+          <li>Early detection strategies for real-time fake news identification</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/GNN-FakeNews" class="link" target="_blank">GitHub Repository</a></p>
+      </div>
+
+      <!-- Automatic Speech Recognition -->
+      <div class="project">
+        <h2>Automatic Speech Recognition System</h2>
+        <p class="project-meta">RWTH Software Project | ASR Research | 2022-2023</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">C++</span>
+          <span class="pill">HMM</span>
+          <span class="pill">Neural Networks</span>
+          <span class="pill">Signal Processing</span>
+        </div>
+
+        <div class="section-title">Research Overview</div>
+        <p>Implemented custom ASR system from scratch using both traditional HMM-based methods and neural network approaches. Gained deep understanding of acoustic modeling, language modeling, and decoding algorithms.</p>
+
+        <div class="section-title">Components</div>
+        <ul>
+          <li><strong>Feature Extraction:</strong> MFCC, filterbank features for audio representation</li>
+          <li><strong>Acoustic Modeling:</strong> HMM-GMM and DNN-HMM hybrid systems</li>
+          <li><strong>Language Modeling:</strong> N-gram models for linguistic constraints</li>
+          <li><strong>Decoding:</strong> Viterbi algorithm for optimal sequence prediction</li>
+        </ul>
+
+        <div class="section-title">Course Performance</div>
+        <p><strong>Grade:</strong> 3.7 | <strong>Lab:</strong> 3.0</p>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/Automatic-Speech-Recognition" class="link" target="_blank">GitHub Repository</a></p>
+      </div>
+
+      <!-- Research Seminars -->
+      <div class="project">
+        <h2>Research Seminars & Coursework</h2>
+        <p class="project-meta">RWTH Master's Program | 2021 - 2023</p>
+
+        <div class="section-title">Large Scale Language Models and GPTs (SS 2023)</div>
+        <p><strong>Topic:</strong> Reinforcement Learning with Human Feedback for LLMs</p>
+        <ul>
+          <li>Deep dive into RLHF methodology for aligning LLMs with human preferences</li>
+          <li>Analysis of InstructGPT, ChatGPT training procedures</li>
+          <li>Reward modeling, PPO fine-tuning, and safety considerations</li>
+        </ul>
+
+        <div class="section-title" style="margin-top: 16px;">End-to-End Machine Translation (WS 2021/22)</div>
+        <p><strong>Grade:</strong> 1.7 (Good)</p>
+        <ul>
+          <li>Neural machine translation with seq2seq and transformer architectures</li>
+          <li>Attention mechanisms and their role in translation quality</li>
+          <li>Evaluation metrics (BLEU, METEOR) and translation challenges</li>
+        </ul>
+
+        <div class="section-title" style="margin-top: 16px;">Computer Vision (SS 2022)</div>
+        <p><strong>Grade:</strong> 3.7</p>
+        <ul>
+          <li>CNNs for image classification, object detection, segmentation</li>
+          <li>Vision transformers and attention-based architectures</li>
+          <li>Generative models for image synthesis</li>
+        </ul>
+
+        <div class="section-title" style="margin-top: 16px;">Machine Learning (WS 2022/23)</div>
+        <p><strong>Grade:</strong> 2.7 (Good)</p>
+        <ul>
+          <li>Supervised, unsupervised, and reinforcement learning fundamentals</li>
+          <li>Deep learning architectures and optimization techniques</li>
+          <li>Practical implementation with PyTorch and TensorFlow</li>
+        </ul>
+
+        <div class="section-title" style="margin-top: 16px;">Reinforcement Learning and Learning-based Control (SS 2023)</div>
+        <ul>
+          <li>MDP formulation and dynamic programming</li>
+          <li>Q-learning, policy gradient methods, actor-critic algorithms</li>
+          <li>Applications to robotics and autonomous systems</li>
+        </ul>
+
+        <div class="section-title" style="margin-top: 16px;">High-Performance Computing (WS 2022/23)</div>
+        <p><strong>Grade:</strong> 4.0</p>
+        <ul>
+          <li>Parallel computing architectures (CPU, GPU, distributed)</li>
+          <li>CUDA programming for deep learning acceleration</li>
+          <li>Performance optimization and scalability analysis</li>
+        </ul>
+      </div>
+
+      <!-- Master Thesis -->
+      <div class="project">
+        <h2>Master Thesis: AI-Based Scenario Generation for Autonomous Vehicles</h2>
+        <p class="project-meta">RWTH Cyber-Physical Mobility Group | Oct 2023 - Apr 2024</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">GAN</span>
+          <span class="pill">Diffusion Models</span>
+          <span class="pill">Reinforcement Learning</span>
+        </div>
+
+        <div class="section-title">Research Contribution</div>
+        <p>Developed novel generative AI approaches for synthesizing realistic and diverse testing scenarios for motion planners in connected and automated vehicles. Combined GAN and Diffusion Model architectures to generate edge cases that reveal system vulnerabilities.</p>
+
+        <div class="section-title">Research Methodology</div>
+        <ul>
+          <li>Formulated scenario generation as conditional generative modeling problem</li>
+          <li>Implemented and compared GAN vs Diffusion Model approaches</li>
+          <li>Designed evaluation metrics for scenario realism and test coverage</li>
+          <li>Validated generated scenarios using motion planning algorithms</li>
+          <li>Analyzed failure modes and edge case discovery capabilities</li>
+        </ul>
+
+        <div class="section-title">Research Impact</div>
+        <div class="highlight">
+          ✓ Automated generation of diverse test scenarios, reducing manual effort<br>
+          ✓ Discovered edge cases not covered by traditional rule-based methods<br>
+          ✓ Improved test coverage for autonomous vehicle safety validation
+        </div>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a></p>
+      </div>
+    </main>
+
+    <footer style="padding: 24px 20px; color: #666; text-align: center; background: white; border-top: 1px solid #e7e7e7;">
+      <div class="wrap">&copy; Ruizhang Zhou | <a href="./index.html" class="link">Back to Home</a></div>
+    </footer>
+  </body>
+</html>

@@ -7,7 +7,7 @@
 )
 
 #section-title("Experience")
-*Software Engineer (AI Platform) - Full-time Position* | KIconnect - RWTH IT Center | 09/2024 - Present (14 months)
+*Software Engineer (AI Platform) - Full-time Position* | KIconnect - RWTH IT Center | 09/2024 - Present
 
 - *Chat Pipeline:* ASP.NET Core 9 + Semantic Kernel + Azure AI Inference/OpenAI; streaming responses, title generation, strict role alternation, content-filter handling.
 - *Tokenization & Costing:* Unified token counting (OpenAI, Llama 3, Gemma 3, Mistral, Qwen, DeepSeek); Python.NET bridge; image tokenization for VLMs; detailed cost events incl. cached tokens; reporting with heatmaps.

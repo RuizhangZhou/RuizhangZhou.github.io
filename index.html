@@ -107,6 +107,53 @@
         padding: 2px 6px;
         border-radius: 6px;
       }
+      .role-card {
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 24px;
+        background: white;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        text-decoration: none;
+        color: #111;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.2s ease;
+      }
+      .role-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+        border-color: #0a66c2;
+      }
+      .role-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .role-card h3 {
+        margin: 0 0 12px 0;
+        font-size: 22px;
+        color: #111;
+      }
+      .role-desc {
+        color: #666;
+        margin-bottom: 16px;
+        flex-grow: 1;
+        line-height: 1.5;
+      }
+      .role-tech {
+        margin-bottom: 16px;
+      }
+      .role-tech .pill {
+        font-size: 11px;
+        padding: 4px 8px;
+      }
+      .role-btn {
+        color: #0a66c2;
+        font-weight: 600;
+        margin-top: auto;
+      }
+      .role-card:hover .role-btn {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
@@ -122,7 +169,7 @@
         <div>
           <h1>Ruizhang Zhou</h1>
           <p class="muted">
-            Full-stack AI Platform Engineer (Full-time, 14+ months) - streaming chat / token and cost governance / multi-tenant security / SSO
+            Full-stack AI Platform Engineer (Full-time) - streaming chat / token and cost governance / multi-tenant security / SSO
           </p>
           <p>
             <span class="pill">C#/.NET</span>
@@ -151,81 +198,73 @@
     </header>
 
     <main class="wrap">
-      <div class="grid">
-        <section class="card">
-          <h2>Latest Role</h2>
-          <p>
-            <strong>Software Engineer (AI Platform) - Full-time Position</strong>, KIconnect - RWTH
-            IT Center (09/2024 - present, 14 months)
-          </p>
-          <ul>
-            <li>
-              Built multi-tenant LLM assistant with streaming, token and cost
-              tracking, document ingestion, and SSO.
-            </li>
-            <li>
-              Unified tokenization (text and vision) across OpenAI, Llama 3,
-              Gemma 3, Mistral, Qwen, DeepSeek.
-            </li>
-            <li>
-              Admin UI (Vue 3 + Inertia), model and deployment management,
-              quotas, reasoning effort.
-            </li>
-            <li>
-              Security: Shibboleth SSO, MongoDB CSFLE, EU data region; reliability with SignalR and Polly.
-            </li>
-          </ul>
-        </section>
-        <section class="card">
-          <h2>Highlighted Tech</h2>
-          <p>
-            C#/.NET 9, ASP.NET Core, Semantic Kernel, Azure AI Inference,
-            OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, Vue 3, Inertia,
-            Vite, MongoDB (CSFLE), SignalR, Traefik, Nomad, Hangfire.
-          </p>
-        </section>
-      </div>
-
-      <section class="card">
-        <h2>Previous Roles</h2>
-        <p>
-          <strong>Research Assistant (Part-time)</strong>, RWTH Chair of Embedded Software
-          (08/2023 - 03/2024, 8 months)
-        </p>
-        <ul>
-          <li>Maintained and enhanced CPM Remote Web Application for remote laboratory management</li>
-          <li>Implemented real-time data visualizations and monitoring dashboards using modern web frameworks</li>
-          <li>Improved CI/CD pipelines for automated testing and deployment</li>
-          <li>Technologies: JavaScript/TypeScript, Web APIs, Docker, GitLab CI/CD</li>
-        </ul>
-        <p style="margin-top: 16px;">
-          <strong>Research Assistant (Part-time)</strong>, RWTH Chair of DBIS (Database and Information Systems)
-          (07/2023 - 03/2024, 9 months)
-        </p>
-        <ul>
-          <li>Conducted research on Large Language Models (LLM), Graph Neural Networks (GNN), and Knowledge Graph integration</li>
-          <li>Designed and executed experiments on GPU cluster infrastructure for model training and evaluation</li>
-          <li>Developed and deployed LLaMA / Ollama-based chat platform for research purposes</li>
-          <li>Technologies: Python, PyTorch, Transformers, CUDA, Ollama, REST APIs</li>
-        </ul>
-      </section>
-
-      <section class="card">
+      <section class="card" style="margin-bottom: 24px;">
         <h2>About</h2>
         <p>
-          <strong>Full-time Software Engineer</strong> with 14+ months of professional experience building production-grade AI platforms at RWTH IT Center.
+          <strong>Full-time AI Platform Engineer</strong> with professional experience building production-grade AI platforms at RWTH IT Center.
         </p>
         <p>
           <strong>Education:</strong> M.Sc. Computer Science (GenAI, LLM, Grade 2.5) from RWTH Aachen University. Master's Thesis: <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI">AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles</a>. B.Sc. Computer Science (Grade 2.2) from RWTH Aachen. Additional B.A. in German Language and Literature from Tongji University.
         </p>
         <p>
-          <strong>Expertise:</strong> Focus on production-grade AI assistants with strong token accounting, cost governance, multi-tenant security, and SSO integration. Experience spans full-stack development, from backend (.NET/C#) to frontend (Vue 3), with expertise in AI/ML model integration and deployment.
-        </p>
-        <p class="muted">
-          This page auto-publishes with GitHub Pages. Edit Typst sources in
-          <code>/resume</code>; PDFs are rebuilt by GitHub Actions.
+          <strong>Expertise:</strong> Full-stack development with focus on AI/ML integration, from backend (.NET/C#) to frontend (Vue 3), production-grade LLM systems, and data engineering.
         </p>
       </section>
+
+      <h2 style="margin-bottom: 16px;">Explore My Experience by Role</h2>
+      <div class="grid">
+        <a href="./ml-ai-engineer.html" class="role-card">
+          <div class="role-icon">🤖</div>
+          <h3>ML/AI Engineer</h3>
+          <p class="role-desc">Production AI systems, LLM integration, deep learning models, and generative AI applications</p>
+          <div class="role-tech">
+            <span class="pill">PyTorch</span>
+            <span class="pill">Semantic Kernel</span>
+            <span class="pill">Azure AI</span>
+            <span class="pill">GAN/Diffusion</span>
+          </div>
+          <span class="role-btn">View Projects →</span>
+        </a>
+
+        <a href="./fullstack-engineer.html" class="role-card">
+          <div class="role-icon">💻</div>
+          <h3>Fullstack Software Engineer</h3>
+          <p class="role-desc">End-to-end web applications, real-time systems, multi-tenant architecture, and SSO integration</p>
+          <div class="role-tech">
+            <span class="pill">C#/.NET</span>
+            <span class="pill">Vue 3</span>
+            <span class="pill">MongoDB</span>
+            <span class="pill">Docker</span>
+          </div>
+          <span class="role-btn">View Projects →</span>
+        </a>
+
+        <a href="./data-engineer.html" class="role-card">
+          <div class="role-icon">📊</div>
+          <h3>Data Engineer</h3>
+          <p class="role-desc">Data pipelines, quantitative strategies, business intelligence, and analytics systems</p>
+          <div class="role-tech">
+            <span class="pill">Python</span>
+            <span class="pill">Pandas</span>
+            <span class="pill">SQL</span>
+            <span class="pill">ETL</span>
+          </div>
+          <span class="role-btn">View Projects →</span>
+        </a>
+
+        <a href="./ml-research.html" class="role-card">
+          <div class="role-icon">🔬</div>
+          <h3>ML Research</h3>
+          <p class="role-desc">Academic research in LLMs, GNNs, computer vision, and published work in top-tier conferences</p>
+          <div class="role-tech">
+            <span class="pill">Research</span>
+            <span class="pill">GNN</span>
+            <span class="pill">LLM</span>
+            <span class="pill">Computer Vision</span>
+          </div>
+          <span class="role-btn">View Projects →</span>
+        </a>
+      </div>
     </main>
 
     <footer>

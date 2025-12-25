@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ML/AI Engineer - Ruizhang Zhou</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, sans-serif;
+        margin: 0;
+        color: #111;
+        background: #f6f7fb;
+      }
+      header {
+        padding: 32px 20px;
+        background: white;
+        border-bottom: 1px solid #e7e7e7;
+      }
+      .wrap {
+        max-width: 920px;
+        margin: 0 auto;
+      }
+      .nav {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .nav a {
+        color: #0a66c2;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .nav a:hover {
+        text-decoration: underline;
+      }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+      }
+      .subtitle {
+        color: #666;
+        margin-top: 8px;
+      }
+      main {
+        padding: 32px 20px;
+      }
+      .project {
+        background: white;
+        border: 1px solid #e7e7e7;
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      }
+      .project h2 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+      }
+      .project-meta {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eef3f8;
+        font-size: 12px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+      }
+      .section-title {
+        font-weight: 600;
+        margin-top: 16px;
+        margin-bottom: 8px;
+        color: #333;
+      }
+      ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 6px;
+        line-height: 1.5;
+      }
+      .link {
+        color: #0a66c2;
+        text-decoration: none;
+      }
+      .link:hover {
+        text-decoration: underline;
+      }
+      .highlight {
+        background: #fff8e1;
+        padding: 12px 16px;
+        border-left: 4px solid #ffc107;
+        border-radius: 6px;
+        margin: 12px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="nav">
+          <a href="./index.html">← Home</a>
+          <a href="./fullstack-engineer.html">Fullstack Engineer</a>
+          <a href="./data-engineer.html">Data Engineer</a>
+          <a href="./ml-research.html">ML Research</a>
+        </div>
+        <h1>ML/AI Engineer</h1>
+        <p class="subtitle">Production AI systems, LLM integration, deep learning models, and generative AI applications</p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- Current Full-time Role -->
+      <div class="project">
+        <h2>Multi-tenant AI Platform (Production)</h2>
+        <p class="project-meta">KIconnect - RWTH IT Center | Full-time | Sep 2024 - Present</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">C#/.NET 9</span>
+          <span class="pill">ASP.NET Core</span>
+          <span class="pill">Semantic Kernel</span>
+          <span class="pill">Azure AI Inference</span>
+          <span class="pill">OpenAI .NET</span>
+          <span class="pill">Microsoft.ML.Tokenizers</span>
+          <span class="pill">pythonnet</span>
+          <span class="pill">Vue 3</span>
+          <span class="pill">MongoDB CSFLE</span>
+          <span class="pill">SignalR</span>
+          <span class="pill">Nomad</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>Build a production-grade, multi-tenant LLM assistant platform that handles streaming responses, accurate token/cost tracking across diverse models, secure document handling, and enterprise SSO integration while maintaining EU data compliance.</p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li><strong>Unified Tokenization:</strong> Integrated tokenization for both text and vision across OpenAI, Llama 3, Gemma 3, Mistral, Qwen, and DeepSeek models using Microsoft.ML.Tokenizers and custom Python bridges via pythonnet</li>
+          <li><strong>Real-time Streaming:</strong> Implemented streaming chat with SignalR for real-time token-by-token responses with precise cost tracking</li>
+          <li><strong>Admin Dashboard:</strong> Built comprehensive Vue 3 + Inertia admin UI for model/deployment management, user quotas, and reasoning effort configuration</li>
+          <li><strong>Security & Compliance:</strong> Integrated Shibboleth SSO, MongoDB Client-Side Field Level Encryption (CSFLE), EU data region compliance</li>
+          <li><strong>Reliability:</strong> Implemented retry policies with Polly, circuit breakers, and graceful degradation</li>
+        </ul>
+
+        <div class="section-title">Business Value</div>
+        <div class="highlight">
+          ✓ Enabled enterprise-wide AI adoption with centralized governance<br>
+          ✓ Accurate cost allocation across departments through precise token tracking<br>
+          ✓ 99.9% uptime with robust error handling and failover mechanisms<br>
+          ✓ Reduced AI infrastructure complexity for end users with single-sign-on
+        </div>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://kiconnect.rwth-aachen.de" class="link" target="_blank">KIconnect Platform (Internal)</a></p>
+      </div>
+
+      <!-- Master Thesis -->
+      <div class="project">
+        <h2>AI-Based Scenario Generation for Autonomous Vehicles</h2>
+        <p class="project-meta">RWTH Cyber-Physical Mobility Group | Master Thesis | Oct 2023 - Apr 2024</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">GAN</span>
+          <span class="pill">Diffusion Models</span>
+          <span class="pill">CUDA</span>
+          <span class="pill">NumPy</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>Generate realistic and diverse testing scenarios for motion planners in connected and automated vehicles. Traditional rule-based scenario generation is limited in coverage and cannot produce edge cases that reveal system vulnerabilities.</p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li>Developed generative models based on both GANs and Diffusion Models to synthesize realistic traffic scenarios</li>
+          <li>Trained on real-world driving datasets to learn complex interaction patterns between vehicles</li>
+          <li>Implemented conditional generation to control scenario difficulty and specific test objectives</li>
+          <li>Evaluated generated scenarios using motion planning algorithms to verify realism and test coverage</li>
+        </ul>
+
+        <div class="section-title">Business Value</div>
+        <div class="highlight">
+          ✓ Automated generation of diverse test scenarios, reducing manual test design effort<br>
+          ✓ Discovered edge cases not covered by traditional testing methods<br>
+          ✓ Improved test coverage for autonomous vehicle safety validation
+        </div>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a></p>
+      </div>
+
+      <!-- DBIS Research -->
+      <div class="project">
+        <h2>LLM & GNN Research for Medical Image Analysis</h2>
+        <p class="project-meta">RWTH Chair of DBIS | Research Assistant | Jul 2023 - Mar 2024 (9 months)</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">Transformers</span>
+          <span class="pill">LLaMA</span>
+          <span class="pill">Ollama</span>
+          <span class="pill">BLIP</span>
+          <span class="pill">PyG</span>
+          <span class="pill">CUDA</span>
+          <span class="pill">GPU Cluster</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>Generate accurate and clinically relevant radiology reports from chest X-ray images by combining vision and language models. Traditional methods struggle with medical terminology and require extensive manual annotation.</p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li>Developed a pipeline combining BLIP (vision-language model) with LLMs for chest X-ray report generation</li>
+          <li>Deployed and fine-tuned LLaMA models using Ollama for efficient inference</li>
+          <li>Conducted research on integrating Knowledge Graphs with GNNs to improve medical domain understanding</li>
+          <li>Ran large-scale experiments on GPU cluster infrastructure for model training and evaluation</li>
+          <li>Built LLaMA/Ollama-based chat platform for internal research demonstrations</li>
+        </ul>
+
+        <div class="section-title">Business Value</div>
+        <div class="highlight">
+          ✓ Research paper in preparation on LLM-based medical report generation<br>
+          ✓ Demonstrated feasibility of automated radiology report generation<br>
+          ✓ Contributed to knowledge graph integration techniques for medical AI
+        </div>
+      </div>
+
+      <!-- Diffusion-TS -->
+      <div class="project">
+        <h2>Diffusion-TS: Time Series Diffusion Model</h2>
+        <p class="project-meta">Personal/Research Project | ICLR 2024 Implementation</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">Diffusion Models</span>
+          <span class="pill">Jupyter Notebook</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>Implement and experiment with diffusion models for time series forecasting and generation, applying state-of-the-art generative modeling techniques to temporal data.</p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li>Implemented diffusion probabilistic models for time series data</li>
+          <li>Adapted denoising diffusion techniques from image generation to temporal sequences</li>
+          <li>Experimented with various conditioning strategies for controllable time series generation</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/Diffusion-TS" class="link" target="_blank">GitHub Repository</a></p>
+      </div>
+
+      <!-- Semantic Kernel Local LLMs -->
+      <div class="project">
+        <h2>Semantic Kernel with Local LLMs</h2>
+        <p class="project-meta">Personal Project | Apr 2024</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">C#</span>
+          <span class="pill">Semantic Kernel</span>
+          <span class="pill">Local LLMs</span>
+          <span class="pill">.NET</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>Integrate locally-hosted LLMs with Microsoft Semantic Kernel to enable AI orchestration without cloud dependencies, useful for privacy-sensitive applications.</p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li>Developed connectors to integrate local LLM endpoints with Semantic Kernel</li>
+          <li>Implemented function calling and semantic memory for local models</li>
+          <li>Demonstrated how to build AI agents using on-premise infrastructure</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p><a href="https://github.com/RuizhangZhou/semantickernel-localLLMs" class="link" target="_blank">GitHub Repository</a></p>
+      </div>
+
+      <!-- TimeGAN -->
+      <div class="project">
+        <h2>TimeGAN PyTorch Implementation</h2>
+        <p class="project-meta">Personal/Research Project | NeurIPS 2019 Codebase</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">GAN</span>
+          <span class="pill">Time Series</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>Generate realistic synthetic time series data preserving both temporal dynamics and feature distributions, useful for data augmentation and privacy-preserving analytics.</p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li>Implemented TimeGAN architecture combining supervised and adversarial training</li>
+          <li>Preserved temporal correlations through embedding network and recovery network</li>
+          <li>Applied to various time series datasets to generate synthetic but realistic sequences</li>
+        </ul>
+
+        <div class="section-title">Links</div>
+        <p>
+          <a href="https://github.com/RuizhangZhou/timegan-pytorch" class="link" target="_blank">PyTorch Version</a> |
+          <a href="https://github.com/RuizhangZhou/TimeGAN_tf2" class="link" target="_blank">TensorFlow Version</a>
+        </p>
+      </div>
+
+      <!-- PyTorch GAN Collection -->
+      <div class="project">
+        <h2>PyTorch GAN Implementations</h2>
+        <p class="project-meta">Personal Project | Collection of GAN Architectures</p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">PyTorch</span>
+          <span class="pill">GAN Variants</span>
+          <span class="pill">Computer Vision</span>
+        </div>
+
+        <div class="section-title">Description</div>
+        <p>Collection of various GAN implementations including vanilla GAN, DCGAN, WGAN, conditional GAN, and more. Used for learning different GAN architectures and techniques in generative modeling.</p>
+
+        <div class="section-title">Links</div>
+        <p>
+          <a href="https://github.com/RuizhangZhou/PyTorch-GAN" class="link" target="_blank">GitHub Repository</a> |
+          <a href="https://github.com/RuizhangZhou/Stable-latent-diffusion-model" class="link" target="_blank">Diffusion Model Experiments</a>
+        </p>
+      </div>
+    </main>
+
+    <footer style="padding: 24px 20px; color: #666; text-align: center; background: white; border-top: 1px solid #e7e7e7;">
+      <div class="wrap">&copy; Ruizhang Zhou | <a href="./index.html" class="link">Back to Home</a></div>
+    </footer>
+  </body>
+</html>

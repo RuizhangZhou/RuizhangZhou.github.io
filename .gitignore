@@ -1,2 +1,9 @@
 # Claude Code settings
 .claude/
+
+# Generated PDF files (auto-built by GitHub Actions)
+Resume_EN.pdf
+Lebenslauf_DE.pdf
+
+# Personal information (private reference)
+ruizhang_zhou_all_personal_information.pdf

@@ -112,7 +112,10 @@
           <a href="./ml-research.html">ML Research</a>
         </div>
         <h1>Data Engineer</h1>
-        <p class="subtitle">Data pipelines, quantitative strategies, business intelligence, and analytics systems</p>
+        <p class="subtitle">
+          Data pipelines, quantitative strategies, business intelligence, and
+          analytics systems
+        </p>
       </div>
     </header>
 
@@ -120,7 +123,9 @@
       <!-- Token & Cost Tracking System -->
       <div class="project">
         <h2>Production LLM Token & Cost Tracking System</h2>
-        <p class="project-meta">KIconnect - RWTH IT Center | Full-time | Sep 2024 - Present</p>
+        <p class="project-meta">
+          KIconnect - RWTH IT Center | Full-time | Sep 2024 - Present
+        </p>
 
         <div class="section-title">Tech Stack</div>
         <div>
@@ -133,22 +138,49 @@
         </div>
 
         <div class="section-title">Challenge</div>
-        <p>Build accurate token counting and cost tracking infrastructure for a multi-tenant LLM platform supporting diverse models (OpenAI, Llama, Gemma, Mistral, Qwen, DeepSeek) with different tokenization methods. Must handle both text and vision inputs, aggregate costs per tenant, and provide real-time billing data.</p>
+        <p>
+          Build accurate token counting and cost tracking infrastructure for a
+          multi-tenant LLM platform supporting diverse models (OpenAI, Llama,
+          Gemma, Mistral, Qwen, DeepSeek) with different tokenization methods.
+          Must handle both text and vision inputs, aggregate costs per tenant,
+          and provide real-time billing data.
+        </p>
 
         <div class="section-title">Solution</div>
         <ul>
-          <li><strong>Unified Tokenization Layer:</strong> Integrated Microsoft.ML.Tokenizers for text and pythonnet for vision model tokenizers, creating abstraction layer supporting all model families</li>
-          <li><strong>Real-time Cost Calculation:</strong> Implemented streaming token counting during LLM responses with accurate pricing models per deployment</li>
-          <li><strong>Data Aggregation Pipeline:</strong> Built Hangfire background jobs for hourly/daily cost aggregation, quota monitoring, and usage analytics</li>
-          <li><strong>Multi-tenant Analytics:</strong> Designed MongoDB schemas for efficient querying of usage patterns, cost breakdowns, and trend analysis per tenant</li>
-          <li><strong>Quota Management:</strong> Implemented real-time quota enforcement with overflow handling and alert system</li>
+          <li>
+            <strong>Unified Tokenization Layer:</strong> Integrated
+            Microsoft.ML.Tokenizers for text and pythonnet for vision model
+            tokenizers, creating abstraction layer supporting all model families
+          </li>
+          <li>
+            <strong>Real-time Cost Calculation:</strong> Implemented streaming
+            token counting during LLM responses with accurate pricing models per
+            deployment
+          </li>
+          <li>
+            <strong>Data Aggregation Pipeline:</strong> Built Hangfire
+            background jobs for hourly/daily cost aggregation, quota monitoring,
+            and usage analytics
+          </li>
+          <li>
+            <strong>Multi-tenant Analytics:</strong> Designed MongoDB schemas
+            for efficient querying of usage patterns, cost breakdowns, and trend
+            analysis per tenant
+          </li>
+          <li>
+            <strong>Quota Management:</strong> Implemented real-time quota
+            enforcement with overflow handling and alert system
+          </li>
         </ul>
 
         <div class="section-title">Business Value</div>
         <div class="highlight">
-          ✓ Accurate cost attribution across 10+ departments with sub-token precision<br>
-          ✓ Prevented budget overruns with real-time quota enforcement<br>
-          ✓ Enabled data-driven decisions on model deployment and resource allocation<br>
+          ✓ Accurate cost attribution across 10+ departments with sub-token
+          precision<br />
+          ✓ Prevented budget overruns with real-time quota enforcement<br />
+          ✓ Enabled data-driven decisions on model deployment and resource
+          allocation<br />
           ✓ Generated detailed usage reports for financial planning
         </div>
       </div>
@@ -168,19 +200,47 @@
         </div>
 
         <div class="section-title">Description</div>
-        <p>Collection of quantitative investment strategies including Market Health Indicator (MHI) and other algorithmic trading approaches. Implements data pipelines for fetching market data, computing technical indicators, backtesting strategies, and visualizing results.</p>
+        <p>
+          Collection of quantitative investment strategies including Market
+          Health Indicator (MHI) and other algorithmic trading approaches.
+          Implements data pipelines for fetching market data, computing
+          technical indicators, backtesting strategies, and visualizing results.
+        </p>
 
         <div class="section-title">Features</div>
         <ul>
-          <li><strong>Market Health Indicator (MHI):</strong> Custom composite indicator combining multiple market metrics to assess overall market conditions</li>
-          <li><strong>Data Pipeline:</strong> Automated fetching and preprocessing of historical market data from various sources</li>
-          <li><strong>Backtesting Framework:</strong> Simulates strategy performance on historical data with transaction costs and slippage</li>
-          <li><strong>Performance Analytics:</strong> Calculates Sharpe ratio, maximum drawdown, alpha/beta, and other risk-adjusted returns</li>
-          <li><strong>Visualization:</strong> Generates equity curves, drawdown charts, and strategy performance dashboards</li>
+          <li>
+            <strong>Market Health Indicator (MHI):</strong> Custom composite
+            indicator combining multiple market metrics to assess overall market
+            conditions
+          </li>
+          <li>
+            <strong>Data Pipeline:</strong> Automated fetching and preprocessing
+            of historical market data from various sources
+          </li>
+          <li>
+            <strong>Backtesting Framework:</strong> Simulates strategy
+            performance on historical data with transaction costs and slippage
+          </li>
+          <li>
+            <strong>Performance Analytics:</strong> Calculates Sharpe ratio,
+            maximum drawdown, alpha/beta, and other risk-adjusted returns
+          </li>
+          <li>
+            <strong>Visualization:</strong> Generates equity curves, drawdown
+            charts, and strategy performance dashboards
+          </li>
         </ul>
 
         <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/quant-strategies" class="link" target="_blank">GitHub Repository</a></p>
+        <p>
+          <a
+            href="https://github.com/RuizhangZhou/quant-strategies"
+            class="link"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
       </div>
 
       <!-- Drawdown Alerts & Watchtower -->
@@ -197,12 +257,34 @@
         </div>
 
         <div class="section-title">Drawdown Alerts</div>
-        <p>Automated monitoring system that tracks portfolio drawdowns and triggers alerts when losses exceed predefined thresholds. Helps manage risk by providing early warnings of significant portfolio declines.</p>
-        <p><a href="https://github.com/RuizhangZhou/drawdown-alerts" class="link" target="_blank">GitHub Repository</a></p>
+        <p>
+          Automated monitoring system that tracks portfolio drawdowns and
+          triggers alerts when losses exceed predefined thresholds. Helps manage
+          risk by providing early warnings of significant portfolio declines.
+        </p>
+        <p>
+          <a
+            href="https://github.com/RuizhangZhou/drawdown-alerts"
+            class="link"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
 
-        <div class="section-title" style="margin-top: 16px;">Watchtower</div>
-        <p>Continuous monitoring and alerting system for tracking key metrics and anomalies. Implements data quality checks, drift detection, and automated notifications.</p>
-        <p><a href="https://github.com/RuizhangZhou/watchtower" class="link" target="_blank">GitHub Repository</a></p>
+        <div class="section-title" style="margin-top: 16px">Watchtower</div>
+        <p>
+          Continuous monitoring and alerting system for tracking key metrics and
+          anomalies. Implements data quality checks, drift detection, and
+          automated notifications.
+        </p>
+        <p>
+          <a
+            href="https://github.com/RuizhangZhou/watchtower"
+            class="link"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
       </div>
 
       <!-- Business Process Intelligence -->
@@ -219,7 +301,11 @@
         </div>
 
         <div class="section-title">Description</div>
-        <p>Course focused on extracting insights from business process data using process mining techniques, data analytics, and business intelligence tools. Grade: 2.0 (Good)</p>
+        <p>
+          Course focused on extracting insights from business process data using
+          process mining techniques, data analytics, and business intelligence
+          tools.
+        </p>
 
         <div class="section-title">Key Topics</div>
         <ul>
@@ -233,7 +319,9 @@
       <!-- Data Science Course -->
       <div class="project">
         <h2>Introduction to Data Science</h2>
-        <p class="project-meta">RWTH Course | Data Science Fundamentals | 2022-2023</p>
+        <p class="project-meta">
+          RWTH Course | Data Science Fundamentals | 2022-2023
+        </p>
 
         <div class="section-title">Tech Stack</div>
         <div>
@@ -246,7 +334,11 @@
         </div>
 
         <div class="section-title">Description</div>
-        <p>Comprehensive course covering data science fundamentals including data wrangling, exploratory data analysis, statistical modeling, and machine learning pipelines. Grade: 2.0 (Good)</p>
+        <p>
+          Comprehensive course covering data science fundamentals including data
+          wrangling, exploratory data analysis, statistical modeling, and
+          machine learning pipelines.
+        </p>
 
         <div class="section-title">Key Topics</div>
         <ul>
@@ -275,16 +367,29 @@
         </div>
 
         <div class="section-title">Description</div>
-        <p>Series of data science assignments focusing on applying deep learning frameworks to real-world datasets. Covered data preprocessing, model training, hyperparameter tuning, and results analysis.</p>
+        <p>
+          Series of data science assignments focusing on applying deep learning
+          frameworks to real-world datasets. Covered data preprocessing, model
+          training, hyperparameter tuning, and results analysis.
+        </p>
 
         <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/Deep-Learning-packages-learning-assignment" class="link" target="_blank">GitHub Repository</a></p>
+        <p>
+          <a
+            href="https://github.com/RuizhangZhou/Deep-Learning-packages-learning-assignment"
+            class="link"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
       </div>
 
       <!-- Operations Research -->
       <div class="project">
         <h2>Operations Research & Optimization</h2>
-        <p class="project-meta">RWTH Courses | Business Administration | 2022-2023</p>
+        <p class="project-meta">
+          RWTH Courses | Business Administration | 2022-2023
+        </p>
 
         <div class="section-title">Tech Stack</div>
         <div>
@@ -296,12 +401,21 @@
         </div>
 
         <div class="section-title">Operations Research 1 & 2</div>
-        <p>Advanced operations research courses covering linear programming, network flows, integer programming, dynamic programming, and queueing theory. Applied mathematical optimization to real-world business problems.</p>
-        <p><strong>Grades:</strong> OR1: 3.3 | OR2: 2.7</p>
+        <p>
+          Advanced operations research courses covering linear programming,
+          network flows, integer programming, dynamic programming, and queueing
+          theory. Applied mathematical optimization to real-world business
+          problems.
+        </p>
 
-        <div class="section-title" style="margin-top: 16px;">Practical Optimization with Modeling Languages</div>
-        <p>Hands-on course using algebraic modeling languages (AML) to formulate and solve large-scale optimization problems. Implemented solutions for supply chain, scheduling, and resource allocation problems.</p>
-        <p><strong>Grade:</strong> 2.0 (Good)</p>
+        <div class="section-title" style="margin-top: 16px">
+          Practical Optimization with Modeling Languages
+        </div>
+        <p>
+          Hands-on course using algebraic modeling languages (AML) to formulate
+          and solve large-scale optimization problems. Implemented solutions for
+          supply chain, scheduling, and resource allocation problems.
+        </p>
 
         <div class="section-title">Key Topics</div>
         <ul>
@@ -317,7 +431,9 @@
       <!-- FinTech Bank Data Analytics -->
       <div class="project">
         <h2>FinTech Data Analytics Platform</h2>
-        <p class="project-meta">RWTH Software Project | Full-stack + Analytics | 2020-2021</p>
+        <p class="project-meta">
+          RWTH Software Project | Full-stack + Analytics | 2020-2021
+        </p>
 
         <div class="section-title">Tech Stack</div>
         <div>
@@ -329,23 +445,58 @@
         </div>
 
         <div class="section-title">Description</div>
-        <p>Full-stack web application for banking with integrated data analytics features. Built ETL pipelines for transaction data, implemented analytical dashboards, and provided business intelligence insights.</p>
+        <p>
+          Full-stack web application for banking with integrated data analytics
+          features. Built ETL pipelines for transaction data, implemented
+          analytical dashboards, and provided business intelligence insights.
+        </p>
 
         <div class="section-title">Data Engineering Components</div>
         <ul>
-          <li><strong>Data Pipeline:</strong> Designed MongoDB schemas for efficient storage and querying of transaction data</li>
-          <li><strong>Analytics Engine:</strong> Implemented aggregation pipelines for computing financial metrics, trends, and KPIs</li>
-          <li><strong>Dashboard:</strong> Built interactive visualizations for transaction patterns, customer segments, and financial health indicators</li>
-          <li><strong>Reporting:</strong> Automated generation of periodic reports with key business metrics</li>
+          <li>
+            <strong>Data Pipeline:</strong> Designed MongoDB schemas for
+            efficient storage and querying of transaction data
+          </li>
+          <li>
+            <strong>Analytics Engine:</strong> Implemented aggregation pipelines
+            for computing financial metrics, trends, and KPIs
+          </li>
+          <li>
+            <strong>Dashboard:</strong> Built interactive visualizations for
+            transaction patterns, customer segments, and financial health
+            indicators
+          </li>
+          <li>
+            <strong>Reporting:</strong> Automated generation of periodic reports
+            with key business metrics
+          </li>
         </ul>
 
         <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/fintech_apobank" class="link" target="_blank">GitHub Repository</a></p>
+        <p>
+          <a
+            href="https://github.com/RuizhangZhou/fintech_apobank"
+            class="link"
+            target="_blank"
+            >GitHub Repository</a
+          >
+        </p>
       </div>
     </main>
 
-    <footer style="padding: 24px 20px; color: #666; text-align: center; background: white; border-top: 1px solid #e7e7e7;">
-      <div class="wrap">&copy; Ruizhang Zhou | <a href="./index.html" class="link">Back to Home</a></div>
+    <footer
+      style="
+        padding: 24px 20px;
+        color: #666;
+        text-align: center;
+        background: white;
+        border-top: 1px solid #e7e7e7;
+      "
+    >
+      <div class="wrap">
+        &copy; Ruizhang Zhou |
+        <a href="./index.html" class="link">Back to Home</a>
+      </div>
     </footer>
   </body>
 </html>

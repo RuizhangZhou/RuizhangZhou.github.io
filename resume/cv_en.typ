@@ -19,11 +19,11 @@
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Education")
-*M.Sc. Computer Science* | RWTH Aachen University | Oct. 2022 - Jun. 2024 | Grade: 2.5
+*M.Sc. Computer Science* | RWTH Aachen University | Oct. 2022 - Jun. 2024
 - Master's Thesis: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
 - Focus on AI/ML: Deep Learning, NLP, Large Language Models, Knowledge Representation
 
-*B.Sc. Computer Science* | RWTH Aachen University | Oct. 2019 - Sep. 2022 | Grade: 2.2
+*B.Sc. Computer Science* | RWTH Aachen University | Oct. 2019 - Sep. 2022
 
 *B.A. German Language and Literature* | Tongji University | Sep. 2014 - Aug. 2018
 

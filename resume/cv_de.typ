@@ -19,11 +19,11 @@
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Ausbildung")
-*M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024 | Note: 2,5
+*M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024
 - Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
 - Schwerpunkt KI/ML: Deep Learning, NLP, Large Language Models, Wissensrepräsentation
 
-*B.Sc. Informatik* | RWTH Aachen University | Okt. 2019 - Sep. 2022 | Note: 2,2
+*B.Sc. Informatik* | RWTH Aachen University | Okt. 2019 - Sep. 2022
 
 *B.A. Germanistik* | Tongji Universität | Sep. 2014 - Aug. 2018
 

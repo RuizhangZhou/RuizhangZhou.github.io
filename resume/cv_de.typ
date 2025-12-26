@@ -38,9 +38,10 @@
 
 *Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl DBIS | Jul. 2023 - Mär. 2024 (9 Monate)
 - Forschung zu LLM, GNN und Knowledge-Graph-Integration
-- Experimente auf GPU-Cluster-Infrastruktur für Modelltraining/-evaluierung
-- Entwicklung/Deployment einer LLaMA/Ollama-basierten Chat-Plattform für Forschungszwecke
-- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, REST-APIs
+- Deployment von LLaMA-Modellen auf GPU-Cluster mit Ollama, Entwicklung eines FastAPI-REST-Services für internen Forschungszugang
+- Experimente auf GPU-Cluster-Infrastruktur für Modelltraining/-evaluierung, vLLM-Experimente für Inferenz-Optimierung
+- Aufbau einer End-to-End-LLM-Chat-Plattform: GPU-Deployment → API-Service → Web-Interface
+- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, FastAPI, vLLM, REST-APIs
 
 #line(length: 100%, stroke: 0.5pt)
 

@@ -38,9 +38,10 @@
 
 *Research Assistant (Part-time)* | RWTH Chair of DBIS | Jul. 2023 - Mar. 2024 (9 months)
 - Research on LLM, GNN, and Knowledge Graph integration
-- Experiments on GPU cluster infrastructure for model training/evaluation
-- Developed/deployed LLaMA/Ollama-based chat platform for research purposes
-- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, REST APIs
+- Deployed LLaMA models on GPU cluster using Ollama, built FastAPI REST service for internal research access
+- Experiments on GPU cluster infrastructure for model training/evaluation, experimented with vLLM for inference optimization
+- Built end-to-end LLM chat platform: GPU deployment → API service → web interface
+- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, FastAPI, vLLM, REST APIs
 
 #line(length: 100%, stroke: 0.5pt)
 

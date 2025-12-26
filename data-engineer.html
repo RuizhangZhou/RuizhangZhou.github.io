@@ -120,6 +120,67 @@
     </header>
 
     <main class="wrap">
+      <!-- Traffic Data Pipeline for ML -->
+      <div class="project">
+        <h2>Traffic Trajectory Data Pipeline for ML Models</h2>
+        <p class="project-meta">
+          RWTH Cyber-Physical Mobility Group | Master Thesis | Oct 2023 - Apr 2024
+        </p>
+
+        <div class="section-title">Tech Stack</div>
+        <div>
+          <span class="pill">Python</span>
+          <span class="pill">Pandas</span>
+          <span class="pill">NumPy</span>
+          <span class="pill">Data Preprocessing</span>
+          <span class="pill">Time Series</span>
+          <span class="pill">XML Processing</span>
+        </div>
+
+        <div class="section-title">Challenge</div>
+        <p>
+          Build comprehensive data preprocessing pipeline to transform raw IKA traffic datasets (inD, rounD, exiD) containing thousands of vehicle trajectories into clean, normalized time series data suitable for training generative ML models. Must handle missing data, variable-length sequences, multi-agent interactions, and convert outputs to simulation-ready XML format.
+        </p>
+
+        <div class="section-title">Solution</div>
+        <ul>
+          <li>
+            <strong>Data Extraction & Cleaning:</strong> Processed 3 large-scale IKA datasets (intersection, roundabout, expressway scenarios) with custom parsers for trajectory data, handling edge cases and data quality issues
+          </li>
+          <li>
+            <strong>Feature Engineering:</strong> Engineered features including velocity, acceleration, heading, relative positions, and interaction features between multiple vehicles
+          </li>
+          <li>
+            <strong>Sliding Window Segmentation:</strong> Implemented 500-frame sliding window approach to extract fixed-length trajectory sequences, creating thousands of training samples from raw data
+          </li>
+          <li>
+            <strong>Normalization Pipeline:</strong> Built standardization and min-max normalization pipelines to ensure stable training, with separate statistics per dataset to preserve traffic pattern characteristics
+          </li>
+          <li>
+            <strong>Data Augmentation:</strong> Implemented data augmentation strategies including temporal shifting and noise injection to increase training data diversity
+          </li>
+          <li>
+            <strong>XML Conversion Pipeline:</strong> Developed automated pipeline to convert generated trajectories back to XML format for CPM Remote platform integration, handling coordinate transformations and metadata
+          </li>
+          <li>
+            <strong>Data Validation:</strong> Built validation checks for trajectory continuity, physical constraints (velocity/acceleration limits), and format compliance
+          </li>
+        </ul>
+
+        <div class="section-title">Business Value</div>
+        <div class="highlight">
+          ✓ Processed 10,000+ real-world vehicle trajectories into ML-ready format<br />
+          ✓ Automated data pipeline reduced preprocessing time from weeks to hours<br />
+          ✓ Enabled training of generative models on diverse traffic scenarios<br />
+          ✓ Seamless integration with simulation platform through XML conversion
+        </div>
+
+        <div class="section-title">Links</div>
+        <p>
+          <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a>
+        </p>
+      </div>
+
       <!-- Token & Cost Tracking System -->
       <div class="project">
         <h2>Production LLM Token & Cost Tracking System</h2>

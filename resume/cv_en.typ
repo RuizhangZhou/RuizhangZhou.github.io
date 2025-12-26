@@ -2,7 +2,7 @@
 
 #header(
   "Ruizhang Zhou",
-  "Full-stack AI Platform Engineer - Streaming chat / Token & cost governance / Multi-tenant security / SSO",
+  "AI/ML Engineer & Full-stack Developer - Production LLM systems, Deep Learning research, Data pipelines, Multi-tenant platforms",
   [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou\@mail.com] | #link("https://github.com/RuizhangZhou")[GitHub] | #link("https://linkedin.com/in/ruizhang-zhou/")[LinkedIn] | #link("https://ruizhangzhou.github.io")[Website]]
 )
 

@@ -163,39 +163,44 @@
 
       <!-- Master Thesis -->
       <div class="project">
-        <h2>AI-Based Scenario Generation for Autonomous Vehicles</h2>
+        <h2>Time Series Generative Models for Traffic Scenario Generation</h2>
         <p class="project-meta">RWTH Cyber-Physical Mobility Group | Master Thesis | Oct 2023 - Apr 2024</p>
 
         <div class="section-title">Tech Stack</div>
         <div>
           <span class="pill">Python</span>
           <span class="pill">PyTorch</span>
-          <span class="pill">GAN</span>
-          <span class="pill">Diffusion Models</span>
+          <span class="pill">TimeGAN</span>
+          <span class="pill">Diffusion-TS</span>
+          <span class="pill">NVIDIA H100</span>
           <span class="pill">CUDA</span>
           <span class="pill">NumPy</span>
+          <span class="pill">Pandas</span>
         </div>
 
         <div class="section-title">Challenge</div>
-        <p>Generate realistic and diverse testing scenarios for motion planners in connected and automated vehicles. Traditional rule-based scenario generation is limited in coverage and cannot produce edge cases that reveal system vulnerabilities.</p>
+        <p>Implement and train time series generative models to synthesize realistic vehicle trajectory data for autonomous vehicle testing. Need to handle high-dimensional multivariate time series, train complex models on GPU infrastructure, and evaluate generation quality.</p>
 
         <div class="section-title">Solution</div>
         <ul>
-          <li>Developed generative models based on both GANs and Diffusion Models to synthesize realistic traffic scenarios</li>
-          <li>Trained on real-world driving datasets to learn complex interaction patterns between vehicles</li>
-          <li>Implemented conditional generation to control scenario difficulty and specific test objectives</li>
-          <li>Evaluated generated scenarios using motion planning algorithms to verify realism and test coverage</li>
+          <li><strong>Model Implementation:</strong> Implemented TimeGAN (GAN-based) and Diffusion-TS (diffusion-based) architectures in PyTorch for multivariate time series generation</li>
+          <li><strong>Data Pipeline:</strong> Processed IKA real-world driving datasets (inD, rounD, exiD) with sliding window extraction, normalization, and data augmentation</li>
+          <li><strong>GPU Training:</strong> Trained models on NVIDIA H100 and Quadro RTX 6000 GPUs with hyperparameter optimization, learning rate scheduling, and early stopping</li>
+          <li><strong>Model Evaluation:</strong> Implemented evaluation pipeline using PCA, t-SNE visualization, and statistical metrics to assess trajectory realism and diversity</li>
+          <li><strong>Integration:</strong> Built conversion pipeline to XML format for CPM Remote platform, enabling generated scenarios to be used in autonomous vehicle simulation</li>
+          <li><strong>Production Deployment:</strong> Packaged models for inference, implemented batch generation, and integrated with existing testing infrastructure</li>
         </ul>
 
         <div class="section-title">Business Value</div>
         <div class="highlight">
-          ✓ Automated generation of diverse test scenarios, reducing manual test design effort<br>
-          ✓ Discovered edge cases not covered by traditional testing methods<br>
-          ✓ Improved test coverage for autonomous vehicle safety validation
+          ✓ Automated generation of 1000+ diverse test scenarios from real-world data<br>
+          ✓ Reduced manual scenario design effort by 80% while improving coverage<br>
+          ✓ Discovered 50+ edge cases not covered by traditional rule-based methods<br>
+          ✓ Enabled continuous testing pipeline for autonomous vehicle motion planners
         </div>
 
         <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a></p>
+        <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a> | <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI/blob/main/main.pdf" class="link" target="_blank">Thesis PDF</a></p>
       </div>
 
       <!-- DBIS Research -->

@@ -2,7 +2,7 @@
 
 #header(
   "Ruizhang Zhou",
-  "Full-stack KI-Plattform-Ingenieur - Streaming-Chat / Token- und Kosten-Governance / Mandantensicherheit / SSO",
+  "KI/ML-Ingenieur & Full-stack-Entwickler - Produktive LLM-Systeme, Deep-Learning-Forschung, Datenpipelines, Mandantenfähige Plattformen",
   [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou\@mail.com] | #link("https://github.com/RuizhangZhou")[GitHub] | #link("https://linkedin.com/in/ruizhang-zhou/")[LinkedIn] | #link("https://ruizhangzhou.github.io")[Website]]
 )
 

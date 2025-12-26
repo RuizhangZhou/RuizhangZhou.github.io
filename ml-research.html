@@ -152,6 +152,7 @@
           <li><strong>LLM Deployment:</strong> Deployed and fine-tuned LLaMA models using Ollama for efficient inference in research settings</li>
           <li><strong>Large-scale Experimentation:</strong> Conducted experiments on GPU cluster infrastructure, managing distributed training and hyperparameter optimization</li>
           <li><strong>Regular Research Presentations:</strong> Presented findings weekly at DBIS group meetings, discussing latest developments in LLMs and GNNs</li>
+          <li><strong>GNN-based Fake News Detection:</strong> Reproduced and experimented with GNN architectures (GCN, GAT, GraphSAGE) for fake news classification on social network propagation data</li>
         </ul>
 
         <div class="section-title">Research Impact</div>
@@ -160,35 +161,6 @@
           ✓ Demonstrated feasibility of knowledge graph-enhanced medical AI<br>
           ✓ Contributed to understanding of multi-modal LLM applications
         </div>
-      </div>
-
-      <!-- GNN-FakeNews -->
-      <div class="project">
-        <h2>GNN-based Fake News Detection</h2>
-        <p class="project-meta">Research Project | Graph Neural Networks</p>
-
-        <div class="section-title">Tech Stack</div>
-        <div>
-          <span class="pill">Python</span>
-          <span class="pill">PyTorch</span>
-          <span class="pill">PyG</span>
-          <span class="pill">Graph Neural Networks</span>
-          <span class="pill">Social Network Analysis</span>
-        </div>
-
-        <div class="section-title">Research Overview</div>
-        <p>Developed graph neural network models for detecting fake news by modeling propagation patterns in social networks. Leverages both content features and network structure for improved detection accuracy.</p>
-
-        <div class="section-title">Approach</div>
-        <ul>
-          <li>Graph construction from news propagation cascades on social media</li>
-          <li>GNN architectures (GCN, GAT, GraphSAGE) for fake news classification</li>
-          <li>Joint modeling of content semantics and propagation dynamics</li>
-          <li>Early detection strategies for real-time fake news identification</li>
-        </ul>
-
-        <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/GNN-FakeNews" class="link" target="_blank">GitHub Repository</a></p>
       </div>
 
       <!-- Automatic Speech Recognition -->
@@ -278,32 +250,36 @@
         <div>
           <span class="pill">Python</span>
           <span class="pill">PyTorch</span>
-          <span class="pill">GAN</span>
-          <span class="pill">Diffusion Models</span>
-          <span class="pill">Reinforcement Learning</span>
+          <span class="pill">TimeGAN</span>
+          <span class="pill">Diffusion-TS</span>
+          <span class="pill">GANs</span>
+          <span class="pill">CUDA</span>
+          <span class="pill">IKA Datasets</span>
         </div>
 
         <div class="section-title">Research Contribution</div>
-        <p>Developed novel generative AI approaches for synthesizing realistic and diverse testing scenarios for motion planners in connected and automated vehicles. Combined GAN and Diffusion Model architectures to generate edge cases that reveal system vulnerabilities.</p>
+        <p>Comparative study of generative AI approaches (TimeGAN vs Diffusion-TS) for synthesizing realistic traffic scenarios from time series trajectory data. Addresses the challenge of generating diverse and realistic edge cases for testing autonomous vehicle motion planners.</p>
 
         <div class="section-title">Research Methodology</div>
         <ul>
-          <li>Formulated scenario generation as conditional generative modeling problem</li>
-          <li>Implemented and compared GAN vs Diffusion Model approaches</li>
-          <li>Designed evaluation metrics for scenario realism and test coverage</li>
-          <li>Validated generated scenarios using motion planning algorithms</li>
-          <li>Analyzed failure modes and edge case discovery capabilities</li>
+          <li><strong>Problem Formulation:</strong> Formulated scenario generation as conditional time series generation problem for vehicle trajectories</li>
+          <li><strong>Data Collection:</strong> Utilized IKA real-world datasets (inD - intersections, rounD - roundabouts, exiD - expressways) containing complex traffic interactions</li>
+          <li><strong>Comparative Analysis:</strong> Implemented and compared TimeGAN (GAN-based) and Diffusion-TS (diffusion-based) approaches for trajectory generation</li>
+          <li><strong>Evaluation Framework:</strong> Designed comprehensive evaluation metrics using PCA, t-SNE visualization, and density analysis to assess realism and diversity</li>
+          <li><strong>Integration & Validation:</strong> Converted generated scenarios to XML format for CPM Remote platform integration and validation with motion planning algorithms</li>
+          <li><strong>Edge Case Discovery:</strong> Analyzed capability of both methods to discover challenging scenarios not covered by traditional rule-based generation</li>
         </ul>
 
         <div class="section-title">Research Impact</div>
         <div class="highlight">
-          ✓ Automated generation of diverse test scenarios, reducing manual effort<br>
-          ✓ Discovered edge cases not covered by traditional rule-based methods<br>
-          ✓ Improved test coverage for autonomous vehicle safety validation
+          ✓ Demonstrated time series generative models can produce realistic traffic scenarios<br>
+          ✓ Comparative insights on GAN vs Diffusion approaches for trajectory generation<br>
+          ✓ Identified edge cases and challenging scenarios for autonomous vehicle testing<br>
+          ✓ Provided framework for automated scenario generation from real-world data
         </div>
 
         <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a></p>
+        <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a> | <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI/blob/main/main.pdf" class="link" target="_blank">Thesis PDF</a></p>
       </div>
     </main>
 

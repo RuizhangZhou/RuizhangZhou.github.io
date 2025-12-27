@@ -26,8 +26,12 @@
 
 *B.A. German Language and Literature* | Tongji University | Sep. 2014 - Aug. 2018
 
-#line(length: 100%, stroke: 0.5pt)
+#section-title("Previous Roles")
+#role("Research Assistant — Chair of Embedded Software", "RWTH Aachen University", "08/2023–03/2024")
+- Enhanced remote lab web app with real‑time visualizations and CI/CD automation.
+- Tech: TypeScript, Angular, Docker, GitLab
 
+<<<<<<< HEAD
 #section-title("Selected previous roles")
 *Research Assistant (Part-time)* | RWTH Chair of Embedded Software | Aug. 2023 - Mar. 2024
 - Maintained CPM Remote Web Application for autonomous vehicle algorithm testing with real-time visualizations
@@ -50,3 +54,11 @@
 - Run automated bots for daily use (Aachen appointment monitoring, quant data alerts) with Matrix notifications
 - *Tech:* Python, Linux Server, Matrix API, Automation Scripts
 
+=======
+#role("Research Assistant — Chair of DBIS", "RWTH Aachen University", "07/2023–03/2024")
+- Deployed LLaMA on GPU cluster, exposed via FastAPI; built end‑to‑end LLM chat platform for internal research.
+- Tech: Python, PyTorch, Ollama, vLLM, FastAPI
+
+#section-title("Tech Stack")
+C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.
+>>>>>>> 739fbfb052f49d91839e4739f1baaa9eeb9c5344

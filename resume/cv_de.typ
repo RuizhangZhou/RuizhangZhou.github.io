@@ -7,20 +7,19 @@
 )
 
 #section-title("Erfahrung")
-*Software Engineer (AI Platform) - Vollzeitstelle* | KIconnect - RWTH IT Center | 09/2024 - heute
+*Software Engineer (AI Platform) - Vollzeit* | KIconnect - RWTH IT Center | 09/2024 - heute
 
-- *Chat-Pipeline:* ASP.NET Core 9 + Semantic Kernel + Azure AI Inference/OpenAI; Streaming-Antworten, Titelgenerierung, strikte Rollenfolge, Content-Filter-Handling.
-- *Tokenisierung & Kosten:* Einheitliche Tokenerfassung (OpenAI, Llama 3, Gemma 3, Mistral, Qwen, DeepSeek); Python.NET-Bridge; Bild-Tokenisierung für VLMs; detaillierte Kostenereignisse inkl. Caching-Tokens; Reporting mit Heatmaps.
-- *Admin-UI:* Vue 3 + Inertia; Modell-/Deploymentverwaltung, Parameter-Tuning, System-Prompts, Quoten; Soft-Delete/Restore; automatische Deaktivierung.
-- *Dokumente & Kontext:* Upload/Extraktion via KernelMemory; Token-Guardrails je Deployment/Modell; On-Demand-Einbindung; tägliche Cleanup-Jobs (Hangfire).
-- *Sicherheit & Compliance:* Shibboleth-SSO; MongoDB CSFLE (lokaler Master-Key); EU-Datenregion; Mandanten-/Rollenprüfungen.
-- *Echtzeit & Stabilität:* SignalR-Broadcasting (Live-UI), resiliente HTTP-Pipelines (Polly), NLog; DevOps mit Traefik/Nomad; eingebettete Python-Runtime.
+- Entwicklung einer produktiven Multi-Tenant-LLM-Plattform mit Streaming-Chat, Echtzeit-Kostentracking und Enterprise-SSO
+- Implementierung einheitlicher Tokenisierung für OpenAI, Llama, Gemma, Mistral, Qwen, DeepSeek; Entwicklung eines Vue 3 Admin-Dashboards
+- *Tech:* C\#/.NET 9, ASP.NET Core, Semantic Kernel, Vue 3, MongoDB, SignalR, Azure AI Inference
 
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Ausbildung")
 *M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024
-- Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles]
+- Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles ↗]
+  - Implementierung von TimeGAN- und Diffusion-TS-Modellen zur Generierung realistischer Fahrzeugtrajektorien für autonome Fahrzeugtests
+  - Automatisierte Generierung von 1000+ diversen Testszenarien aus realen Fahrdatensätzen (inD, rounD, exiD)
 - Schwerpunkt KI/ML: Deep Learning, NLP, Large Language Models, Wissensrepräsentation
 
 *B.Sc. Informatik* | RWTH Aachen University | Okt. 2019 - Sep. 2022
@@ -30,21 +29,24 @@
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Ausgewählte frühere Tätigkeiten")
-*Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl Embedded Software | Aug. 2023 - Mär. 2024 (8 Monate)
-- Wartung/Weiterentwicklung der CPM Remote Web-Anwendung für Remote-Laborverwaltung
-- Echtzeit-Datenvisualisierungen und Monitoring-Dashboards mit modernen Web-Frameworks
-- Verbesserung der CI/CD-Pipelines für automatisiertes Testen/Deployment
-- *Tech:* JavaScript/TypeScript, Web-APIs, Docker, GitLab CI/CD
+*Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl Embedded Software | Aug. 2023 - Mär. 2024
+- Wartung der CPM Remote Web-Anwendung für autonome Fahrzeug-Algorithmentests mit Echtzeit-Visualisierungen
+- *Tech:* TypeScript, Angular, Docker, GitLab CI/CD
 
-*Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl DBIS | Jul. 2023 - Mär. 2024 (9 Monate)
-- Forschung zu LLM, GNN und Knowledge-Graph-Integration
-- Deployment von LLaMA-Modellen auf GPU-Cluster mit Ollama, Entwicklung eines FastAPI-REST-Services für internen Forschungszugang
-- Experimente auf GPU-Cluster-Infrastruktur für Modelltraining/-evaluierung, vLLM-Experimente für Inferenz-Optimierung
-- Aufbau einer End-to-End-LLM-Chat-Plattform: GPU-Deployment → API-Service → Web-Interface
-- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, FastAPI, vLLM, REST-APIs
+*Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl DBIS | Jul. 2023 - Mär. 2024
+- Forschung zu medizinischer Bildverarbeitung: Kombination von BLIP Vision-Language-Modell mit LLMs für Röntgenbild-Berichterstellung
+- Untersuchung der Knowledge-Graph-Integration mit GNNs (GCN, GAT, GraphSAGE) zur Verbesserung des medizinischen Domänenverständnisses
+- Einrichtung von LLM-Serving mit Ollama; Entwicklung eines FastAPI-REST-Services und End-to-End-LLM-Chat-Plattform
+- *Tech:* Python, PyTorch, Transformers, PyG, BLIP, CUDA, Ollama, FastAPI, vLLM
 
 #line(length: 100%, stroke: 0.5pt)
 
-#section-title("Tech-Stack")
-C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.
+#section-title("Projekte")
+#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Echtzeit-Meeting-Untertitel & Übersetzung* ↗] | Persönliches Projekt | Laufend
+- Desktop-Overlay-App für unsichtbare Echtzeit-Meeting-Untertitel mit Übersetzung; erfasst Systemaudio und Mikrofon
+- *Tech:* TypeScript, Rust, Electron, Speech-to-Text API, LLM-Integration
+
+*Self-hosted Automation Server* | Persönliche Infrastruktur | Laufend
+- Automatisierte Bots für den täglichen Gebrauch (Aachener Terminüberwachung, Quant-Daten-Alerts) mit Matrix-Benachrichtigungen
+- *Tech:* Python, Linux Server, Matrix API, Automation Scripts
 

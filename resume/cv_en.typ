@@ -7,16 +7,13 @@
 )
 
 #section-title("Experience")
-*Software Engineer (AI Platform) - Full-time Position* | KIconnect - RWTH IT Center | 09/2024 - Present
+#role("Software Engineer (AI Platform)", "KIconnect — RWTH IT Center", "09/2024–Present")
 
-- *Chat Pipeline:* ASP.NET Core 9 + Semantic Kernel + Azure AI Inference/OpenAI; streaming responses, title generation, strict role alternation, content-filter handling.
-- *Tokenization & Costing:* Unified token counting (OpenAI, Llama 3, Gemma 3, Mistral, Qwen, DeepSeek); Python.NET bridge; image tokenization for VLMs; detailed cost events incl. cached tokens; reporting with heatmaps.
-- *Admin UI:* Vue 3 + Inertia; model/deployment management, parameter tuning, system prompts, quotas; soft-delete/restore; auto-deactivation.
-- *Documents & Context:* Upload/extraction via KernelMemory; per-deployment/per-model token guardrails; on-demand inclusion; daily cleanup jobs (Hangfire).
-- *Security & Compliance:* Shibboleth SSO; MongoDB CSFLE (local master key); EU data region; tenant/role checks.
-- *Realtime & Resilience:* SignalR broadcasting (live UI), resilient HTTP (Polly), NLog; DevOps with Traefik/Nomad; embedded Python runtime.
-
-#line(length: 100%, stroke: 0.5pt)
+- Built a production multi‑tenant AI platform (ASP.NET Core + Vue 3) with real‑time LLM streaming, admin controls, and enterprise SSO.
+- Implemented unified tokenization and cost accounting (text + vision) across model families, enabling per‑tenant quotas and heatmap reporting.
+- Secured sensitive data with MongoDB CSFLE and tenant/role guardrails; integrated moderation and image handling.
+- Improved operability and resilience with SignalR streaming, Hangfire jobs, and Polly retries on Nomad/Traefik.
+- Tech: C#/.NET, Vue 3, MongoDB, Semantic Kernel, Azure/OpenAI
 
 #section-title("Education")
 *M.Sc. Computer Science* | RWTH Aachen University | Oct. 2022 - Jun. 2024
@@ -27,24 +24,14 @@
 
 *B.A. German Language and Literature* | Tongji University | Sep. 2014 - Aug. 2018
 
-#line(length: 100%, stroke: 0.5pt)
+#section-title("Previous Roles")
+#role("Research Assistant — Chair of Embedded Software", "RWTH Aachen University", "08/2023–03/2024")
+- Enhanced remote lab web app with real‑time visualizations and CI/CD automation.
+- Tech: TypeScript, Angular, Docker, GitLab
 
-#section-title("Selected previous roles")
-*Research Assistant (Part-time)* | RWTH Chair of Embedded Software | Aug. 2023 - Mar. 2024 (8 months)
-- Maintained/enhanced CPM Remote Web Application for remote laboratory management
-- Real-time data visualizations and monitoring dashboards using modern web frameworks
-- Improved CI/CD pipelines for automated testing/deployment
-- *Tech:* JavaScript/TypeScript, Web APIs, Docker, GitLab CI/CD
-
-*Research Assistant (Part-time)* | RWTH Chair of DBIS | Jul. 2023 - Mar. 2024 (9 months)
-- Research on LLM, GNN, and Knowledge Graph integration
-- Deployed LLaMA models on GPU cluster using Ollama, built FastAPI REST service for internal research access
-- Experiments on GPU cluster infrastructure for model training/evaluation, experimented with vLLM for inference optimization
-- Built end-to-end LLM chat platform: GPU deployment → API service → web interface
-- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, FastAPI, vLLM, REST APIs
-
-#line(length: 100%, stroke: 0.5pt)
+#role("Research Assistant — Chair of DBIS", "RWTH Aachen University", "07/2023–03/2024")
+- Deployed LLaMA on GPU cluster, exposed via FastAPI; built end‑to‑end LLM chat platform for internal research.
+- Tech: Python, PyTorch, Ollama, vLLM, FastAPI
 
 #section-title("Tech Stack")
 C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.
-

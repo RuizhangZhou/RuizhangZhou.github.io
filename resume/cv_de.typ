@@ -7,16 +7,13 @@
 )
 
 #section-title("Erfahrung")
-*Software Engineer (AI Platform) - Vollzeitstelle* | KIconnect - RWTH IT Center | 09/2024 - heute
+#role("Software Engineer (AI Platform)", "KIconnect — RWTH IT Center", "09/2024–heute")
 
-- *Chat-Pipeline:* ASP.NET Core 9 + Semantic Kernel + Azure AI Inference/OpenAI; Streaming-Antworten, Titelgenerierung, strikte Rollenfolge, Content-Filter-Handling.
-- *Tokenisierung & Kosten:* Einheitliche Tokenerfassung (OpenAI, Llama 3, Gemma 3, Mistral, Qwen, DeepSeek); Python.NET-Bridge; Bild-Tokenisierung für VLMs; detaillierte Kostenereignisse inkl. Caching-Tokens; Reporting mit Heatmaps.
-- *Admin-UI:* Vue 3 + Inertia; Modell-/Deploymentverwaltung, Parameter-Tuning, System-Prompts, Quoten; Soft-Delete/Restore; automatische Deaktivierung.
-- *Dokumente & Kontext:* Upload/Extraktion via KernelMemory; Token-Guardrails je Deployment/Modell; On-Demand-Einbindung; tägliche Cleanup-Jobs (Hangfire).
-- *Sicherheit & Compliance:* Shibboleth-SSO; MongoDB CSFLE (lokaler Master-Key); EU-Datenregion; Mandanten-/Rollenprüfungen.
-- *Echtzeit & Stabilität:* SignalR-Broadcasting (Live-UI), resiliente HTTP-Pipelines (Polly), NLog; DevOps mit Traefik/Nomad; eingebettete Python-Runtime.
-
-#line(length: 100%, stroke: 0.5pt)
+- Produktionsreife, mandantenfähige KI‑Plattform (ASP.NET Core + Vue 3) mit Echtzeit‑LLM‑Streaming, Admin‑Kontrollen und Enterprise‑SSO aufgebaut.
+- Vereinheitlichte Tokenisierung und Kostenrechnung (Text + Vision) über mehrere Modellfamilien; Quoten pro Mandant und Heatmap‑Reporting.
+- Schutz sensibler Daten mit MongoDB CSFLE und Mandanten-/Rollen‑Guardrails; Moderation und Bildverarbeitung integriert.
+- Betriebsfähigkeit/Resilienz verbessert (SignalR‑Streaming, Hangfire‑Jobs, Polly‑Retries auf Nomad/Traefik).
+- Tech: C#/.NET, Vue 3, MongoDB, Semantic Kernel, Azure/OpenAI
 
 #section-title("Ausbildung")
 *M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024
@@ -27,24 +24,14 @@
 
 *B.A. Germanistik* | Tongji Universität | Sep. 2014 - Aug. 2018
 
-#line(length: 100%, stroke: 0.5pt)
-
 #section-title("Ausgewählte frühere Tätigkeiten")
-*Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl Embedded Software | Aug. 2023 - Mär. 2024 (8 Monate)
-- Wartung/Weiterentwicklung der CPM Remote Web-Anwendung für Remote-Laborverwaltung
-- Echtzeit-Datenvisualisierungen und Monitoring-Dashboards mit modernen Web-Frameworks
-- Verbesserung der CI/CD-Pipelines für automatisiertes Testen/Deployment
-- *Tech:* JavaScript/TypeScript, Web-APIs, Docker, GitLab CI/CD
+#role("Wiss. Hilfskraft — Lehrstuhl Embedded Software", "RWTH Aachen University", "08/2023–03/2024")
+- Remote‑Lab‑Webanwendung mit Echtzeit‑Visualisierung und CI/CD‑Automatisierung verbessert.
+- Tech: TypeScript, Angular, Docker, GitLab
 
-*Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl DBIS | Jul. 2023 - Mär. 2024 (9 Monate)
-- Forschung zu LLM, GNN und Knowledge-Graph-Integration
-- Deployment von LLaMA-Modellen auf GPU-Cluster mit Ollama, Entwicklung eines FastAPI-REST-Services für internen Forschungszugang
-- Experimente auf GPU-Cluster-Infrastruktur für Modelltraining/-evaluierung, vLLM-Experimente für Inferenz-Optimierung
-- Aufbau einer End-to-End-LLM-Chat-Plattform: GPU-Deployment → API-Service → Web-Interface
-- *Tech:* Python, PyTorch, Transformers, CUDA, Ollama, FastAPI, vLLM, REST-APIs
-
-#line(length: 100%, stroke: 0.5pt)
+#role("Wiss. Hilfskraft — Lehrstuhl DBIS", "RWTH Aachen University", "07/2023–03/2024")
+- LLaMA auf GPU‑Cluster deployt, via FastAPI bereitgestellt; interne End‑to‑End‑LLM‑Chat‑Plattform aufgebaut.
+- Tech: Python, PyTorch, Ollama, vLLM, FastAPI
 
 #section-title("Tech-Stack")
 C\# / .NET 9, ASP.NET Core, MongoDB (CSFLE), Semantic Kernel, Azure AI Inference, OpenAI .NET, Microsoft.ML.Tokenizers, pythonnet, SkiaSharp, Hangfire, SignalR, Vue 3, Inertia.js, Vite, NLog, Traefik, Nomad, KernelMemory.
-

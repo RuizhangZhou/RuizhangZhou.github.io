@@ -7,7 +7,6 @@
 )
 
 #section-title("Erfahrung")
-<<<<<<< HEAD
 *Software Engineer (AI Platform) - Vollzeit* | KIconnect - RWTH IT Center | 09/2024 - heute
 
 - Entwicklung einer produktiven Multi-Tenant-LLM-Plattform mit Streaming-Chat, Echtzeit-Kostentracking und Enterprise-SSO
@@ -15,15 +14,6 @@
 - *Tech:* C\#/.NET 9, ASP.NET Core, Semantic Kernel, Vue 3, MongoDB, SignalR, Azure AI Inference
 
 #line(length: 100%, stroke: 0.5pt)
-=======
-#role("Software Engineer (AI Platform)", "KIconnect — RWTH IT Center", "09/2024–heute")
-
-- Produktionsreife, mandantenfähige KI‑Plattform (ASP.NET Core + Vue 3) mit Echtzeit‑LLM‑Streaming, Admin‑Kontrollen und Enterprise‑SSO aufgebaut.
-- Vereinheitlichte Tokenisierung und Kostenrechnung (Text + Vision) über mehrere Modellfamilien; Quoten pro Mandant und Heatmap‑Reporting.
-- Schutz sensibler Daten mit MongoDB CSFLE und Mandanten-/Rollen‑Guardrails; Moderation und Bildverarbeitung integriert.
-- Betriebsfähigkeit/Resilienz verbessert (SignalR‑Streaming, Hangfire‑Jobs, Polly‑Retries auf Nomad/Traefik).
-- Tech: C#/.NET, Vue 3, MongoDB, Semantic Kernel, Azure/OpenAI
->>>>>>> 739fbfb052f49d91839e4739f1baaa9eeb9c5344
 
 #section-title("Ausbildung")
 *M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024

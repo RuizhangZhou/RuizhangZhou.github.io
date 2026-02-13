@@ -145,6 +145,61 @@
         background: #dde7f0;
         text-decoration: none;
       }
+      .filters {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        padding: 6px 16px;
+        border-radius: 999px;
+        border: 1px solid #d0d7de;
+        background: white;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: inherit;
+        color: #333;
+        transition: all 0.15s;
+      }
+      .filter-btn:hover {
+        border-color: #0a66c2;
+        color: #0a66c2;
+      }
+      .filter-btn.active {
+        background: #0a66c2;
+        color: white;
+        border-color: #0a66c2;
+      }
+      .post-count {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+      .load-more {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #d0d7de;
+        background: white;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: inherit;
+        font-weight: 500;
+        color: #0a66c2;
+        margin-top: 8px;
+        transition: all 0.15s;
+      }
+      .load-more:hover {
+        background: #f0f6fc;
+        border-color: #0a66c2;
+      }
+      .load-more:disabled {
+        color: #999;
+        cursor: default;
+        background: #f6f7fb;
+      }
       .comments-section {
         background: white;
         border: 1px solid #e7e7e7;
@@ -178,6 +233,11 @@
           <a href="./index.html">Home</a>
           <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog" target="_blank" class="btn">+ New Post</a>
         </div>
+        <div class="filters" id="filters" style="display:none">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="bot">AI Generated</button>
+          <button class="filter-btn" data-filter="manual">Manual</button>
+        </div>
       </div>
     </header>
 
@@ -189,6 +249,12 @@
       const REPO_OWNER = 'RuizhangZhou';
       const REPO_NAME = 'RuizhangZhou.github.io';
       const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
+      const PER_PAGE = 10;
+
+      let currentFilter = 'all'; // 'all' | 'bot' | 'manual'
+      let currentPage = 1;
+      let allDone = false;
+      let loading = false;
 
       // Get post number from URL
       const urlParams = new URLSearchParams(window.location.search);
@@ -197,59 +263,118 @@
       if (postId) {
         loadPost(postId);
       } else {
-        loadPosts();
+        initFilters();
+        loadPosts(true);
       }
 
-      async function loadPosts() {
+      function initFilters() {
+        const filtersEl = document.getElementById('filters');
+        filtersEl.style.display = '';
+        filtersEl.addEventListener('click', (e) => {
+          const btn = e.target.closest('.filter-btn');
+          if (!btn || btn.classList.contains('active')) return;
+          filtersEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.dataset.filter;
+          currentPage = 1;
+          allDone = false;
+          loadPosts(true);
+        });
+      }
+
+      function buildApiUrl() {
+        const labels = currentFilter === 'bot' ? 'blog,bot' : 'blog';
+        return `${API_URL}?labels=${labels}&state=open&sort=created&direction=desc&per_page=${PER_PAGE}&page=${currentPage}`;
+      }
+
+      function renderCard(issue) {
+        const excerpt = issue.body
+          ? issue.body.substring(0, 200).replace(/[#*`]/g, '') + '...'
+          : 'No content';
+        const labels = issue.labels.map(label =>
+          `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
+        ).join('');
+        return `
+          <div class="post-card" onclick="window.location.href='?id=${issue.number}'">
+            <h2 class="post-title">${issue.title}</h2>
+            <div class="post-meta">
+              Published on ${new Date(issue.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+              })}
+            </div>
+            ${labels ? `<div class="labels">${labels}</div>` : ''}
+            <div class="post-excerpt">${excerpt}</div>
+          </div>
+        `;
+      }
+
+      async function loadPosts(reset) {
+        if (loading) return;
+        loading = true;
         const main = document.getElementById('main');
+
+        if (reset) {
+          main.innerHTML = '<div class="loading">Loading posts...</div>';
+        }
+
         try {
-          const response = await fetch(`${API_URL}?labels=blog&state=open&sort=created&direction=desc`);
+          const response = await fetch(buildApiUrl());
           if (!response.ok) throw new Error('Failed to fetch posts');
 
-          const issues = await response.json();
+          let issues = await response.json();
 
-          if (issues.length === 0) {
+          // Client-side filter for "manual" (no bot label)
+          if (currentFilter === 'manual') {
+            issues = issues.filter(i => !i.labels.some(l => l.name === 'bot'));
+          }
+
+          if (reset && issues.length === 0) {
             main.innerHTML = `
               <div class="empty">
                 <h2>No posts yet</h2>
-                <p>Click "New Post" to create your first blog post!</p>
+                <p>${currentFilter === 'manual' ? 'No manual posts found.' : 'Click "New Post" to create your first blog post!'}</p>
               </div>
             `;
+            loading = false;
             return;
           }
 
-          main.innerHTML = issues.map(issue => {
-            const excerpt = issue.body
-              ? issue.body.substring(0, 200).replace(/[#*`]/g, '') + '...'
-              : 'No content';
+          if (issues.length < PER_PAGE) {
+            allDone = true;
+          }
 
-            const labels = issue.labels.map(label =>
-              `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
-            ).join('');
+          const cards = issues.map(renderCard).join('');
 
-            return `
-              <div class="post-card" onclick="window.location.href='?id=${issue.number}'">
-                <h2 class="post-title">${issue.title}</h2>
-                <div class="post-meta">
-                  Published on ${new Date(issue.created_at).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </div>
-                ${labels ? `<div class="labels">${labels}</div>` : ''}
-                <div class="post-excerpt">${excerpt}</div>
+          if (reset) {
+            main.innerHTML = `
+              <div id="post-list">${cards}</div>
+              ${allDone ? '' : '<button class="load-more" id="load-more" onclick="loadMore()">Load more</button>'}
+            `;
+          } else {
+            document.getElementById('post-list').insertAdjacentHTML('beforeend', cards);
+            const btn = document.getElementById('load-more');
+            if (allDone && btn) btn.remove();
+          }
+        } catch (error) {
+          if (reset) {
+            main.innerHTML = `
+              <div class="error">
+                <h2>Failed to load posts</h2>
+                <p>${error.message}</p>
               </div>
             `;
-          }).join('');
-        } catch (error) {
-          main.innerHTML = `
-            <div class="error">
-              <h2>Failed to load posts</h2>
-              <p>${error.message}</p>
-            </div>
-          `;
+          }
         }
+        loading = false;
+      }
+
+      function loadMore() {
+        const btn = document.getElementById('load-more');
+        if (btn) { btn.disabled = true; btn.textContent = 'Loading...'; }
+        currentPage++;
+        loadPosts(false).then(() => {
+          if (btn && !allDone) { btn.disabled = false; btn.textContent = 'Load more'; }
+        });
       }
 
       async function loadPost(id) {

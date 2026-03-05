@@ -318,14 +318,27 @@
         }
 
         try {
-          const response = await fetch(buildApiUrl());
-          if (!response.ok) throw new Error('Failed to fetch posts');
+          let issues = [];
 
-          let issues = await response.json();
+          // Keep fetching pages until we have enough posts or no more data
+          while (!allDone && issues.length < PER_PAGE) {
+            const response = await fetch(buildApiUrl());
+            if (!response.ok) throw new Error('Failed to fetch posts');
 
-          // Client-side filter for "manual" (no bot label)
-          if (currentFilter === 'manual') {
-            issues = issues.filter(i => !i.labels.some(l => l.name === 'bot'));
+            let batch = await response.json();
+
+            if (batch.length < PER_PAGE) {
+              allDone = true;
+            }
+
+            currentPage++;
+
+            // Client-side filter for "manual" (no bot label)
+            if (currentFilter === 'manual') {
+              batch = batch.filter(i => !i.labels.some(l => l.name === 'bot'));
+            }
+
+            issues = issues.concat(batch);
           }
 
           if (reset && issues.length === 0) {
@@ -337,10 +350,6 @@
             `;
             loading = false;
             return;
-          }
-
-          if (issues.length < PER_PAGE) {
-            allDone = true;
           }
 
           const cards = issues.map(renderCard).join('');
@@ -371,7 +380,6 @@
       function loadMore() {
         const btn = document.getElementById('load-more');
         if (btn) { btn.disabled = true; btn.textContent = 'Loading...'; }
-        currentPage++;
         loadPosts(false).then(() => {
           if (btn && !allDone) { btn.disabled = false; btn.textContent = 'Load more'; }
         });

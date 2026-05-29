@@ -4,6 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Blog - Ruizhang Zhou</title>
+    <!-- Markdown renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+    <!-- KaTeX math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js"
+            onload="window._katexReady = true"></script>
     <style>
       body {
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
@@ -133,6 +140,50 @@
         background: none;
         padding: 0;
       }
+      .post-content h2 { font-size: 1.4em; margin: 1.6em 0 0.6em; }
+      .post-content h3 { font-size: 1.15em; margin: 1.4em 0 0.5em; }
+      .post-content ul, .post-content ol {
+        padding-left: 1.6em;
+        margin: 0.8em 0;
+      }
+      .post-content li { margin: 0.3em 0; line-height: 1.7; }
+      .post-content blockquote {
+        border-left: 3px solid #0a66c2;
+        margin: 1em 0;
+        padding: 0.4em 1em;
+        color: #555;
+        background: #f0f6fc;
+        border-radius: 0 6px 6px 0;
+      }
+      .post-content table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 1.2em 0;
+        font-size: 0.95em;
+        overflow-x: auto;
+        display: block;
+      }
+      .post-content th {
+        background: #f0f6fc;
+        font-weight: 600;
+        text-align: left;
+        padding: 10px 14px;
+        border: 1px solid #d0d7de;
+      }
+      .post-content td {
+        padding: 9px 14px;
+        border: 1px solid #d0d7de;
+        vertical-align: top;
+      }
+      .post-content tr:nth-child(even) td { background: #f9fafb; }
+      .post-content hr {
+        border: none;
+        border-top: 1px solid #e7e7e7;
+        margin: 1.6em 0;
+      }
+      .post-content p { margin: 0.8em 0; }
+      /* KaTeX display math centering */
+      .post-content .katex-display { overflow-x: auto; padding: 0.5em 0; }
       .back-btn {
         display: inline-block;
         padding: 8px 16px;
@@ -397,8 +448,7 @@
             `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
           ).join('');
 
-          // Convert markdown to HTML (basic conversion)
-          const content = markdownToHtml(issue.body || 'No content');
+          const content = marked.parse(issue.body || 'No content');
 
           main.innerHTML = `
             <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>
@@ -434,6 +484,25 @@
             </div>
           `;
 
+          // Render math with KaTeX (wait for KaTeX to load if needed)
+          const renderMath = () => {
+            renderMathInElement(document.querySelector('.post-content'), {
+              delimiters: [
+                { left: '$$',  right: '$$',  display: true  },
+                { left: '$',   right: '$',   display: false },
+                { left: '\\[', right: '\\]', display: true  },
+                { left: '\\(', right: '\\)', display: false },
+              ],
+              throwOnError: false,
+            });
+          };
+          if (window._katexReady) {
+            renderMath();
+          } else {
+            document.querySelector('[onload="_katexReady = true"]')?.addEventListener('load', renderMath);
+            window.addEventListener('load', renderMath);
+          }
+
           // Load Giscus script dynamically (innerHTML doesn't execute scripts)
           const script = document.createElement('script');
           script.src = 'https://giscus.app/client.js';
@@ -463,40 +532,6 @@
             </div>
           `;
         }
-      }
-
-      // Basic markdown to HTML conversion
-      function markdownToHtml(markdown) {
-        let html = markdown;
-
-        // Code blocks
-        html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-
-        // Images
-        html = html.replace(/!\[([^\]]*)\]\(([^\)]+)\)/g, '<img src="$2" alt="$1" />');
-
-        // Links
-        html = html.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-
-        // Headers
-        html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-        html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-        html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-
-        // Bold
-        html = html.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
-
-        // Italic
-        html = html.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
-
-        // Inline code
-        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-        // Line breaks
-        html = html.replace(/\n\n/g, '</p><p>');
-        html = '<p>' + html + '</p>';
-
-        return html;
       }
 
       // Get contrast color for label text

@@ -9,8 +9,7 @@
     <!-- KaTeX math rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js"
-            onload="window._katexReady = true"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js"></script>
     <style>
       body {
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
@@ -448,7 +447,7 @@
             `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
           ).join('');
 
-          const content = marked.parse(issue.body || 'No content');
+          const content = marked.parse(preprocessMath(issue.body || 'No content'));
 
           main.innerHTML = `
             <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>
@@ -484,24 +483,25 @@
             </div>
           `;
 
-          // Render math with KaTeX (wait for KaTeX to load if needed)
-          const renderMath = () => {
-            renderMathInElement(document.querySelector('.post-content'), {
-              delimiters: [
-                { left: '$$',  right: '$$',  display: true  },
-                { left: '$',   right: '$',   display: false },
-                { left: '\\[', right: '\\]', display: true  },
-                { left: '\\(', right: '\\)', display: false },
-              ],
-              throwOnError: false,
-            });
+          // Render math with KaTeX.
+          // Poll until renderMathInElement is available (deferred scripts may still be loading).
+          const katexDelimiters = [
+            { left: '$$',  right: '$$',  display: true  },
+            { left: '$',   right: '$',   display: false },
+            { left: '\\[', right: '\\]', display: true  },
+            { left: '\\(', right: '\\)', display: false },
+          ];
+          const tryRenderMath = () => {
+            if (typeof renderMathInElement === 'function') {
+              renderMathInElement(document.querySelector('.post-content'), {
+                delimiters: katexDelimiters,
+                throwOnError: false,
+              });
+            } else {
+              setTimeout(tryRenderMath, 100);
+            }
           };
-          if (window._katexReady) {
-            renderMath();
-          } else {
-            document.querySelector('[onload="_katexReady = true"]')?.addEventListener('load', renderMath);
-            window.addEventListener('load', renderMath);
-          }
+          tryRenderMath();
 
           // Load Giscus script dynamically (innerHTML doesn't execute scripts)
           const script = document.createElement('script');
@@ -532,6 +532,24 @@
             </div>
           `;
         }
+      }
+
+      // Normalise math delimiters before Markdown parsing.
+      // LLMs emit several non-standard formats; convert them all to $$ $$ so
+      // KaTeX auto-render finds them reliably after marked.js runs.
+      function preprocessMath(md) {
+        // \[...\]  →  $$...$$  (standard LaTeX display, but marked may eat the backslash)
+        md = md.replace(/\\\[([\s\S]*?)\\\]/g, (_, m) => `$$\n${m.trim()}\n$$`);
+        // \(...\)  →  $...$
+        md = md.replace(/\\\(([\s\S]*?)\\\)/g, (_, m) => `$${m.trim()}$`);
+        // [ math ]  →  $$...$$ (LLM non-standard: space right after [ and before ])
+        // Guard: skip if ] is followed by ( which means it's a Markdown link.
+        md = md.replace(/\[ ([\s\S]*?) \](?!\()/g, (match, inner) => {
+          // Only treat as math if content contains a LaTeX command (\word)
+          if (/\\[a-zA-Z]/.test(inner)) return `$$\n${inner.trim()}\n$$`;
+          return match;
+        });
+        return md;
       }
 
       // Get contrast color for label text

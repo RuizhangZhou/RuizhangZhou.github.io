@@ -534,10 +534,67 @@
         }
       }
 
+      // ── LaTeX brace repair ──────────────────────────────────────────────────
+      // LLMs sometimes omit _ or ^ before {label} in \underbrace / \overbrace.
+      // Walk the string with a brace counter so nesting is handled correctly.
+      function fixLatexBraces(tex) {
+        // Commands that always need _{ after their main argument.
+        const subCmds  = ['\\underbrace'];
+        // Commands that always need ^{ after their main argument.
+        const supCmds  = ['\\overbrace'];
+
+        function repair(src, cmds, marker) {
+          let out = '', pos = 0;
+          for (const cmd of cmds) {
+            out = ''; pos = 0;
+            while (pos < src.length) {
+              const idx = src.indexOf(cmd, pos);
+              if (idx === -1) { out += src.slice(pos); break; }
+              out += src.slice(pos, idx + cmd.length);
+              pos  = idx + cmd.length;
+
+              // Skip optional space then expect {
+              let p = pos;
+              while (p < src.length && src[p] === ' ') p++;
+              if (src[p] !== '{') { out += src.slice(pos, p); pos = p; continue; }
+
+              // Brace-count to find the matching }
+              let depth = 0, q = p;
+              while (q < src.length) {
+                if (src[q] === '\\') { q += 2; continue; } // skip \X pairs
+                if (src[q] === '{') depth++;
+                else if (src[q] === '}') { depth--; if (depth === 0) { q++; break; } }
+                q++;
+              }
+              out += src.slice(p, q); // append {content}
+              pos = q;
+
+              // Skip whitespace after closing }
+              let r = pos;
+              while (r < src.length && src[r] === ' ') r++;
+
+              // If the next character is { without a preceding _ or ^, insert marker
+              if (src[r] === '{' && out.slice(-1) !== '_' && out.slice(-1) !== '^') {
+                out += marker;
+              }
+            }
+            src = out;
+          }
+          return out;
+        }
+
+        tex = repair(tex, subCmds, '_');
+        tex = repair(tex, supCmds, '^');
+        return tex;
+      }
+
       // Normalise math delimiters before Markdown parsing.
       // LLMs emit several non-standard formats; convert them all to $$ $$ so
       // KaTeX auto-render finds them reliably after marked.js runs.
       function preprocessMath(md) {
+        // Fix LLM LaTeX errors first (before delimiters are altered)
+        md = fixLatexBraces(md);
+
         // \[...\]  →  $$...$$  (standard LaTeX display, but marked may eat the backslash)
         md = md.replace(/\\\[([\s\S]*?)\\\]/g, (_, m) => `$$\n${m.trim()}\n$$`);
         // \(...\)  →  $...$
@@ -545,7 +602,6 @@
         // [ math ]  →  $$...$$ (LLM non-standard: space right after [ and before ])
         // Guard: skip if ] is followed by ( which means it's a Markdown link.
         md = md.replace(/\[ ([\s\S]*?) \](?!\()/g, (match, inner) => {
-          // Only treat as math if content contains a LaTeX command (\word)
           if (/\\[a-zA-Z]/.test(inner)) return `$$\n${inner.trim()}\n$$`;
           return match;
         });

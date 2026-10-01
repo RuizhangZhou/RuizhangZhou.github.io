@@ -4,8 +4,8 @@ This repository contains my portfolio and CV source files. The site focuses on a
 
 ## Site structure
 
-- `index.html`: introduction and selected work, including KI:connect, [CompatBench](https://github.com/RuizhangZhou/CompatBench), [LLM Gateway](https://github.com/RuizhangZhou/llm-gateway), and my master's thesis.
-- `ml-ai-engineer.html`: AI platform work and related projects.
+- `index.html`: introduction and selected work, including KI:connect, [TalkEcho](https://github.com/RuizhangZhou/talkecho), [LLM Gateway](https://github.com/RuizhangZhou/llm-gateway), and my master's thesis.
+- `ml-ai-engineer.html`: AI platform work, operations, and related projects; smaller API experiments such as [CompatBench](https://github.com/RuizhangZhou/CompatBench) are linked as supplementary work.
 - `fullstack-engineer.html`, `data-engineer.html`, `ml-research.html`: supporting experience.
 - `blog.html`: GitHub Issues-backed blog with title/date search and pagination.
 - `resume/cv_en.typ` and `resume/cv_de.typ`: English and German CV sources.

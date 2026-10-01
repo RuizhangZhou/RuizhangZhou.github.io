@@ -146,35 +146,35 @@
         <ul>
           <li><strong>Backend:</strong> Contributed to model-facing APIs, streaming response handling, usage calculations, and quota-related behavior in ASP.NET Core.</li>
           <li><strong>Admin interface:</strong> Worked on Vue 3 and Inertia views for deployment selection, model settings, and usage controls.</li>
-          <li><strong>Authentication and data:</strong> Worked within a platform that uses institutional SSO and encrypted MongoDB fields.</li>
-          <li><strong>Operations:</strong> Contributed to deployment configuration and investigated failures across the application, IIS, and provider boundaries.</li>
+          <li><strong>Data:</strong> Worked with tenant data and encrypted MongoDB fields.</li>
+          <li><strong>Authentication:</strong> Investigated Shibboleth/SAML login failures using service-provider metadata, application behavior, and time-correlated logs.</li>
+          <li><strong>Operations:</strong> Contributed to deployment configuration and traced failures across CI/CD, Nomad, IIS, proxy, application, and provider layers using health checks and Grafana/OpenSearch telemetry.</li>
         </ul>
       </div>
 
       <!-- TalkEcho -->
       <div class="project">
-        <h2>TalkEcho - Real-time Meeting Subtitle & Translation</h2>
-        <p class="project-meta">Personal fork | TypeScript</p>
+        <h2>TalkEcho - Meeting Captions &amp; Dictation</h2>
+        <p class="project-meta">Actively developed personal fork | TypeScript · Tauri · Rust</p>
 
         <div class="section-title">Tech Stack</div>
         <div>
           <span class="pill">TypeScript</span>
-          <span class="pill">Electron</span>
+          <span class="pill">Tauri</span>
+          <span class="pill">Rust</span>
           <span class="pill">Speech-to-Text API</span>
           <span class="pill">LLM Integration</span>
           <span class="pill">Desktop Overlay</span>
         </div>
 
         <div class="section-title">Description</div>
-        <p>A desktop overlay for meeting subtitles and translation. This is a fork of Pluely; the repository shows the adapted application and its integration with speech-to-text and LLM providers.</p>
+        <p>A desktop overlay for meeting subtitles, translation, and dictation. In this fork of Pluely, I have worked on the live request pipeline, Windows interaction, provider configuration, and credential handling.</p>
 
         <div class="section-title">Features</div>
         <ul>
-          <li>Real-time audio capture from system and microphone</li>
-          <li>Live speech-to-text transcription with multiple provider support</li>
-          <li>On-the-fly translation to multiple languages using LLMs</li>
-          <li>Transparent desktop overlay that doesn't interfere with applications</li>
-          <li>Configurable caption position, size, and appearance</li>
+          <li>Added dictation and Windows tray workflows with hotkey, window, and provider-selection fixes</li>
+          <li>Improved long-meeting processing with a coalescing backlog, request timeouts, and transient-failure retries</li>
+          <li>Moved provider API keys into the operating system's credential store</li>
         </ul>
 
         <div class="section-title">Links</div>

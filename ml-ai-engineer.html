@@ -124,7 +124,7 @@
         <h2>KI:connect AI Platform</h2>
         <p class="project-meta">RWTH IT Center | Software Engineer (AI Platform) | Sep 2024 - Present</p>
 
-        <p>I contribute to a multi-tenant platform that gives users and applications access to LLMs through a web interface and APIs. My work spans provider behavior, request and response handling, metering, and the operational details needed to run the service.</p>
+        <p>I contribute to a multi-tenant platform that gives users and applications access to LLMs through a web interface and APIs. My work spans provider behavior, request and response handling, metering, integration reviews, and service diagnostics.</p>
         <div class="section-title">Core Stack</div>
         <div>
           <span class="pill">C#/.NET</span>
@@ -145,10 +145,16 @@
           <li>Worked on usage and cost calculation across model deployments, including cached input tokens and cache-write pricing.</li>
           <li>Contributed to quota handling and administrative controls for model access and deployment settings.</li>
         </ul>
+        <div class="section-title">Agent Tools &amp; RAG Integration</div>
+        <ul>
+          <li>Reviewed web-search tool integration, provider boundaries, and tenant eligibility for agent workflows; distinguished the application contract from provider-specific configuration.</li>
+          <li>Worked through RAG integration and rollout requirements, including document ingestion, queue and storage dependencies, service authentication, and container runtime checks.</li>
+        </ul>
         <div class="section-title">Operations &amp; Reliability</div>
         <ul>
-          <li>Investigated request failures across application, provider, and deployment layers; improved error and streaming behavior.</li>
-          <li>Contributed to deployment configuration and to the Vue-based admin interface used to manage platform capabilities.</li>
+          <li>Traced release and request failures through CI/CD, Nomad, IIS, reverse proxies, application code, and providers; separated build, deployment, health-check, and external-access evidence.</li>
+          <li>Used Grafana dashboards and OpenSearch logs to investigate request behavior and load-test failures; correlated telemetry across service boundaries.</li>
+          <li>Investigated Shibboleth/SAML login issues using service-provider metadata and time-correlated logs. Contributed to deployment configuration and the Vue-based admin interface.</li>
         </ul>
 
         <div class="section-title">Links</div>
@@ -156,15 +162,15 @@
       </div>
 
       <div class="project">
-        <h2>CompatBench</h2>
-        <p class="project-meta">Independent open-source project | Python</p>
-        <p>A command-line tool for testing whether an OpenAI-compatible endpoint behaves consistently across common API capabilities.</p>
+        <h2>TalkEcho</h2>
+        <p class="project-meta">Actively developed personal fork | TypeScript · Tauri · Rust</p>
+        <p>A desktop meeting-caption and dictation application using configurable speech-to-text and LLM providers. My contributions focus on making live workflows more reliable and usable.</p>
         <ul>
-          <li>Checks Chat Completions, Responses, SSE streaming, tool calls, structured output, usage reporting, and error shapes.</li>
-          <li>Produces JSON and Markdown reports, supports provider registries, and compares results across runs.</li>
-          <li>Uses synthetic prompts and redacted reports to make compatibility gaps reproducible without publishing private inputs.</li>
+          <li>Added dictation and Windows tray workflows, with hotkey and window-behavior fixes.</li>
+          <li>Improved long-meeting request handling with a coalescing backlog, timeouts, and retries for transient failures.</li>
+          <li>Moved provider credentials to the operating system's credential store.</li>
         </ul>
-        <p><a href="https://github.com/RuizhangZhou/CompatBench" class="link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
+        <p><a href="https://github.com/RuizhangZhou/talkecho" class="link" target="_blank" rel="noopener noreferrer">GitHub Repository</a> (fork of Pluely)</p>
       </div>
 
       <div class="project">
@@ -178,6 +184,8 @@
         </ul>
         <p><a href="https://github.com/RuizhangZhou/llm-gateway" class="link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
       </div>
+
+      <p>Additional API testing experiment: <a href="https://github.com/RuizhangZhou/CompatBench" class="link" target="_blank" rel="noopener noreferrer">CompatBench</a>.</p>
 
       <!-- Master Thesis -->
       <div class="project">

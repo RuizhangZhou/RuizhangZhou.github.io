@@ -11,7 +11,8 @@
 
 - Mitarbeit an OpenAI-kompatiblen Chat-Completions- und Responses-APIs, einschließlich Raw-Request-Weitergabe und Streaming
 - Arbeit an modellspezifischer Token-Schätzung, Nutzungs- und Kostenberechnung, Cache-Write-Preisen und Quoten
-- Entwicklung von ASP.NET-Core-Diensten und Vue-3-Admin-Oberflächen; Analyse von Anwendungs-, Provider- und Deployment-Problemen
+- Bewertung von Websuche für Agent-Workflows und RAG-Integration: Provider-Grenzen, Mandantenfreigaben, Ingestion und Service-Authentifizierung
+- Entwicklung von ASP.NET-Core-Diensten und Vue-3-Admin-Oberflächen; Analyse von Releases, SSO und Fehlern über CI/CD, Nomad, IIS, Grafana/OpenSearch und Provider hinweg
 - *Tech:* C\#/.NET, ASP.NET Core, Vue 3, MongoDB, SignalR, OpenAI-kompatible APIs
 
 #line(length: 100%, stroke: 0.5pt)
@@ -40,11 +41,8 @@
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Projekte")
-#link("https://github.com/RuizhangZhou/CompatBench")[*CompatBench - Tests für OpenAI-kompatible APIs* ↗] | Eigenständiges Open-Source-Projekt
-- Python-CLI für Streaming, Tool Calls, strukturierte Ausgaben, Nutzungsdaten und Fehlerverhalten mit reproduzierbaren Berichten
+#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Meeting-Untertitel und Diktierfunktion* ↗] | Aktiv weiterentwickelter persönlicher Fork
+- Windows-Diktier- und Tray-Funktionen, stabilere Verarbeitung langer Meetings sowie sichere Speicherung von Provider-Schlüsseln
 
 #link("https://github.com/RuizhangZhou/llm-gateway")[*LLM Gateway - Aufgabenabhängiges Modell-Routing* ↗] | Eigenständiges Open-Source-Projekt
 - Verteilt Jobs auf verfügbare Modelle, mit Provider-Fallback und Wechsel beim Streaming nur vor der ersten Ausgabe
-
-#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Meeting-Untertitel und Übersetzung* ↗] | Persönlicher Fork
-

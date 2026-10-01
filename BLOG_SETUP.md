@@ -4,6 +4,10 @@ Your blog is now ready! Here's how to use it and complete the setup.
 
 ## How to Use
 
+### Browsing Posts
+
+The blog lists GitHub Issues with the `blog` label, newest first. Use the AI Generated and Manual buttons to narrow the list. Search matches post titles and publication dates, including dates typed as `YYYY-MM-DD`; it does not search article bodies. Choose 10, 20, or 50 posts per page, then use Previous, Next, or the page-number field to navigate. Opening a post and returning to the list preserves the selected filter, search, page size, and page number.
+
 ### Creating Blog Posts
 
 1. Click "New Post" button on the blog page, or go to: https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog
@@ -83,7 +87,6 @@ Just paste the link directly in your post, or use HTML:
 - Use additional labels to organize posts by topic (e.g., "Tech", "Personal", "Tutorial")
 - Use GitHub's built-in preview when writing posts
 - You can use all GitHub Flavored Markdown features
-- Pin important issues to keep them at the top
 - Close an issue to hide the post from your blog (like a draft or delete)
 - Only you can create issues (posts) - others can only comment via Giscus
 

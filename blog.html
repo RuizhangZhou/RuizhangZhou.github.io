@@ -51,6 +51,7 @@
         padding: 32px 20px;
       }
       .post-card {
+        display: block;
         background: white;
         border: 1px solid #e7e7e7;
         border-radius: 14px;
@@ -59,9 +60,14 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
         transition: box-shadow 0.2s;
         cursor: pointer;
+        color: inherit;
+        text-decoration: none;
       }
-      .post-card:hover {
+      .post-card:hover,
+      .post-card:focus-visible {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        text-decoration: none;
+        outline-color: #0a66c2;
       }
       .post-title {
         font-size: 24px;
@@ -226,29 +232,74 @@
         font-size: 14px;
         margin-bottom: 16px;
       }
-      .load-more {
-        display: block;
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
+      .list-toolbar {
+        display: flex;
+        gap: 16px;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+        scroll-margin-top: 170px;
+      }
+      .list-toolbar label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .list-toolbar label:first-child {
+        flex: 1 1 280px;
+      }
+      .list-toolbar input,
+      .list-toolbar select,
+      .page-jump input {
+        box-sizing: border-box;
+        padding: 9px 10px;
+        border-radius: 8px;
         border: 1px solid #d0d7de;
         background: white;
-        cursor: pointer;
-        font-size: 15px;
         font-family: inherit;
-        font-weight: 500;
-        color: #0a66c2;
-        margin-top: 8px;
-        transition: all 0.15s;
+        font-size: 14px;
       }
-      .load-more:hover {
+      .list-toolbar input {
+        width: 100%;
+      }
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 24px 0;
+      }
+      .pagination[hidden] {
+        display: none;
+      }
+      .pagination button {
+        padding: 9px 14px;
+        border-radius: 8px;
+        border: 1px solid #d0d7de;
+        background: white;
+        color: #0a66c2;
+        cursor: pointer;
+        font: inherit;
+      }
+      .pagination button:hover:not(:disabled) {
         background: #f0f6fc;
         border-color: #0a66c2;
       }
-      .load-more:disabled {
+      .pagination button:disabled {
         color: #999;
         cursor: default;
         background: #f6f7fb;
+      }
+      .page-jump {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .page-jump input {
+        width: 76px;
       }
       .comments-section {
         background: white;
@@ -281,7 +332,7 @@
         <h1>Blog</h1>
         <div class="nav">
           <a href="./index.html">Home</a>
-          <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog" target="_blank" class="btn">+ New Post</a>
+          <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog" target="_blank" rel="noopener noreferrer" class="btn">+ New Post</a>
         </div>
         <div class="filters" id="filters" style="display:none">
           <button class="filter-btn active" data-filter="all">All</button>
@@ -299,27 +350,31 @@
       const REPO_OWNER = 'RuizhangZhou';
       const REPO_NAME = 'RuizhangZhou.github.io';
       const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
-      const PER_PAGE = 10;
-
-      let currentFilter = 'all'; // 'all' | 'bot' | 'manual'
-      let currentPage = 1;
-      let allDone = false;
-      let loading = false;
-
-      // Get post number from URL
+      const API_PAGE_SIZE = 100;
+      const PAGE_SIZE_OPTIONS = [10, 20, 50];
       const urlParams = new URLSearchParams(window.location.search);
       const postId = urlParams.get('id');
+      let currentFilter = ['all', 'bot', 'manual'].includes(urlParams.get('filter'))
+        ? urlParams.get('filter') : 'all';
+      let currentPage = Math.max(1, Number.parseInt(urlParams.get('page'), 10) || 1);
+      let pageSize = PAGE_SIZE_OPTIONS.includes(Number(urlParams.get('size')))
+        ? Number(urlParams.get('size')) : 10;
+      let searchQuery = (urlParams.get('q') || '').trim().slice(0, 100);
+      let allPosts = [];
 
       if (postId) {
         loadPost(postId);
       } else {
         initFilters();
-        loadPosts(true);
+        loadPosts();
       }
 
       function initFilters() {
         const filtersEl = document.getElementById('filters');
         filtersEl.style.display = '';
+        filtersEl.querySelectorAll('.filter-btn').forEach(button => {
+          button.classList.toggle('active', button.dataset.filter === currentFilter);
+        });
         filtersEl.addEventListener('click', (e) => {
           const btn = e.target.closest('.filter-btn');
           if (!btn || btn.classList.contains('active')) return;
@@ -327,112 +382,201 @@
           btn.classList.add('active');
           currentFilter = btn.dataset.filter;
           currentPage = 1;
-          allDone = false;
-          loadPosts(true);
+          if (allPosts.length) renderPage();
         });
       }
 
-      function buildApiUrl() {
-        const labels = currentFilter === 'bot' ? 'blog,bot' : 'blog';
-        return `${API_URL}?labels=${labels}&state=open&sort=created&direction=desc&per_page=${PER_PAGE}&page=${currentPage}`;
+      function listParams() {
+        const params = new URLSearchParams();
+        if (currentFilter !== 'all') params.set('filter', currentFilter);
+        if (searchQuery) params.set('q', searchQuery);
+        if (pageSize !== 10) params.set('size', String(pageSize));
+        if (currentPage !== 1) params.set('page', String(currentPage));
+        return params;
+      }
+
+      function listUrl() {
+        const query = listParams().toString();
+        return `./blog.html${query ? `?${query}` : ''}`;
+      }
+
+      function postUrl(number) {
+        const params = listParams();
+        params.set('id', String(number));
+        return `./blog.html?${params.toString()}`;
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, character => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        })[character]);
+      }
+
+      function renderLabels(issue) {
+        return issue.labels.map(label => {
+          const color = /^[0-9a-f]{6}$/i.test(label.color) ? label.color : 'e7e7e7';
+          return `<span class="label" style="background: #${color}; color: ${getContrastColor(color)}">${escapeHtml(label.name)}</span>`;
+        }).join('');
+      }
+
+      function formatPostDate(issue) {
+        return new Date(issue.created_at).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        });
       }
 
       function renderCard(issue) {
-        const excerpt = issue.body
-          ? issue.body.substring(0, 200).replace(/[#*`]/g, '') + '...'
-          : 'No content';
-        const labels = issue.labels.map(label =>
-          `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
-        ).join('');
+        const labels = renderLabels(issue);
         return `
-          <div class="post-card" onclick="window.location.href='?id=${issue.number}'">
-            <h2 class="post-title">${issue.title}</h2>
+          <a class="post-card" href="${escapeHtml(postUrl(issue.number))}">
+            <h2 class="post-title">${escapeHtml(issue.title)}</h2>
             <div class="post-meta">
-              Published on ${new Date(issue.created_at).toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric'
-              })}
+              Published on ${escapeHtml(formatPostDate(issue))}
             </div>
             ${labels ? `<div class="labels">${labels}</div>` : ''}
-            <div class="post-excerpt">${excerpt}</div>
-          </div>
+            <div class="post-excerpt">${escapeHtml(issue.excerpt)}</div>
+          </a>
         `;
       }
 
-      async function loadPosts(reset) {
-        if (loading) return;
-        loading = true;
-        const main = document.getElementById('main');
+      async function fetchPostSummaries() {
+        const posts = [];
+        for (let page = 1; ; page++) {
+          const url = `${API_URL}?labels=blog&state=open&sort=created&direction=desc&per_page=${API_PAGE_SIZE}&page=${page}`;
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`GitHub returned HTTP ${response.status}. Please try again later.`);
+          const batch = await response.json();
+          if (!Array.isArray(batch)) throw new Error('GitHub returned an unexpected post list.');
 
-        if (reset) {
-          main.innerHTML = '<div class="loading">Loading posts...</div>';
+          for (const issue of batch) {
+            if (issue.pull_request) continue;
+            posts.push({
+              number: issue.number,
+              title: issue.title || '',
+              created_at: issue.created_at,
+              labels: issue.labels || [],
+              excerpt: issue.body
+                ? issue.body.substring(0, 200).replace(/[#*`]/g, '').replace(/\s+/g, ' ').trim() + '...'
+                : 'No content'
+            });
+          }
+          if (batch.length < API_PAGE_SIZE) return posts;
         }
-
-        try {
-          let issues = [];
-
-          // Keep fetching pages until we have enough posts or no more data
-          while (!allDone && issues.length < PER_PAGE) {
-            const response = await fetch(buildApiUrl());
-            if (!response.ok) throw new Error('Failed to fetch posts');
-
-            let batch = await response.json();
-
-            if (batch.length < PER_PAGE) {
-              allDone = true;
-            }
-
-            currentPage++;
-
-            // Client-side filter for "manual" (no bot label)
-            if (currentFilter === 'manual') {
-              batch = batch.filter(i => !i.labels.some(l => l.name === 'bot'));
-            }
-
-            issues = issues.concat(batch);
-          }
-
-          if (reset && issues.length === 0) {
-            main.innerHTML = `
-              <div class="empty">
-                <h2>No posts yet</h2>
-                <p>${currentFilter === 'manual' ? 'No manual posts found.' : 'Click "New Post" to create your first blog post!'}</p>
-              </div>
-            `;
-            loading = false;
-            return;
-          }
-
-          const cards = issues.map(renderCard).join('');
-
-          if (reset) {
-            main.innerHTML = `
-              <div id="post-list">${cards}</div>
-              ${allDone ? '' : '<button class="load-more" id="load-more" onclick="loadMore()">Load more</button>'}
-            `;
-          } else {
-            document.getElementById('post-list').insertAdjacentHTML('beforeend', cards);
-            const btn = document.getElementById('load-more');
-            if (allDone && btn) btn.remove();
-          }
-        } catch (error) {
-          if (reset) {
-            main.innerHTML = `
-              <div class="error">
-                <h2>Failed to load posts</h2>
-                <p>${error.message}</p>
-              </div>
-            `;
-          }
-        }
-        loading = false;
       }
 
-      function loadMore() {
-        const btn = document.getElementById('load-more');
-        if (btn) { btn.disabled = true; btn.textContent = 'Loading...'; }
-        loadPosts(false).then(() => {
-          if (btn && !allDone) { btn.disabled = false; btn.textContent = 'Load more'; }
+      async function loadPosts() {
+        const main = document.getElementById('main');
+        main.innerHTML = '<div class="loading">Loading posts...</div>';
+        try {
+          allPosts = await fetchPostSummaries();
+          main.innerHTML = `
+            <div class="list-toolbar" id="list-toolbar">
+              <label for="post-search">Search title or date
+                <input id="post-search" type="search" maxlength="100" placeholder="Title or date (e.g. 2026-10-01)">
+              </label>
+              <label for="page-size">Posts per page
+                <select id="page-size">
+                  ${PAGE_SIZE_OPTIONS.map(size => `<option value="${size}">${size}</option>`).join('')}
+                </select>
+              </label>
+            </div>
+            <p class="post-count" id="post-count" role="status" aria-live="polite"></p>
+            <div id="post-list"></div>
+            <nav class="pagination" id="pagination" aria-label="Blog pages"></nav>
+          `;
+          const search = document.getElementById('post-search');
+          search.value = searchQuery;
+          search.addEventListener('input', () => {
+            searchQuery = search.value.trim();
+            currentPage = 1;
+            renderPage();
+          });
+          const sizeSelect = document.getElementById('page-size');
+          sizeSelect.value = String(pageSize);
+          sizeSelect.addEventListener('change', () => {
+            pageSize = Number(sizeSelect.value);
+            currentPage = 1;
+            renderPage();
+          });
+          renderPage();
+        } catch (error) {
+          main.innerHTML = `
+            <div class="error">
+              <h2>Failed to load posts</h2>
+              <p id="load-error"></p>
+              <button class="filter-btn" id="retry-posts" type="button">Retry</button>
+            </div>
+          `;
+          document.getElementById('load-error').textContent = error.message;
+          document.getElementById('retry-posts').addEventListener('click', loadPosts);
+        }
+      }
+
+      function visiblePosts() {
+        const query = searchQuery.toLowerCase();
+        return allPosts.filter(issue => {
+          const isBot = issue.labels.some(label => label.name === 'bot');
+          if (currentFilter === 'bot' && !isBot) return false;
+          if (currentFilter === 'manual' && isBot) return false;
+          if (!query) return true;
+
+          const date = new Date(issue.created_at);
+          const searchable = [
+            issue.title,
+            issue.created_at.slice(0, 10),
+            formatPostDate(issue),
+            date.toLocaleDateString('en-US')
+          ].join(' ').toLowerCase();
+          return searchable.includes(query);
         });
+      }
+
+      function renderPage() {
+        const posts = visiblePosts();
+        const pageCount = Math.max(1, Math.ceil(posts.length / pageSize));
+        currentPage = Math.min(currentPage, pageCount);
+        const first = (currentPage - 1) * pageSize;
+        const pagePosts = posts.slice(first, first + pageSize);
+
+        document.getElementById('post-count').textContent = posts.length
+          ? `Showing ${first + 1}–${first + pagePosts.length} of ${posts.length} posts`
+          : 'No matching posts';
+        document.getElementById('post-list').innerHTML = posts.length
+          ? pagePosts.map(renderCard).join('')
+          : '<div class="empty"><h2>No matching posts</h2><p>Try another title, date, or filter.</p></div>';
+        renderPagination(pageCount, posts.length);
+        window.history.replaceState(null, '', listUrl());
+      }
+
+      function renderPagination(pageCount, postCount) {
+        const nav = document.getElementById('pagination');
+        nav.hidden = postCount === 0 || pageCount === 1;
+        if (nav.hidden) return;
+
+        nav.innerHTML = `
+          <button id="prev-page" type="button" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+          <span>Page ${currentPage} of ${pageCount}</span>
+          <button id="next-page" type="button" ${currentPage === pageCount ? 'disabled' : ''}>Next</button>
+          <form class="page-jump" id="page-jump">
+            <label for="page-number">Go to page</label>
+            <input id="page-number" type="number" min="1" max="${pageCount}" value="${currentPage}" required>
+            <button type="submit">Go</button>
+          </form>
+        `;
+        nav.querySelector('#prev-page').addEventListener('click', () => goToPage(currentPage - 1));
+        nav.querySelector('#next-page').addEventListener('click', () => goToPage(currentPage + 1));
+        nav.querySelector('#page-jump').addEventListener('submit', event => {
+          event.preventDefault();
+          goToPage(Number(nav.querySelector('#page-number').value));
+        });
+      }
+
+      function goToPage(page) {
+        const pageCount = Math.max(1, Math.ceil(visiblePosts().length / pageSize));
+        if (!Number.isInteger(page) || page < 1 || page > pageCount) return;
+        currentPage = page;
+        renderPage();
+        document.getElementById('list-toolbar').scrollIntoView({ behavior: 'smooth' });
       }
 
       async function loadPost(id) {
@@ -443,16 +587,14 @@
 
           const issue = await response.json();
 
-          const labels = issue.labels.map(label =>
-            `<span class="label" style="background: #${label.color}; color: ${getContrastColor(label.color)}">${label.name}</span>`
-          ).join('');
+          const labels = renderLabels(issue);
 
           const content = marked.parse(preprocessMath(issue.body || 'No content'));
 
           main.innerHTML = `
-            <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>
+            <a href="${escapeHtml(listUrl())}" class="back-btn">&larr; Back to all posts</a>
             <article class="post-detail">
-              <h1 class="post-title">${issue.title}</h1>
+              <h1 class="post-title">${escapeHtml(issue.title)}</h1>
               <div class="post-meta">
                 Published on ${new Date(issue.created_at).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -470,8 +612,8 @@
               <div class="post-content">${content}</div>
               <hr style="margin: 32px 0; border: none; border-top: 1px solid #e7e7e7;">
               <p style="color: #666; font-size: 14px;">
-                <a href="${issue.html_url}" target="_blank">View on GitHub</a> ·
-                <a href="${issue.html_url}" target="_blank">Edit this post</a>
+                <a href="${escapeHtml(issue.html_url)}" target="_blank" rel="noopener noreferrer">View on GitHub</a> ·
+                <a href="${escapeHtml(issue.html_url)}" target="_blank" rel="noopener noreferrer">Edit this post</a>
               </p>
             </article>
             <div class="comments-section">
@@ -525,7 +667,7 @@
           document.getElementById('giscus-container').appendChild(script);
         } catch (error) {
           main.innerHTML = `
-            <a href="./blog.html" class="back-btn">&larr; Back to all posts</a>
+            <a href="${escapeHtml(listUrl())}" class="back-btn">&larr; Back to all posts</a>
             <div class="error">
               <h2>Failed to load post</h2>
               <p>${error.message}</p>

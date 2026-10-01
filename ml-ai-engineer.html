@@ -3,7 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ML/AI Engineer - Ruizhang Zhou</title>
+    <title>Applied AI / AI Platform Engineer - Ruizhang Zhou</title>
+    <meta name="description" content="Ruizhang Zhou's AI platform work: OpenAI-compatible APIs, streaming, usage metering, provider integration, and open-source LLM tooling." />
+    <link rel="canonical" href="https://ruizhangzhou.github.io/ml-ai-engineer.html" />
     <style>
       body {
         font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
@@ -107,58 +109,74 @@
       <div class="wrap">
         <div class="nav">
           <a href="./index.html">← Home</a>
-          <a href="./fullstack-engineer.html">Fullstack Engineer</a>
+          <a href="./fullstack-engineer.html">Backend &amp; Full-stack</a>
           <a href="./data-engineer.html">Data Engineer</a>
           <a href="./ml-research.html">ML Research</a>
         </div>
-        <h1>ML/AI Engineer</h1>
-        <p class="subtitle">Production AI systems, LLM integration, deep learning models, and generative AI applications</p>
+        <h1>Applied AI / AI Platform Engineer</h1>
+        <p class="subtitle">Production LLM Systems · Backend &amp; Infrastructure · ML Engineering</p>
       </div>
     </header>
 
     <main class="wrap">
       <!-- Current Full-time Role -->
       <div class="project">
-        <h2>Multi-tenant AI Platform (Production)</h2>
-        <p class="project-meta">KIconnect - RWTH IT Center | Full-time | Sep 2024 - Present</p>
+        <h2>KI:connect AI Platform</h2>
+        <p class="project-meta">RWTH IT Center | Software Engineer (AI Platform) | Sep 2024 - Present</p>
 
-        <div class="section-title">Tech Stack</div>
+        <p>I contribute to a multi-tenant platform that gives users and applications access to LLMs through a web interface and APIs. My work spans provider behavior, request and response handling, metering, and the operational details needed to run the service.</p>
+        <div class="section-title">Core Stack</div>
         <div>
-          <span class="pill">C#/.NET 9</span>
+          <span class="pill">C#/.NET</span>
           <span class="pill">ASP.NET Core</span>
-          <span class="pill">Semantic Kernel</span>
-          <span class="pill">Azure AI Inference</span>
-          <span class="pill">OpenAI .NET</span>
-          <span class="pill">Microsoft.ML.Tokenizers</span>
-          <span class="pill">pythonnet</span>
+          <span class="pill">OpenAI-compatible APIs</span>
           <span class="pill">Vue 3</span>
-          <span class="pill">MongoDB CSFLE</span>
+          <span class="pill">MongoDB</span>
           <span class="pill">SignalR</span>
-          <span class="pill">Nomad</span>
         </div>
 
-        <div class="section-title">Challenge</div>
-        <p>Build a production-grade, multi-tenant LLM assistant platform that handles streaming responses, accurate token/cost tracking across diverse models, secure document handling, and enterprise SSO integration while maintaining EU data compliance.</p>
-
-        <div class="section-title">Solution</div>
+        <div class="section-title">Protocol &amp; Provider Integration</div>
         <ul>
-          <li><strong>Unified Tokenization:</strong> Integrated tokenization for both text and vision across OpenAI, Llama 3, Gemma 3, Mistral, Qwen, and DeepSeek models using Microsoft.ML.Tokenizers and custom Python bridges via pythonnet</li>
-          <li><strong>Real-time Streaming:</strong> Implemented streaming chat with SignalR for real-time token-by-token responses with precise cost tracking</li>
-          <li><strong>Admin Dashboard:</strong> Built comprehensive Vue 3 + Inertia admin UI for model/deployment management, user quotas, and reasoning effort configuration</li>
-          <li><strong>Security & Compliance:</strong> Integrated Shibboleth SSO, MongoDB Client-Side Field Level Encryption (CSFLE), EU data region compliance</li>
-          <li><strong>Reliability:</strong> Implemented retry policies with Polly, circuit breakers, and graceful degradation</li>
+          <li>Worked on OpenAI-compatible Chat Completions and Responses APIs, including raw request forwarding and streamed response handling.</li>
+          <li>Added and validated provider-specific model capabilities and multimodal token estimation where provider behavior differs.</li>
+        </ul>
+        <div class="section-title">Metering &amp; Governance</div>
+        <ul>
+          <li>Worked on usage and cost calculation across model deployments, including cached input tokens and cache-write pricing.</li>
+          <li>Contributed to quota handling and administrative controls for model access and deployment settings.</li>
+        </ul>
+        <div class="section-title">Operations &amp; Reliability</div>
+        <ul>
+          <li>Investigated request failures across application, provider, and deployment layers; improved error and streaming behavior.</li>
+          <li>Contributed to deployment configuration and to the Vue-based admin interface used to manage platform capabilities.</li>
         </ul>
 
-        <div class="section-title">Business Value</div>
-        <div class="highlight">
-          ✓ Enabled enterprise-wide AI adoption with centralized governance<br>
-          ✓ Accurate cost allocation across departments through precise token tracking<br>
-          ✓ 99.9% uptime with robust error handling and failover mechanisms<br>
-          ✓ Reduced AI infrastructure complexity for end users with single-sign-on
-        </div>
-
         <div class="section-title">Links</div>
-        <p><a href="https://kiconnect.rwth-aachen.de" class="link" target="_blank">KIconnect Platform (Internal)</a></p>
+        <p><a href="https://kiconnect.rwth-aachen.de" class="link" target="_blank" rel="noopener noreferrer">KI:connect</a></p>
+      </div>
+
+      <div class="project">
+        <h2>CompatBench</h2>
+        <p class="project-meta">Independent open-source project | Python</p>
+        <p>A command-line tool for testing whether an OpenAI-compatible endpoint behaves consistently across common API capabilities.</p>
+        <ul>
+          <li>Checks Chat Completions, Responses, SSE streaming, tool calls, structured output, usage reporting, and error shapes.</li>
+          <li>Produces JSON and Markdown reports, supports provider registries, and compares results across runs.</li>
+          <li>Uses synthetic prompts and redacted reports to make compatibility gaps reproducible without publishing private inputs.</li>
+        </ul>
+        <p><a href="https://github.com/RuizhangZhou/CompatBench" class="link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
+      </div>
+
+      <div class="project">
+        <h2>LLM Gateway</h2>
+        <p class="project-meta">Independent open-source project | Python</p>
+        <p>A task-aware model router for personal automation jobs. Applications request a task type, while routing policy chooses from the available models.</p>
+        <ul>
+          <li>Refreshes its model catalog from a live models endpoint and retains the previous configuration when discovery fails.</li>
+          <li>Falls back on rate limits, timeouts, capacity errors, and unavailable models.</li>
+          <li>Limits streaming failover to the period before the first output chunk, avoiding mixed responses from two models.</li>
+        </ul>
+        <p><a href="https://github.com/RuizhangZhou/llm-gateway" class="link" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
       </div>
 
       <!-- Master Thesis -->
@@ -188,16 +206,9 @@
           <li><strong>GPU Training:</strong> Trained models on NVIDIA H100 and Quadro RTX 6000 GPUs with hyperparameter optimization, learning rate scheduling, and early stopping</li>
           <li><strong>Model Evaluation:</strong> Implemented evaluation pipeline using PCA, t-SNE visualization, and statistical metrics to assess trajectory realism and diversity</li>
           <li><strong>Integration:</strong> Built conversion pipeline to XML format for CPM Remote platform, enabling generated scenarios to be used in autonomous vehicle simulation</li>
-          <li><strong>Production Deployment:</strong> Packaged models for inference, implemented batch generation, and integrated with existing testing infrastructure</li>
         </ul>
 
-        <div class="section-title">Business Value</div>
-        <div class="highlight">
-          ✓ Automated generation of 1000+ diverse test scenarios from real-world data<br>
-          ✓ Reduced manual scenario design effort by 80% while improving coverage<br>
-          ✓ Discovered 50+ edge cases not covered by traditional rule-based methods<br>
-          ✓ Enabled continuous testing pipeline for autonomous vehicle motion planners
-        </div>
+        <p>The thesis connects ML model development with the data processing and evaluation needed to study generated trajectories.</p>
 
         <div class="section-title">Links</div>
         <p><a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="link" target="_blank">GitHub Repository</a> | <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI/blob/main/main.pdf" class="link" target="_blank">Thesis PDF</a></p>
@@ -222,7 +233,7 @@
         </div>
 
         <div class="section-title">Challenge</div>
-        <p>Generate accurate and clinically relevant radiology reports from chest X-ray images by combining vision and language models. Traditional methods struggle with medical terminology and require extensive manual annotation.</p>
+        <p>Explore chest X-ray report generation by combining vision and language models in a research setting.</p>
 
         <div class="section-title">Solution</div>
         <ul>
@@ -233,40 +244,9 @@
           <li>Built end-to-end LLM chat platform: GPU deployment → API service → web interface for research demonstrations</li>
         </ul>
 
-        <div class="section-title">Business Value</div>
-        <div class="highlight">
-          ✓ Research paper in preparation on LLM-based medical report generation<br>
-          ✓ Demonstrated feasibility of automated radiology report generation<br>
-          ✓ Contributed to knowledge graph integration techniques for medical AI
-        </div>
+        <p>This research experience introduced me to model serving, multimodal pipelines, and GPU-based experimentation.</p>
       </div>
 
-      <!-- Semantic Kernel Local LLMs -->
-      <div class="project">
-        <h2>Semantic Kernel with Local LLMs</h2>
-        <p class="project-meta">Personal Project | Apr 2024</p>
-
-        <div class="section-title">Tech Stack</div>
-        <div>
-          <span class="pill">C#</span>
-          <span class="pill">Semantic Kernel</span>
-          <span class="pill">Local LLMs</span>
-          <span class="pill">.NET</span>
-        </div>
-
-        <div class="section-title">Challenge</div>
-        <p>Integrate locally-hosted LLMs with Microsoft Semantic Kernel to enable AI orchestration without cloud dependencies, useful for privacy-sensitive applications.</p>
-
-        <div class="section-title">Solution</div>
-        <ul>
-          <li>Developed connectors to integrate local LLM endpoints with Semantic Kernel</li>
-          <li>Implemented function calling and semantic memory for local models</li>
-          <li>Demonstrated how to build AI agents using on-premise infrastructure</li>
-        </ul>
-
-        <div class="section-title">Links</div>
-        <p><a href="https://github.com/RuizhangZhou/semantickernel-localLLMs" class="link" target="_blank">GitHub Repository</a></p>
-      </div>
     </main>
 
     <footer style="padding: 24px 20px; color: #666; text-align: center; background: white; border-top: 1px solid #e7e7e7;">

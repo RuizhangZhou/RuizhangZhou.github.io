@@ -2,25 +2,25 @@
 
 #header(
   "Ruizhang Zhou",
-  "KI/ML-Ingenieur & Full-stack-Entwickler - Produktive LLM-Systeme, Deep-Learning-Forschung, Datenpipelines, Mandantenfähige Plattformen",
+  "Applied AI / AI Platform Engineer - Produktive LLM-Systeme · Backend & Infrastruktur · ML Engineering",
   [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou\@mail.com] | #link("https://github.com/RuizhangZhou")[GitHub] | #link("https://linkedin.com/in/ruizhang-zhou/")[LinkedIn] | #link("https://ruizhangzhou.github.io")[Website]]
 )
 
 #section-title("Erfahrung")
-*Software Engineer (AI Platform) - Vollzeit* | KIconnect - RWTH IT Center | 09/2024 - heute
+*Software Engineer (AI Platform)* | KI:connect - RWTH IT Center | 09/2024 - heute
 
-- Entwicklung einer produktiven Multi-Tenant-LLM-Plattform mit Streaming-Chat, Echtzeit-Kostentracking und Enterprise-SSO
-- Implementierung einheitlicher Tokenisierung für OpenAI, Llama, Gemma, Mistral, Qwen, DeepSeek; Entwicklung eines Vue 3 Admin-Dashboards
-- *Tech:* C\#/.NET 9, ASP.NET Core, Semantic Kernel, Vue 3, MongoDB, SignalR, Azure AI Inference
+- Mitarbeit an OpenAI-kompatiblen Chat-Completions- und Responses-APIs, einschließlich Raw-Request-Weitergabe und Streaming
+- Arbeit an modellspezifischer Token-Schätzung, Nutzungs- und Kostenberechnung, Cache-Write-Preisen und Quoten
+- Entwicklung von ASP.NET-Core-Diensten und Vue-3-Admin-Oberflächen; Analyse von Anwendungs-, Provider- und Deployment-Problemen
+- *Tech:* C\#/.NET, ASP.NET Core, Vue 3, MongoDB, SignalR, OpenAI-kompatible APIs
 
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Ausbildung")
 *M.Sc. Informatik* | RWTH Aachen University | Okt. 2022 - Jun. 2024
-- Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles ↗]
+- Masterarbeit: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[KI-basierte Testszenarien für autonome Fahrzeuge ↗]
   - Implementierung von TimeGAN- und Diffusion-TS-Modellen zur Generierung realistischer Fahrzeugtrajektorien für autonome Fahrzeugtests
-  - Automatisierte Generierung von 1000+ diversen Testszenarien aus realen Fahrdatensätzen (inD, rounD, exiD)
-- Schwerpunkt KI/ML: Deep Learning, NLP, Large Language Models, Wissensrepräsentation
+  - Verarbeitung realer Fahrdatensätze (inD, rounD, exiD) und Evaluation generierter Trajektorien
 
 *B.Sc. Informatik* | RWTH Aachen University | Okt. 2019 - Sep. 2022
 
@@ -33,18 +33,18 @@
 
 *Wissenschaftliche Hilfskraft (Teilzeit)* | RWTH Lehrstuhl DBIS | Jul. 2023 - Mär. 2024
 - Forschung zu medizinischer Bildverarbeitung: Kombination von BLIP Vision-Language-Modell mit LLMs für Röntgenbild-Berichterstellung
-- Untersuchung der Knowledge-Graph-Integration mit GNNs (GCN, GAT, GraphSAGE) zur Verbesserung des medizinischen Domänenverständnisses
+- Untersuchung von Knowledge Graphs und GNNs für medizinische Daten
 - Einrichtung von LLM-Serving mit Ollama; Entwicklung eines FastAPI-REST-Services und End-to-End-LLM-Chat-Plattform
 - *Tech:* Python, PyTorch, Transformers, PyG, BLIP, CUDA, Ollama, FastAPI, vLLM
 
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Projekte")
-#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Echtzeit-Meeting-Untertitel & Übersetzung* ↗] | Persönliches Projekt | Laufend
-- Desktop-Overlay-App für unsichtbare Echtzeit-Meeting-Untertitel mit Übersetzung; erfasst Systemaudio und Mikrofon
-- *Tech:* TypeScript, Rust, Electron, Speech-to-Text API, LLM-Integration
+#link("https://github.com/RuizhangZhou/CompatBench")[*CompatBench - Tests für OpenAI-kompatible APIs* ↗] | Eigenständiges Open-Source-Projekt
+- Python-CLI für Streaming, Tool Calls, strukturierte Ausgaben, Nutzungsdaten und Fehlerverhalten mit reproduzierbaren Berichten
 
-*Self-hosted Automation Server* | Persönliche Infrastruktur | Laufend
-- Automatisierte Bots für den täglichen Gebrauch (Aachener Terminüberwachung, Quant-Daten-Alerts) mit Matrix-Benachrichtigungen
-- *Tech:* Python, Linux Server, Matrix API, Automation Scripts
+#link("https://github.com/RuizhangZhou/llm-gateway")[*LLM Gateway - Aufgabenabhängiges Modell-Routing* ↗] | Eigenständiges Open-Source-Projekt
+- Verteilt Jobs auf verfügbare Modelle, mit Provider-Fallback und Wechsel beim Streaming nur vor der ersten Ausgabe
+
+#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Meeting-Untertitel und Übersetzung* ↗] | Persönlicher Fork
 

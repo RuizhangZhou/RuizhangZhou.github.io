@@ -107,14 +107,13 @@
       <div class="wrap">
         <div class="nav">
           <a href="./index.html">← Home</a>
-          <a href="./ml-ai-engineer.html">ML/AI Engineer</a>
-          <a href="./fullstack-engineer.html">Fullstack Engineer</a>
+          <a href="./ml-ai-engineer.html">AI Platform Engineer</a>
+          <a href="./fullstack-engineer.html">Backend &amp; Full-stack</a>
           <a href="./ml-research.html">ML Research</a>
         </div>
         <h1>Data Engineer</h1>
         <p class="subtitle">
-          Data pipelines, quantitative strategies, business intelligence, and
-          analytics systems
+          Data processing and usage analysis supporting ML and AI systems
         </p>
       </div>
     </header>
@@ -167,13 +166,7 @@
           </li>
         </ul>
 
-        <div class="section-title">Business Value</div>
-        <div class="highlight">
-          ✓ Processed 10,000+ real-world vehicle trajectories into ML-ready format<br />
-          ✓ Automated data pipeline reduced preprocessing time from weeks to hours<br />
-          ✓ Enabled training of generative models on diverse traffic scenarios<br />
-          ✓ Seamless integration with simulation platform through XML conversion
-        </div>
+        <p>The pipeline prepared trajectory data for generative-model experiments and conversion into the simulation format used by the research project.</p>
 
         <div class="section-title">Links</div>
         <p>
@@ -183,9 +176,9 @@
 
       <!-- Token & Cost Tracking System -->
       <div class="project">
-        <h2>Production LLM Token & Cost Tracking System</h2>
+        <h2>LLM Usage &amp; Cost Metering</h2>
         <p class="project-meta">
-          KIconnect - RWTH IT Center | Full-time | Sep 2024 - Present
+          KI:connect - RWTH IT Center | Full-time | Sep 2024 - Present
         </p>
 
         <div class="section-title">Tech Stack</div>
@@ -204,46 +197,35 @@
           multi-tenant LLM platform supporting diverse models (OpenAI, Llama,
           Gemma, Mistral, Qwen, DeepSeek) with different tokenization methods.
           Must handle both text and vision inputs, aggregate costs per tenant,
-          and provide real-time billing data.
+          and provide usage data for reporting and quotas.
         </p>
 
         <div class="section-title">Solution</div>
         <ul>
           <li>
-            <strong>Unified Tokenization Layer:</strong> Integrated
-            Microsoft.ML.Tokenizers for text and pythonnet for vision model
-            tokenizers, creating abstraction layer supporting all model families
+            <strong>Token estimation:</strong> Worked on model-specific text and
+            image token estimation, with provider usage used where available.
           </li>
           <li>
-            <strong>Real-time Cost Calculation:</strong> Implemented streaming
-            token counting during LLM responses with accurate pricing models per
-            deployment
+            <strong>Cost calculation:</strong> Contributed to usage and pricing
+            logic for model deployments, including cached input and cache-write
+            tokens.
           </li>
           <li>
-            <strong>Data Aggregation Pipeline:</strong> Built Hangfire
-            background jobs for hourly/daily cost aggregation, quota monitoring,
-            and usage analytics
+            <strong>Reporting:</strong> Worked with usage records that support
+            cost breakdowns, quotas, and administrative reports.
           </li>
           <li>
-            <strong>Multi-tenant Analytics:</strong> Designed MongoDB schemas
-            for efficient querying of usage patterns, cost breakdowns, and trend
-            analysis per tenant
+            <strong>Multi-tenant analysis:</strong> Worked with usage data
+            grouped by tenant and deployment.
           </li>
           <li>
-            <strong>Quota Management:</strong> Implemented real-time quota
-            enforcement with overflow handling and alert system
+            <strong>Quota management:</strong> Contributed to checks that limit
+            usage according to configured quotas.
           </li>
         </ul>
 
-        <div class="section-title">Business Value</div>
-        <div class="highlight">
-          ✓ Accurate cost attribution across 10+ departments with sub-token
-          precision<br />
-          ✓ Prevented budget overruns with real-time quota enforcement<br />
-          ✓ Enabled data-driven decisions on model deployment and resource
-          allocation<br />
-          ✓ Generated detailed usage reports for financial planning
-        </div>
+        <p>This work connects provider usage data to pricing and reporting without assuming that every model returns usage in the same format.</p>
       </div>
 
       <!-- Quantitative Strategies -->

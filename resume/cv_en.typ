@@ -2,16 +2,17 @@
 
 #header(
   "Ruizhang Zhou",
-  "AI/ML Engineer & Full-stack Developer - Production LLM systems, Deep Learning research, Data pipelines",
+  "Applied AI / AI Platform Engineer - Production LLM Systems · Backend & Infrastructure · ML Engineering",
   [#link("mailto:ruizhang.zhou@mail.com")[ruizhang.zhou\@mail.com] | #link("https://github.com/RuizhangZhou")[GitHub] | #link("https://linkedin.com/in/ruizhang-zhou/")[LinkedIn] | #link("https://ruizhangzhou.github.io")[Website]]
 )
 
 #section-title("Experience")
-*Software Engineer (AI Platform) - Full-time* | KIconnect - RWTH IT Center | 09/2024 - Present
+*Software Engineer (AI Platform)* | KI:connect - RWTH IT Center | 09/2024 - Present
 
-- Built production multi-tenant LLM platform with streaming chat, real-time cost tracking, and enterprise SSO
-- Implemented unified tokenization for OpenAI, Llama, Gemma, Mistral, Qwen, DeepSeek models; developed Vue 3 admin dashboard
-- *Tech:* C\#/.NET 9, ASP.NET Core, Semantic Kernel, Vue 3, MongoDB, SignalR, Azure AI Inference
+- Contribute to OpenAI-compatible Chat Completions and Responses APIs, including raw request forwarding and streaming behavior
+- Work on model-specific token estimation, usage and cost metering, cache-write pricing, and quota handling
+- Develop ASP.NET Core services and Vue 3 admin interfaces; investigate application, provider, and deployment issues
+- *Tech:* C\#/.NET, ASP.NET Core, Vue 3, MongoDB, SignalR, OpenAI-compatible APIs
 
 #line(length: 100%, stroke: 0.5pt)
 
@@ -19,7 +20,7 @@
 *M.Sc. Computer Science* | RWTH Aachen University | Oct. 2022 - Jun. 2024
 - Master's Thesis: #link("https://github.com/RuizhangZhou/ScenarioGenerationAI")[AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles ↗]
   - Implemented TimeGAN and Diffusion-TS models to generate realistic vehicle trajectory data for autonomous vehicle testing
-  - Automated generation of 1000+ diverse test scenarios from real-world driving datasets (inD, rounD, exiD)
+  - Processed real-world driving datasets (inD, rounD, exiD) and evaluated generated trajectories
 - Focus on AI/ML: Deep Learning, NLP, Large Language Models, Knowledge Representation
 
 *B.Sc. Computer Science* | RWTH Aachen University | Oct. 2019 - Sep. 2022
@@ -42,10 +43,10 @@
 #line(length: 100%, stroke: 0.5pt)
 
 #section-title("Projects")
-#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Real-time Meeting Subtitle & Translation* ↗] | Personal Project | Ongoing
-- Desktop overlay app for invisible real-time meeting subtitles with translation; captures system audio and microphone
-- *Tech:* TypeScript, Rust, Electron, Speech-to-Text API, LLM Integration
+#link("https://github.com/RuizhangZhou/CompatBench")[*CompatBench - OpenAI-compatible API tests* ↗] | Independent open-source project
+- Python CLI for testing streaming, tool calls, structured output, usage, and error behavior; produces reproducible reports
 
-*Self-hosted Automation Server* | Personal Infrastructure | Ongoing
-- Run automated bots for daily use (Aachen appointment monitoring, quant data alerts) with Matrix notifications
-- *Tech:* Python, Linux Server, Matrix API, Automation Scripts
+#link("https://github.com/RuizhangZhou/llm-gateway")[*LLM Gateway - Task-aware model routing* ↗] | Independent open-source project
+- Routes jobs across discovered models with provider fallback and safe pre-output streaming failover
+
+#link("https://github.com/RuizhangZhou/talkecho")[*TalkEcho - Meeting subtitles and translation* ↗] | Personal fork

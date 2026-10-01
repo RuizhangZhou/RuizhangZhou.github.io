@@ -1,26 +1,24 @@
-# Resume + Personal Site (Starter)
+# Ruizhang Zhou — Personal Site
 
-This repo contains:
+This repository contains my portfolio and CV source files. The site focuses on applied AI and AI platform engineering: production LLM systems, backend and infrastructure work, and ML engineering.
 
-- `resume/` — Typst sources for **English** and **German** CVs.
-- `index.html` — a minimal homepage linking to the generated PDFs.
-- GitHub Actions workflow to compile PDFs and publish everything to **GitHub Pages**.
+## Site structure
 
-## How to use
+- `index.html`: introduction and selected work, including KI:connect, [CompatBench](https://github.com/RuizhangZhou/CompatBench), [LLM Gateway](https://github.com/RuizhangZhou/llm-gateway), and my master's thesis.
+- `ml-ai-engineer.html`: AI platform work and related projects.
+- `fullstack-engineer.html`, `data-engineer.html`, `ml-research.html`: supporting experience.
+- `blog.html`: GitHub Issues-backed blog with title/date search and pagination.
+- `resume/cv_en.typ` and `resume/cv_de.typ`: English and German CV sources.
 
-1. Ensure your repository is named `<username>.github.io` (for me: `RuizhangZhou.github.io`) and **Pages** is enabled with **GitHub Actions** as the build source.
-2. Commit these files and push to `main` (or `master`).
-3. The workflow will install Typst, compile `resume/cv_en.typ` → `Resume_EN.pdf` and `resume/cv_de.typ` → `Lebenslauf_DE.pdf`, and publish the whole repo as a site.
-4. Edit the Typst files any time; pushing updates will rebuild PDFs automatically.
+## Build and publish
 
-## Where to edit
+The GitHub Actions workflow in `.github/workflows/build.yml` compiles the Typst sources into `Resume_EN.pdf` and `Lebenslauf_DE.pdf`, then publishes the site through GitHub Pages. The PDFs are generated during the build and are not stored in this repository.
 
-- `resume/cv_en.typ` and `resume/cv_de.typ`: core content.
-- `resume/theme.typ`: small style helpers.
-- `index.html`: homepage text and links.
+To check the CVs locally with Typst installed:
 
-## Tips
+```sh
+typst compile resume/cv_en.typ Resume_EN.pdf
+typst compile resume/cv_de.typ Lebenslauf_DE.pdf
+```
 
-- Prefer concise bullet points with **action → impact**.
-- Keep each CV **1 page** if possible.
-- For a GUI builder alternative, try **Reactive Resume** or **FlowCV** and then drop exported PDFs into the repo.
+The HTML pages can be opened locally in a browser. Keep claims about work outcomes and publications tied to evidence that can be shared publicly.

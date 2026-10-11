@@ -91,6 +91,49 @@ class PublicationTests(unittest.TestCase):
                 run_actions.main()
         store.put.assert_not_called()
 
+    def transcript_research(self, fetch, events=None, dry_run=True):
+        store = Mock()
+        data = {'meta': {'version': 1}, 'history': {'posts': []},
+                'digested_videos': {'ids': []}, 'playlist_cache': {'videos': []}}
+        store.get.side_effect = data.get
+        videos = [{'id': str(i)} for i in range(3)]
+        blog = SimpleNamespace(load_history=lambda: [], load_digested_ids=lambda: set(),
+            fetch_playlist_videos=lambda: videos, pick_candidate_videos=lambda *a: videos,
+            fetch_transcript=fetch, MAX_DIGEST_CANDIDATES=2,
+            generate_video_digest=Mock(return_value=('Title', 'English', '标题', '中文', 'Hook', ['1', '2'])),
+            generate_post=Mock())
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
+             patch.dict(sys.modules, {'daily_blog': blog}), \
+             patch.object(sys, 'argv', ['run_actions'] + (['--dry-run'] if dry_run else [])), \
+             patch.object(run_actions.time, 'sleep', side_effect=lambda seconds:
+                          events.append('sleep:' + str(seconds)) if events is not None else None) as sleep, \
+             patch.object(run_actions, 'github_request') as api:
+            try:
+                run_actions.main()
+            finally:
+                store.put.assert_not_called()
+                store.send.assert_not_called()
+                api.assert_not_called()
+                blog.generate_post.assert_not_called()
+        return blog, sleep
+
+    def test_transcript_requests_keep_three_second_pacing_including_missing_captions(self):
+        order = []
+        def fetch(video_id):
+            order.append('fetch:' + video_id)
+            return None if video_id == '0' else 'Transcript'
+        blog, sleep = self.transcript_research(fetch, order)
+        self.assertEqual(order, ['fetch:0', 'sleep:3', 'fetch:1', 'sleep:3', 'fetch:2'])
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [3, 3])
+        blog.generate_video_digest.assert_called_once()
+
+    def test_transcript_service_failure_never_publishes_or_marks_video_consumed(self):
+        with self.assertRaises(RuntimeError):
+            self.transcript_research(Mock(side_effect=RuntimeError('Transcript service failed')), dry_run=False)
+
 
 if __name__ == '__main__':
     unittest.main()

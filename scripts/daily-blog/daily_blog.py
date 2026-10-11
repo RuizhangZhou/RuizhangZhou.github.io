@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # /// script
-# dependencies = ["python-dotenv", "requests", "markdown", "llm-gateway @ git+https://github.com/RuizhangZhou/llm-gateway.git@master"]
+# dependencies = ["python-dotenv", "requests", "markdown", "nh3==0.3.7", "regex==2026.9.29", "llm-gateway @ git+https://github.com/RuizhangZhou/llm-gateway.git@eeed89c95a317f279494fa27c0c44dfe5712d791"]
 # ///
 """
 daily-blog: video-digest-first, essay-fallback → GitHub Issues + Bluesky (EN) + Matrix (ZH).
@@ -31,6 +31,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from dotenv import load_dotenv
+from text_limits import bluesky_text, truncate_text
 
 load_dotenv(Path.home() / ".env", override=False)
 
@@ -191,7 +192,11 @@ def pick_candidate_videos(videos: list[dict], digested_ids: set[str]) -> list[di
 
 
 def fetch_transcript(video_id: str) -> str | None:
-    """Full transcript text via Supadata, or None if unavailable/unconfigured."""
+    """Native transcript or None if unavailable; service errors stop publication.
+
+    Never consume a playlist item or generate a fallback essay because of a
+    temporary rate limit, bad credentials, network error or malformed response.
+    """
     import requests
 
     if not SUPADATA_API_KEY:
@@ -206,11 +211,14 @@ def fetch_transcript(video_id: str) -> str | None:
             headers={"x-api-key": SUPADATA_API_KEY},
             timeout=30,
         )
+        payload = r.json()
+        if (r.status_code < 400 or r.status_code == 404) and payload.get('error') == 'transcript-unavailable':
+            return None
         r.raise_for_status()
-        text = " ".join(seg["text"] for seg in r.json().get("content", []))
-    except Exception as e:
-        log(f"Transcript fetch failed for {video_id}: {e}")
-        return None
+        text = " ".join(seg["text"] for seg in payload['content'])
+    except Exception:
+        # Do not expose provider responses or request headers in public logs.
+        raise RuntimeError('Transcript service failed; playlist item retained for retry') from None
 
     if not text:
         log(f"No usable native transcript for {video_id}; trying the next playlist item.")
@@ -360,8 +368,7 @@ def generate_video_digest(candidates: list[dict], transcripts: dict[str, str], p
     if not used_ids:
         used_ids = [candidates[0]["id"]]  # always mark at least the primary video as covered
 
-    if len(hook.encode()) > 220:
-        hook = hook[:217] + "…"
+    hook = truncate_text(hook)
 
     body += f"\n\n---\n\n_Published by bot · {TODAY}_\n\n<!-- daily-blog-{TODAY} -->"
     return title, body, title_zh, body_zh, hook, used_ids
@@ -511,8 +518,7 @@ general knowledge."""
         raise RuntimeError(f"LLM response missing expected separators:\n{raw[:300]}")
 
     # Enforce Bluesky 300-char limit on hook (leave ~80 chars for URL + newlines)
-    if len(hook.encode()) > 220:
-        hook = hook[:217] + "…"
+    hook = truncate_text(hook)
 
     body += f"\n\n---\n\n_Published by bot · {TODAY}_\n\n<!-- daily-blog-{TODAY} -->"
     return title, body, title_zh, body_zh, domain, hook
@@ -571,9 +577,7 @@ def post_to_bluesky(hook: str, blog_url: str) -> None:
                     {"identifier": BSKY_ID, "password": BSKY_PASS})
     token, did = session["accessJwt"], session["did"]
 
-    text      = f"{hook}\n\n{blog_url}"
-    url_start = len(hook.encode()) + 2
-    url_end   = url_start + len(blog_url.encode())
+    text, url_start, url_end = bluesky_text(hook, blog_url)
 
     _bsky(
         "com.atproto.repo.createRecord",
@@ -619,7 +623,8 @@ def post_to_mastodon(hook: str, blog_url: str) -> str:
 
 def _markdown_to_html(text: str) -> str:
     import markdown
-    return markdown.markdown(text, extensions=["tables"])
+    import nh3
+    return nh3.clean(markdown.markdown(text, extensions=["tables"]))
 
 
 def send_matrix_message(text: str) -> None:

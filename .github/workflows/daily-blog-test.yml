@@ -1,7 +1,7 @@
 name: Daily blog tests
 on:
   pull_request:
-    paths: ['scripts/daily-blog/**', '.github/workflows/daily-blog*.yml']
+    paths: ['scripts/daily-blog/**', '.github/workflows/daily-blog*.yml', 'blog.html', 'js/blog-content.js']
   push:
     branches: ['work/daily-blog-actions']
 permissions:
@@ -29,3 +29,8 @@ jobs:
       - run: python -m unittest discover -s scripts/daily-blog/tests -v
       - run: python -c 'from llm_gateway._config import get_config; assert get_config()["task_routing"]["blog"]; print("Shared gateway imports and routing loads without root access")'
       - run: python -m compileall -q scripts/daily-blog
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - run: npm ci --prefix scripts/daily-blog/browser-tests
+      - run: npm test --prefix scripts/daily-blog/browser-tests

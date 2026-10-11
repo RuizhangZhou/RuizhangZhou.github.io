@@ -22,6 +22,8 @@ optional `AZURE_OPENAI_API_KEY`, `BSKY_APP_PASSWORD`, optional `SUPADATA_API_KEY
 Variables: public `BSKY_IDENTIFIER`, optional non-secret `AZURE_OPENAI_BASE_URL`.
 `GH_TOKEN` uses the temporary workflow token with issues:write for this repo;
 no personal GitHub token is copied to Actions. Provider keys never go in Variables.
+`MATRIX_HOMESERVER` deliberately stays in Secrets too: infrastructure addresses
+need not be public configuration. This is not an API key/Variables requirement.
 
 Private Matrix account data `com.rickandzoey.dailyblog.v1` stores existing history,
 processed video IDs, playlist cache and exact pending publication content/stages.
@@ -64,3 +66,17 @@ snapshot and run two publishers concurrently.
 Actions may delay scheduled runs; public scheduled workflows can be disabled
 after 60 inactive days. Check Actions if posts stop. Private-state/provider
 failures fail the run visibly. Unit tests have no credentials or real posting.
+
+## Review hardening
+
+Public issue bodies are sanitized with pinned DOMPurify before the blog inserts
+HTML; private HTML attachments use nh3 after Markdown rendering. Raw scripts,
+event handlers and dangerous URL schemes are not trusted model output. KaTeX
+still renders math after sanitization. Browser regression tests live in
+`browser-tests` (`npm ci && npm test`, Node 24).
+
+Bluesky hooks use grapheme-aware truncation; final text reserves space for the
+actual URL and checks both the 300-grapheme and 3000-byte limits, retaining UTF-8
+facet offsets. Transcript probes keep the former three-second pacing. Temporary
+Supadata failures abort without publishing an essay or marking videos consumed;
+confirmed unavailable native captions may still use the original fallback.

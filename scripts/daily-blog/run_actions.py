@@ -13,9 +13,11 @@ import logging
 import os
 from pathlib import Path
 import sys
+import time
 
 import httpx
 from matrix_state import MatrixKV
+from text_limits import bluesky_text
 
 BASE = Path(__file__).resolve().parent
 
@@ -109,7 +111,9 @@ def main():
             digested = blog.load_digested_ids()
             candidates = blog.pick_candidate_videos(videos, digested)
             usable, transcripts = [], {}
-            for video in candidates:
+            for attempt, video in enumerate(candidates):
+                if attempt:
+                    time.sleep(3)  # Preserve Supadata pacing, including unavailable captions.
                 transcript = blog.fetch_transcript(video['id'])
                 if transcript:
                     usable.append(video)
@@ -137,13 +141,12 @@ def main():
     blog_url = blog.BLOG_BASE + '?id=' + str(issue['number'])
     if not record.get('bluesky_done'):
         session = blog._bsky('com.atproto.server.createSession', {'identifier': blog.BSKY_ID, 'password': blog.BSKY_PASS})
-        text = record['hook'] + '\n\n' + blog_url
-        start = len(record['hook'].encode()) + 2
+        text, start, end = bluesky_text(record['hook'], blog_url)
         # Stable key: a retry updates this one record, never creates a second post.
         blog._bsky('com.atproto.repo.putRecord', {
             'repo': session['did'], 'collection': 'app.bsky.feed.post', 'rkey': 'daily-' + today,
             'record': {'$type': 'app.bsky.feed.post', 'text': text, 'createdAt': record['created_at'],
-                       'facets': [{'index': {'byteStart': start, 'byteEnd': start + len(blog_url.encode())},
+                       'facets': [{'index': {'byteStart': start, 'byteEnd': end},
                                    'features': [{'$type': 'app.bsky.richtext.facet#link', 'uri': blog_url}]}]}},
                     token=session['accessJwt'])
         record['bluesky_done'] = True

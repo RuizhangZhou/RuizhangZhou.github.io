@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   publish:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DAILY_BLOG_ENABLED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 35
     env:

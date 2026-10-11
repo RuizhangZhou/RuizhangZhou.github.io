@@ -53,6 +53,9 @@ stages resume without rerunning the model. No unlimited exactly-once guarantee.
    must confirm GitHub, Bluesky and Matrix stages.
 
 Until cutover is explicitly recorded, the original server cron remains active.
+Repository Variable `DAILY_BLOG_ENABLED` is initially false: scheduled publication
+stays off even after merge, while manual dispatch remains available for validation.
+Only set it true after fresh state synchronization and disabling the old cron.
 If a gap exists between state migration and cutover, state MUST be re-synced.
 Rollback: disable Actions first, export current private state to server files,
 then restore only the original daily-blog cron line. Never restore a stale file

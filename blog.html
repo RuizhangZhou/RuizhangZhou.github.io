@@ -6,6 +6,11 @@
     <title>Blog - Ruizhang Zhou</title>
     <!-- Markdown renderer -->
     <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+    <!-- Sanitize untrusted issue/model HTML before insertion; fail closed if unavailable. -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.16/dist/purify.min.js"
+      integrity="sha384-a7SzOxErzJ3ZpQz0zJ32d67dSitNzPcbfybc/ykU9KJhMgZkwqfSxlhhdJRS+XGL"
+      crossorigin="anonymous"></script>
+    <script src="js/blog-content.js"></script>
     <!-- KaTeX math rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js"></script>
@@ -589,7 +594,7 @@
 
           const labels = renderLabels(issue);
 
-          const content = marked.parse(preprocessMath(issue.body || 'No content'));
+          const content = sanitizePostContent(marked.parse(preprocessMath(issue.body || 'No content')));
 
           main.innerHTML = `
             <a href="${escapeHtml(listUrl())}" class="back-btn">&larr; Back to all posts</a>
@@ -670,7 +675,7 @@
             <a href="${escapeHtml(listUrl())}" class="back-btn">&larr; Back to all posts</a>
             <div class="error">
               <h2>Failed to load post</h2>
-              <p>${error.message}</p>
+              <p>${escapeHtml(error.message)}</p>
             </div>
           `;
         }

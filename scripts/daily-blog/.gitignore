@@ -1,0 +1,8 @@
+config.json
+creators.json
+history.json
+digested_videos.json
+playlist_cache.json
+daily-blog.log
+output/
+__pycache__/

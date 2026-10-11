@@ -1,0 +1,64 @@
+name: Daily bilingual blog
+on:
+  schedule:
+    # Preserve former server 09:00 UTC: Berlin 11:00 CEST / 10:00 CET.
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        type: boolean
+        default: true
+        description: 'Generate only, without publishing or modifying remote state'
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: daily-blog-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DAILY_BLOG_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      LLM_GATEWAY_ROUTING_FILE: ${{ github.workspace }}/llm-gateway/config/routing.yaml
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          path: blog
+          persist-credentials: false
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: RuizhangZhou/llm-gateway
+          ref: eeed89c95a317f279494fa27c0c44dfe5712d791 # hosted compatibility; routing still follows master
+          path: llm-gateway
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.12'
+      - run: python -m pip install ./llm-gateway -r blog/scripts/daily-blog/requirements.txt
+      - run: python -m unittest discover -s blog/scripts/daily-blog/tests -v
+      - name: Generate and checkpoint publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DAILY_BLOG_CONFIG_JSON: ${{ secrets.DAILY_BLOG_CONFIG_JSON }}
+          DAILY_BLOG_CREATORS_JSON: ${{ secrets.DAILY_BLOG_CREATORS_JSON }}
+          KICONNECT_API_KEY: ${{ secrets.KICONNECT_API_KEY }}
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_BASE_URL: ${{ vars.AZURE_OPENAI_BASE_URL }}
+          BSKY_IDENTIFIER: ${{ vars.BSKY_IDENTIFIER }}
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+          SUPADATA_API_KEY: ${{ secrets.SUPADATA_API_KEY }}
+          MATRIX_HOMESERVER: ${{ secrets.MATRIX_HOMESERVER }}
+          MATRIX_BOT_TOKEN: ${{ secrets.MATRIX_BOT_TOKEN }}
+          MATRIX_RICK_ROOM: ${{ secrets.MATRIX_RICK_ROOM }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          args=()
+          if [[ "$DRY_RUN" == "true" ]]; then
+            python blog/scripts/daily-blog/run_actions.py --probe
+            args+=(--dry-run)
+          fi
+          python blog/scripts/daily-blog/run_actions.py "${args[@]}"

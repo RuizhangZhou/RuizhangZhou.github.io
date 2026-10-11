@@ -1,0 +1,10 @@
+{
+  "name": "daily-blog-render-security-tests",
+  "private": true,
+  "scripts": {"test": "node --test test-content.cjs"},
+  "devDependencies": {
+    "dompurify": "3.4.16",
+    "jsdom": "30.1.2",
+    "marked": "12.0.2"
+  }
+}

@@ -1,6 +1,9 @@
 import importlib.util
 from pathlib import Path
 import sys
+import os
+import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
@@ -56,6 +59,37 @@ class PublicationTests(unittest.TestCase):
         with patch.object(run_actions, 'github_request', return_value=[{'body': marker}, {'body': marker}]):
             with self.assertRaises(RuntimeError):
                 run_actions.find_issue('example/blog', marker)
+
+    def test_research_dry_run_never_publishes_or_updates_remote_state(self):
+        store = Mock()
+        data = {'meta': {'version': 1}, 'history': {'posts': []},
+                'digested_videos': {'ids': []}, 'playlist_cache': {'videos': []}}
+        store.get.side_effect = data.get
+        blog = SimpleNamespace(load_history=lambda: [], load_digested_ids=lambda: set(),
+                               fetch_playlist_videos=lambda: [], pick_candidate_videos=lambda *a: [],
+                               generate_post=lambda *a: ('Title', 'English', '标题', '中文', 'finance', 'Hook'))
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
+             patch.dict(sys.modules, {'daily_blog': blog}), patch.object(sys, 'argv', ['run_actions', '--dry-run']), \
+             patch.object(run_actions, 'github_request') as api:
+            run_actions.main()
+        store.put.assert_not_called()
+        store.send.assert_not_called()
+        api.assert_not_called()
+
+    def test_incomplete_private_state_stops_before_generation(self):
+        store = Mock()
+        store.get.return_value = None
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
+             patch.object(sys, 'argv', ['run_actions', '--dry-run']):
+            with self.assertRaises(RuntimeError):
+                run_actions.main()
+        store.put.assert_not_called()
 
 
 if __name__ == '__main__':

@@ -1,0 +1,60 @@
+# Daily blog on GitHub Actions
+
+Migrates `/root/daily-blog/daily_blog.py` without changing the existing writing
+prompts or model-routing policy. `run_actions.py` reuses its research/generation
+functions, not the old non-idempotent publication entry point.
+
+Schedule: **09:00 UTC daily** (Berlin 11:00 CEST / 10:00 CET), unchanged.
+Public English article -> GitHub issue with blog/bot labels -> Bluesky;
+private Chinese article -> Matrix HTML attachment. Mastodon remains paused.
+
+The workflow installs the public `RuizhangZhou/llm-gateway` master repository and
+reads its shared GitHub routing config. The existing fsn refresh timer continues
+updating/publishing that config; fsn is not the article execution host anymore
+after cutover. No server filesystem dependency is required in the new runner.
+
+Secrets: `DAILY_BLOG_CONFIG_JSON`, `DAILY_BLOG_CREATORS_JSON`, `KICONNECT_API_KEY`,
+optional `AZURE_OPENAI_API_KEY`, `BSKY_APP_PASSWORD`, optional `SUPADATA_API_KEY`,
+`MATRIX_HOMESERVER`, `MATRIX_BOT_TOKEN`, `MATRIX_RICK_ROOM`.
+Variables: public `BSKY_IDENTIFIER`, optional non-secret `AZURE_OPENAI_BASE_URL`.
+`GH_TOKEN` uses the temporary workflow token with issues:write for this repo;
+no personal GitHub token is copied to Actions. Provider keys never go in Variables.
+
+Private Matrix account data `com.rickandzoey.dailyblog.v1` stores existing history,
+processed video IDs, playlist cache and exact pending publication content/stages.
+The namespace version marker is initialized explicitly only after all three
+state documents are migrated. One writer only (workflow concurrency). Missing
+state fails closed. No private Chinese article, cache, profile or raw provider
+error is uploaded as a public artifact or printed to public logs. Runtime files
+are ignored by Git. Private content is still sent to the same configured model
+providers as before, including the existing Azure fallback if configured.
+
+Generation is checkpointed before publishing. GitHub issues reconcile an exact
+date marker; an ambiguous POST with no read-back match requires manual review,
+not a blind second POST. Bluesky uses a stable per-day record key. Matrix uses
+stable per-day text/file transaction IDs and saves the media URI. Completed
+stages resume without rerunning the model. No unlimited exactly-once guarantee.
+
+## Deployment / cutover
+
+1. Configure the listed Secrets/Variables using stdin, never visible shell args.
+2. Migrate `history.json`, `digested_videos.json`, `playlist_cache.json` privately.
+3. Merge this PR manually; the fsn gh wrapper forbids automated main/master merges.
+4. Immediately before switching, refresh the private state from the still-running
+   server job. Re-check that today's article has already shipped; don't publish
+   an extra public test article just for migration.
+5. Run `daily-blog.yml` with `dry_run=true`; require success. Check that source
+   routing and provider authentication work from the hosted runner.
+6. Disable **only** the old daily-blog cron line after validation. Keep all
+   unrelated and intentionally paused entries unchanged. Next daily publication
+   must confirm GitHub, Bluesky and Matrix stages.
+
+Until cutover is explicitly recorded, the original server cron remains active.
+If a gap exists between state migration and cutover, state MUST be re-synced.
+Rollback: disable Actions first, export current private state to server files,
+then restore only the original daily-blog cron line. Never restore a stale file
+snapshot and run two publishers concurrently.
+
+Actions may delay scheduled runs; public scheduled workflows can be disabled
+after 60 inactive days. Check Actions if posts stop. Private-state/provider
+failures fail the run visibly. Unit tests have no credentials or real posting.

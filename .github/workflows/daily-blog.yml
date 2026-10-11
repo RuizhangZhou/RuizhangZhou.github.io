@@ -20,6 +20,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 35
+    env:
+      LLM_GATEWAY_ROUTING_FILE: ${{ github.workspace }}/llm-gateway/config/routing.yaml
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
@@ -28,7 +30,7 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           repository: RuizhangZhou/llm-gateway
-          ref: master
+          ref: eeed89c95a317f279494fa27c0c44dfe5712d791 # hosted compatibility; routing still follows master
           path: llm-gateway
           persist-credentials: false
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1

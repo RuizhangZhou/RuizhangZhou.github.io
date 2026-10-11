@@ -8,8 +8,11 @@ Schedule: **09:00 UTC daily** (Berlin 11:00 CEST / 10:00 CET), unchanged.
 Public English article -> GitHub issue with blog/bot labels -> Bluesky;
 private Chinese article -> Matrix HTML attachment. Mastodon remains paused.
 
-The workflow installs the public `RuizhangZhou/llm-gateway` master repository and
-reads its shared GitHub routing config. The existing fsn refresh timer continues
+The workflow installs public `RuizhangZhou/llm-gateway` at audited compatibility
+commit `eeed89c95a317f279494fa27c0c44dfe5712d791` (gateway PR #1 fixes non-root
+imports and optional server env loading). **Model routing still follows the
+latest master/config/routing.yaml**, independently of the pinned code version.
+The existing fsn refresh timer continues
 updating/publishing that config; fsn is not the article execution host anymore
 after cutover. No server filesystem dependency is required in the new runner.
 

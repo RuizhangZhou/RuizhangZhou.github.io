@@ -150,6 +150,13 @@ class PublicationTests(unittest.TestCase):
             self.transcript_research(Mock(return_value='Transcript'), dry_run=False,
                                      generation_error=RuntimeError('output_truncated_after_retry'))
 
+    def test_privileged_workflow_remains_main_only_even_for_dry_runs(self):
+        import yaml
+        path = BASE.parents[1] / '.github/workflows/daily-blog.yml'
+        workflow = yaml.safe_load(path.read_text())
+        self.assertEqual(workflow['jobs']['publish']['if'],
+                         "github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DAILY_BLOG_ENABLED == 'true')")
+
 
 if __name__ == '__main__':
     unittest.main()

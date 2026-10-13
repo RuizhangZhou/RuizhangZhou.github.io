@@ -101,8 +101,8 @@ generation error code and HTTP status when available, never exception messages,
 provider response bodies, prompts or Chinese content. Historical runs from before
 this instrumentation cannot reveal their original provider HTTP error details.
 
-For hosted end-to-end generation validation, manual `dry_run=true` is permitted
-on a feature branch. Production publishing is guarded to `main` in both the job
-condition and the shell entrypoint. Dry-runs still perform no remote-state writes
-or public/private publication; production schedules and activation gates are
-unchanged.
+The privileged workflow remains restricted to `main`, including dry-runs. A
+Python `--dry-run` flag is not a security boundary for branch-controlled code with
+production credentials. This incident's hosted generation test used the audited
+repair branch temporarily; branch dispatch permission was then removed from the
+final change. Production schedules and activation gates are unchanged.

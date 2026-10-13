@@ -5,6 +5,7 @@ import os
 import tempfile
 from types import SimpleNamespace
 import unittest
+import httpx
 from unittest.mock import Mock, patch
 
 BASE = Path(__file__).resolve().parents[1]
@@ -91,7 +92,7 @@ class PublicationTests(unittest.TestCase):
                 run_actions.main()
         store.put.assert_not_called()
 
-    def transcript_research(self, fetch, events=None, dry_run=True):
+    def transcript_research(self, fetch, events=None, dry_run=True, generation_error=None):
         store = Mock()
         data = {'meta': {'version': 1}, 'history': {'posts': []},
                 'digested_videos': {'ids': []}, 'playlist_cache': {'videos': []}}
@@ -102,6 +103,8 @@ class PublicationTests(unittest.TestCase):
             fetch_transcript=fetch, MAX_DIGEST_CANDIDATES=2,
             generate_video_digest=Mock(return_value=('Title', 'English', '标题', '中文', 'Hook', ['1', '2'])),
             generate_post=Mock())
+        if generation_error is not None:
+            blog.generate_video_digest.side_effect = generation_error
         env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
                'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
         with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
@@ -133,6 +136,26 @@ class PublicationTests(unittest.TestCase):
     def test_transcript_service_failure_never_publishes_or_marks_video_consumed(self):
         with self.assertRaises(RuntimeError):
             self.transcript_research(Mock(side_effect=RuntimeError('Transcript service failed')), dry_run=False)
+
+    def test_failure_summary_exposes_stage_and_status_not_raw_provider_data(self):
+        response = httpx.Response(400, request=httpx.Request('POST', 'https://private.invalid/secret'),
+                                  text='SECRET TOKEN AND ARTICLE')
+        error = httpx.HTTPStatusError('SECRET TOKEN AND ARTICLE', request=response.request, response=response)
+        run_actions.stage('generate_essay')
+        self.assertEqual(run_actions.failure_summary(error),
+                         {'stage': 'generate_essay', 'error_type': 'HTTPStatusError', 'http_status': 400})
+
+    def test_generation_failure_never_checkpoints_or_publishes(self):
+        with self.assertRaises(RuntimeError):
+            self.transcript_research(Mock(return_value='Transcript'), dry_run=False,
+                                     generation_error=RuntimeError('output_truncated_after_retry'))
+
+    def test_privileged_workflow_remains_main_only_even_for_dry_runs(self):
+        import yaml
+        path = BASE.parents[1] / '.github/workflows/daily-blog.yml'
+        workflow = yaml.safe_load(path.read_text())
+        self.assertEqual(workflow['jobs']['publish']['if'],
+                         "github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DAILY_BLOG_ENABLED == 'true')")
 
 
 if __name__ == '__main__':

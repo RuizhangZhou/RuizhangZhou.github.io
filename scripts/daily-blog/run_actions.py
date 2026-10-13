@@ -20,6 +20,27 @@ from matrix_state import MatrixKV
 from text_limits import bluesky_text
 
 BASE = Path(__file__).resolve().parent
+STAGE = 'startup'
+
+
+def stage(name):
+    # Only call with fixed developer-owned labels, never titles, URLs or errors.
+    global STAGE
+    STAGE = name
+
+
+def failure_summary(exc):
+    """Allowlisted diagnostics; never stringify an exception/provider response."""
+    summary = {'stage': STAGE, 'error_type': type(exc).__name__}
+    writer = sys.modules.get('daily_blog')
+    generation_error = getattr(writer, 'GenerationError', None)
+    if isinstance(generation_error, type) and isinstance(exc, generation_error):
+        summary['code'] = exc.code
+    response = getattr(exc, 'response', None)
+    status = getattr(response, 'status_code', None)
+    if isinstance(status, int) and not isinstance(status, bool) and 100 <= status <= 599:
+        summary['http_status'] = status
+    return summary
 
 
 def github_request(method, path, **kwargs):
@@ -65,6 +86,7 @@ def publish_issue(store, key, record, repo, date):
 
 
 def main():
+    stage('startup')
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--probe', action='store_true', help='Read-only service/auth probe; no article or post')
@@ -73,6 +95,7 @@ def main():
     for name in ('config', 'creators'):
         value = json.loads(os.environ['DAILY_BLOG_' + name.upper() + '_JSON'])
         (BASE / (name + '.json')).write_text(json.dumps(value, ensure_ascii=False))
+    stage('private_state')
     store = MatrixKV(os.environ['MATRIX_HOMESERVER'], os.environ['MATRIX_BOT_TOKEN'],
                      'com.rickandzoey.dailyblog.v1')
     if store.get('meta') != {'version': 1}:
@@ -82,12 +105,16 @@ def main():
         if value is None:
             raise RuntimeError('Missing migrated blog state: ' + name)
         (BASE / (name + '.json')).write_text(json.dumps(value, ensure_ascii=False))
+    stage('writer_setup')
     import daily_blog as blog
     blog.log = lambda message: None
     if args.probe:
+        stage('github_probe')
         github_request('GET', '/repos/' + blog.REPO)
+        stage('bluesky_probe')
         blog._bsky('com.atproto.server.createSession', {'identifier': blog.BSKY_ID, 'password': blog.BSKY_PASS})
         from llm_gateway import chat
+        stage('gateway_probe')
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             result = chat([{'role': 'user', 'content': 'Reply only OK.'}],
                           task='blog', max_tokens=64, timeout=60)
@@ -107,10 +134,12 @@ def main():
     if record is None:
         # Suppress raw model/provider/transcript errors from public CI output.
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            stage('playlist')
             videos = blog.fetch_playlist_videos()
             digested = blog.load_digested_ids()
             candidates = blog.pick_candidate_videos(videos, digested)
             usable, transcripts = [], {}
+            stage('transcripts')
             for attempt, video in enumerate(candidates):
                 if attempt:
                     time.sleep(3)  # Preserve Supadata pacing, including unavailable captions.
@@ -121,9 +150,11 @@ def main():
                 if len(usable) >= blog.MAX_DIGEST_CANDIDATES:
                     break
             if usable:
+                stage('generate_digest')
                 title, body, title_zh, body_zh, hook, used_ids = blog.generate_video_digest(usable, transcripts, posts)
                 domain = 'video-digest'
             else:
+                stage('generate_essay')
                 title, body, title_zh, body_zh, domain, hook = blog.generate_post(posts, candidates[0] if candidates else None)
                 used_ids = [candidates[0]['id']] if candidates else []
         record = {'title': title, 'body': body, 'title_zh': title_zh, 'body_zh': body_zh,
@@ -132,14 +163,17 @@ def main():
         if not all(isinstance(record[field], str) and record[field].strip() for field in ('title', 'body', 'title_zh', 'body_zh', 'hook')):
             raise RuntimeError('Incomplete generated article')
         if not args.dry_run:
+            stage('generation_checkpoint')
             store.put(key, record)
             store.put('playlist_cache', json.loads(blog.PLAYLIST_CACHE_FILE.read_text()))
     if args.dry_run:
         print('Research dry-run passed; no publishing or remote-state writes. Article content withheld from public logs.')
         return
+    stage('github_issue')
     issue = publish_issue(store, key, record, blog.REPO, today)
     blog_url = blog.BLOG_BASE + '?id=' + str(issue['number'])
     if not record.get('bluesky_done'):
+        stage('bluesky')
         session = blog._bsky('com.atproto.server.createSession', {'identifier': blog.BSKY_ID, 'password': blog.BSKY_PASS})
         text, start, end = bluesky_text(record['hook'], blog_url)
         # Stable key: a retry updates this one record, never creates a second post.
@@ -153,10 +187,12 @@ def main():
         store.put(key, record)
     room = os.environ['MATRIX_RICK_ROOM']
     if not record.get('matrix_text_done'):
+        stage('matrix_text')
         store.send(room, record['title_zh'] + '\n今日文章附有 HTML 阅读文件。\n' + blog_url, 'daily-blog-text-' + today)
         record['matrix_text_done'] = True
         store.put(key, record)
     if not record.get('matrix_file_done'):
+        stage('matrix_file')
         path = blog.save_chinese_digest(record['title_zh'], record['body_zh'])
         if not record.get('matrix_media'):
             response = store.client.post(os.environ['MATRIX_HOMESERVER'].rstrip('/') + '/_matrix/media/v3/upload',
@@ -170,6 +206,7 @@ def main():
                           'info': {'mimetype': 'text/html', 'size': path.stat().st_size}}, 'daily-blog-file-' + today)
         record['matrix_file_done'] = True
         store.put(key, record)
+    stage('history_checkpoint')
     digested = blog.load_digested_ids() | set(record['used_ids'])
     store.put('digested_videos', {'ids': sorted(digested)})
     posts.insert(0, {'date': today, 'title': record['title'], 'domain': record['domain'],
@@ -182,5 +219,11 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as exc:
-        print('Daily blog failed: ' + type(exc).__name__ + '; private state retained, no raw error/credentials printed.')
+        # Failure reporting must also work before the writer can be imported.
+        try:
+            summary = failure_summary(exc)
+        except Exception:
+            summary = {'stage': STAGE, 'error_type': type(exc).__name__}
+        print('Daily blog failed: ' + json.dumps(summary, sort_keys=True)
+              + '; private state retained, no raw error/credentials printed.')
         sys.exit(1)

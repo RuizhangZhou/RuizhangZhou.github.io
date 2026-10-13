@@ -262,6 +262,55 @@ def _escape_braces(s: str) -> str:
     return s.replace("{", "{{").replace("}", "}}")
 
 
+class GenerationError(RuntimeError):
+    """Content-free failure codes, safe to expose in public CI diagnostics."""
+
+    def __init__(self, code: str):
+        self.code = code
+        super().__init__(code)
+
+
+def complete_sections(messages, *, task, markers, max_tokens, timeout, **kwargs):
+    """Keep high reasoning, budget for both languages, retry truncation once.
+
+    A retry regenerates from the original prompt, never joins partial articles.
+    Neither attempt publishes anything or logs raw output. Provider/model routing
+    remains the shared gateway's responsibility.
+    """
+    from llm_gateway import chat
+
+    for budget in (max_tokens, max_tokens * 2):
+        response = chat(messages=messages, task=task, max_tokens=budget,
+                        timeout=timeout, **kwargs)
+        choices = response.get("choices") or []
+        if not choices:
+            raise GenerationError("missing_choices")
+        choice = choices[0]
+        if choice.get("finish_reason") == "length":
+            if budget == max_tokens:
+                continue
+            raise GenerationError("output_truncated_after_retry")
+        if choice.get("finish_reason") != "stop":
+            raise GenerationError("unexpected_finish_reason")
+        raw = (choice.get("message") or {}).get("content")
+        if not isinstance(raw, str):
+            raise GenerationError("missing_content")
+        positions = [raw.find(marker) for marker in markers]
+        if any(pos < 0 for pos in positions) or positions != sorted(set(positions)):
+            raise GenerationError("missing_or_unordered_sections")
+        if any(raw.count(marker) != 1 for marker in markers):
+            raise GenerationError("duplicate_sections")
+        sections = []
+        for index, marker in enumerate(markers):
+            end = positions[index + 1] if index + 1 < len(markers) else len(raw)
+            value = raw[positions[index] + len(marker):end].strip()
+            if not value:
+                raise GenerationError("empty_section")
+            sections.append(value)
+        return sections
+    raise AssertionError("Unreachable generation retry state")
+
+
 # ── LLM generation: video-digest mode (primary) ──────────────────────────────────
 
 DIGEST_SYSTEM_PROMPT_TEMPLATE = """\
@@ -325,8 +374,6 @@ Video ID reference:
 
 def generate_video_digest(candidates: list[dict], transcripts: dict[str, str], posts: list[dict]):
     """Returns (title, body, title_zh, body_zh, hook, used_video_ids)."""
-    from llm_gateway import chat
-
     transcripts_block = "\n\n".join(
         f'--- Video: "{v["title"]}" by {v["author"]} (id: {v["id"]}) ---\n'
         f'{_escape_braces(transcripts[v["id"]])}'
@@ -341,27 +388,18 @@ def generate_video_digest(candidates: list[dict], transcripts: dict[str, str], p
         video_id_list=video_id_list,
     )
 
-    resp = chat(
+    title, body, title_zh, body_zh, hook, used_raw = complete_sections(
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user",   "content": f"Write today's digest. Date: {TODAY}."},
         ],
         task="youtube_digest",
-        max_tokens=6000,
+        markers=("<<<TITLE>>>", "<<<BODY>>>", "<<<TITLE_ZH>>>",
+                 "<<<BODY_ZH>>>", "<<<HOOK>>>", "<<<USED_VIDEO_IDS>>>"),
+        max_tokens=16000,
         timeout=240.0,
         reasoning_effort="high",
     )
-
-    raw = resp["choices"][0]["message"]["content"]
-    try:
-        title    = raw.split("<<<TITLE>>>")[1].split("<<<BODY>>>")[0].strip()
-        body     = raw.split("<<<BODY>>>")[1].split("<<<TITLE_ZH>>>")[0].strip()
-        title_zh = raw.split("<<<TITLE_ZH>>>")[1].split("<<<BODY_ZH>>>")[0].strip()
-        body_zh  = raw.split("<<<BODY_ZH>>>")[1].split("<<<HOOK>>>")[0].strip()
-        hook     = raw.split("<<<HOOK>>>")[1].split("<<<USED_VIDEO_IDS>>>")[0].strip()
-        used_raw = raw.split("<<<USED_VIDEO_IDS>>>")[1].strip()
-    except IndexError:
-        raise RuntimeError(f"LLM response missing expected separators:\n{raw[:300]}")
 
     valid_ids = {v["id"] for v in candidates}
     used_ids = [x.strip() for x in used_raw.split(",") if x.strip() in valid_ids]
@@ -457,8 +495,6 @@ Rules for <<<HOOK>>> (read carefully):
 
 def generate_post(posts: list[dict], inspiration_video: dict | None = None):
     """Returns (title, body, title_zh, body_zh, domain, hook)."""
-    from llm_gateway import chat
-
     avail = available_domains(posts)
     if not avail:
         avail = list(DOMAINS.keys())   # all domains expired cooldown simultaneously — reset
@@ -496,26 +532,17 @@ general knowledge."""
         playlist_inspiration=playlist_inspiration,
     )
 
-    resp = chat(
+    title, domain, body, title_zh, body_zh, hook = complete_sections(
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user",   "content": f"Write today's post. Date: {TODAY}."},
         ],
         task="blog",
-        max_tokens=4500,
+        markers=("<<<TITLE>>>", "<<<DOMAIN>>>", "<<<BODY>>>",
+                 "<<<TITLE_ZH>>>", "<<<BODY_ZH>>>", "<<<HOOK>>>"),
+        max_tokens=12000,
         timeout=150.0,
     )
-
-    raw = resp["choices"][0]["message"]["content"]
-    try:
-        title    = raw.split("<<<TITLE>>>")[1].split("<<<DOMAIN>>>")[0].strip()
-        domain   = raw.split("<<<DOMAIN>>>")[1].split("<<<BODY>>>")[0].strip()
-        body     = raw.split("<<<BODY>>>")[1].split("<<<TITLE_ZH>>>")[0].strip()
-        title_zh = raw.split("<<<TITLE_ZH>>>")[1].split("<<<BODY_ZH>>>")[0].strip()
-        body_zh  = raw.split("<<<BODY_ZH>>>")[1].split("<<<HOOK>>>")[0].strip()
-        hook     = raw.split("<<<HOOK>>>")[1].strip()
-    except IndexError:
-        raise RuntimeError(f"LLM response missing expected separators:\n{raw[:300]}")
 
     # Enforce Bluesky 300-char limit on hook (leave ~80 chars for URL + newlines)
     hook = truncate_text(hook)

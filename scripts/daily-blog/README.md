@@ -44,7 +44,8 @@ stages resume without rerunning the model. No unlimited exactly-once guarantee.
 
 1. Configure the listed Secrets/Variables using stdin, never visible shell args.
 2. Migrate `history.json`, `digested_videos.json`, `playlist_cache.json` privately.
-3. Merge this PR manually; the fsn gh wrapper forbids automated main/master merges.
+3. Merge only after explicit user authorization for this PR; fsn's gh launcher
+   is transparent and the authorization policy lives in AGENTS.md/the merge skill.
 4. Immediately before switching, refresh the private state from the still-running
    server job. Re-check that today's article has already shipped; don't publish
    an extra public test article just for migration.
@@ -80,3 +81,28 @@ actual URL and checks both the 300-grapheme and 3000-byte limits, retaining UTF-
 facet offsets. Transcript probes keep the former three-second pacing. Temporary
 Supadata failures abort without publishing an essay or marking videos consumed;
 confirmed unavailable native captions may still use the original fallback.
+
+## Generation reliability
+
+High reasoning consumes output budget as well as article text. Essay mode now
+reserves 12,000 output tokens and transcript digest mode 16,000, retaining the
+same prompts, high reasoning policy and shared model routing. A response ending
+with `finish_reason=length` is discarded and regenerated once from the original
+prompt with twice that budget (24,000 / 32,000). No partial outputs are joined.
+The larger limit is a ceiling, not a requirement to use all those tokens.
+
+Only a normal completed response with every required section exactly once, in
+order and nonempty can reach the publication checkpoint. Further truncation,
+refusal, malformed output or provider failures stop without consuming videos or
+publishing. Existing publication checkpoints and deduplication remain unchanged.
+
+Public failure diagnostics include only a fixed stage, exception class, safe
+generation error code and HTTP status when available, never exception messages,
+provider response bodies, prompts or Chinese content. Historical runs from before
+this instrumentation cannot reveal their original provider HTTP error details.
+
+The privileged workflow remains restricted to `main`, including dry-runs. A
+Python `--dry-run` flag is not a security boundary for branch-controlled code with
+production credentials. This incident's hosted generation test used the audited
+repair branch temporarily; branch dispatch permission was then removed from the
+final change. Production schedules and activation gates are unchanged.

@@ -18,6 +18,7 @@ import time
 import httpx
 from matrix_state import MatrixKV
 from text_limits import bluesky_text
+from bluesky_keys import daily_post_rkey
 
 BASE = Path(__file__).resolve().parent
 STAGE = 'startup'
@@ -177,8 +178,12 @@ def main():
         session = blog._bsky('com.atproto.server.createSession', {'identifier': blog.BSKY_ID, 'password': blog.BSKY_PASS})
         text, start, end = bluesky_text(record['hook'], blog_url)
         # Stable key: a retry updates this one record, never creates a second post.
+        # Feed posts require a TID; generic record keys like daily-YYYY-MM-DD fail.
+        if not record.get('bluesky_rkey'):
+            record['bluesky_rkey'] = daily_post_rkey(today)
+            store.put(key, record)
         blog._bsky('com.atproto.repo.putRecord', {
-            'repo': session['did'], 'collection': 'app.bsky.feed.post', 'rkey': 'daily-' + today,
+            'repo': session['did'], 'collection': 'app.bsky.feed.post', 'rkey': record['bluesky_rkey'],
             'record': {'$type': 'app.bsky.feed.post', 'text': text, 'createdAt': record['created_at'],
                        'facets': [{'index': {'byteStart': start, 'byteEnd': end},
                                    'features': [{'$type': 'app.bsky.richtext.facet#link', 'uri': blog_url}]}]}},

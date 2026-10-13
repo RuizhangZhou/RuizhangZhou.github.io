@@ -97,3 +97,62 @@ class WriterSafetyTests(unittest.TestCase):
             with patch.object(self.blog, 'SUPADATA_API_KEY', 'test'), patch('requests.get', return_value=response):
                 with self.assertRaises(RuntimeError):
                     self.blog.fetch_transcript('video')
+
+    def completion(self, content, finish='stop'):
+        return {'choices': [{'finish_reason': finish, 'message': {'content': content}}]}
+
+    def sections(self):
+        return ('<<<TITLE>>>', '<<<BODY>>>', '<<<TITLE_ZH>>>', '<<<BODY_ZH>>>', '<<<HOOK>>>')
+
+    def complete_text(self):
+        return '\n'.join(marker + '\nText' for marker in self.sections())
+
+    def test_truncated_response_is_regenerated_once_with_more_budget(self):
+        messages = [{'role': 'user', 'content': 'Original instructions'}]
+        with patch('llm_gateway.chat', side_effect=[self.completion('Partial secret', 'length'),
+                                                   self.completion(self.complete_text())]) as chat:
+            parts = self.blog.complete_sections(messages, task='youtube_digest', markers=self.sections(),
+                                               max_tokens=16000, timeout=240, reasoning_effort='high')
+        self.assertEqual(parts, ['Text'] * 5)
+        self.assertEqual([c.kwargs['max_tokens'] for c in chat.call_args_list], [16000, 32000])
+        for call in chat.call_args_list:
+            self.assertEqual(call.kwargs['messages'], messages)
+            self.assertEqual(call.kwargs['reasoning_effort'], 'high')
+            self.assertEqual(call.kwargs['task'], 'youtube_digest')
+
+    def test_repeated_truncation_is_bounded_and_never_exposes_article(self):
+        with patch('llm_gateway.chat', return_value=self.completion('PRIVATE CONTENT', 'length')) as chat:
+            with self.assertRaisesRegex(self.blog.GenerationError, '^output_truncated_after_retry$'):
+                self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+        self.assertEqual(chat.call_count, 2)
+
+    def test_length_is_rejected_even_if_every_marker_is_present(self):
+        with patch('llm_gateway.chat', return_value=self.completion(self.complete_text(), 'length')):
+            with self.assertRaises(self.blog.GenerationError):
+                self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+
+    def test_missing_unordered_duplicate_and_empty_sections_are_rejected_without_retry(self):
+        invalid = ['PRIVATE CONTENT', self.complete_text().replace('<<<BODY>>>', '<<<HOOK>>>'),
+                   self.complete_text() + '<<<TITLE>>>duplicate',
+                   self.complete_text().replace('<<<BODY>>>\nText', '<<<BODY>>>')]
+        for text in invalid:
+            with self.subTest(text=text), patch('llm_gateway.chat', return_value=self.completion(text)) as chat:
+                with self.assertRaises(self.blog.GenerationError) as error:
+                    self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+                self.assertNotIn('PRIVATE CONTENT', str(error.exception))
+                self.assertEqual(chat.call_count, 1)
+
+    def test_refusal_and_empty_content_are_safe_failures(self):
+        for response in [self.completion('PRIVATE CONTENT', 'content_filter'), self.completion(None), {'choices': []}]:
+            with patch('llm_gateway.chat', return_value=response):
+                with self.assertRaises(self.blog.GenerationError):
+                    self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+
+    def test_essay_generation_reserves_budget_for_high_reasoning_and_two_languages(self):
+        markers = ('<<<TITLE>>>', '<<<DOMAIN>>>', '<<<BODY>>>', '<<<TITLE_ZH>>>', '<<<BODY_ZH>>>', '<<<HOOK>>>')
+        text = '\n'.join(marker + '\nText' for marker in markers)
+        with patch('llm_gateway.chat', return_value=self.completion(text)) as chat:
+            result = self.blog.generate_post([])
+        self.assertEqual(chat.call_args.kwargs['max_tokens'], 12000)
+        self.assertEqual(chat.call_args.kwargs['task'], 'blog')
+        self.assertEqual(len(result), 6)

@@ -179,8 +179,9 @@ def main():
         text, start, end = bluesky_text(record['hook'], blog_url)
         # Stable key: a retry updates this one record, never creates a second post.
         # Feed posts require a TID; generic record keys like daily-YYYY-MM-DD fail.
-        record['bluesky_rkey'] = daily_post_rkey(today)
-        store.put(key, record)
+        if not record.get('bluesky_rkey'):
+            record['bluesky_rkey'] = daily_post_rkey(today)
+            store.put(key, record)
         blog._bsky('com.atproto.repo.putRecord', {
             'repo': session['did'], 'collection': 'app.bsky.feed.post', 'rkey': record['bluesky_rkey'],
             'record': {'$type': 'app.bsky.feed.post', 'text': text, 'createdAt': record['created_at'],

@@ -43,7 +43,8 @@ stages resume without rerunning the model. No unlimited exactly-once guarantee.
 Bluesky feed posts require a TID record key, not merely a syntactically valid
 generic key. `bluesky_keys.daily_post_rkey` encodes UTC midnight and a fixed
 publisher clock ID into a stable 13-character TID for each publication date.
-The selected key is checkpointed before posting, and retries reuse it; completed
+The selected key is checkpointed before posting, and retries reuse the saved key
+even if the key-generation algorithm changes in a later deployment; completed
 Bluesky stages are skipped. Schema: https://github.com/bluesky-social/atproto/blob/main/lexicons/app/bsky/feed/post.json
 TID specification: https://atproto.com/specs/tid
 

@@ -37,13 +37,16 @@ class RecordKeyTests(unittest.TestCase):
             with self.subTest(day=day), self.assertRaises(ValueError):
                 daily_post_rkey(day)
 
-    def test_pending_publication_uses_tid_and_completed_stages_are_not_repeated(self):
+    def pending_publication(self, existing_key=None):
         today = '2026-10-13'
         record = {'title': 'Example', 'body': 'English', 'title_zh': '标题', 'body_zh': '中文',
                   'hook': 'Hook', 'domain': 'finance', 'used_ids': [],
                   'created_at': '2026-10-13T20:15:50Z',
                   'issue': {'number': 252, 'url': 'https://example.invalid/issues/252'},
                   'matrix_text_done': True, 'matrix_file_done': True}
+        if existing_key is not None:
+            record['bluesky_rkey'] = existing_key
+        expected_key = existing_key or daily_post_rkey(today)
         store = Mock()
         data = {'meta': {'version': 1}, 'history': {'posts': []}, 'digested_videos': {'ids': []},
                 'playlist_cache': {'videos': []}, 'publication.' + today: record}
@@ -63,8 +66,8 @@ class RecordKeyTests(unittest.TestCase):
             run_actions.main()
             call = blog._bsky.call_args_list[1]
             self.assertEqual(call.args[0], 'com.atproto.repo.putRecord')
-            self.assertEqual(call.args[1]['rkey'], daily_post_rkey(today))
-            self.assertEqual(record['bluesky_rkey'], daily_post_rkey(today))
+            self.assertEqual(call.args[1]['rkey'], expected_key)
+            self.assertEqual(record['bluesky_rkey'], expected_key)
             self.assertTrue(record['bluesky_done'])
             blog._bsky.reset_mock()
             run_actions.main()
@@ -72,6 +75,13 @@ class RecordKeyTests(unittest.TestCase):
             store.send.assert_not_called()
             store.event.assert_not_called()
             github.assert_not_called()
+
+    def test_pending_publication_uses_tid_and_completed_stages_are_not_repeated(self):
+        self.pending_publication()
+
+    def test_checkpointed_key_is_reused_even_if_generator_changes(self):
+        with patch.object(run_actions, 'daily_post_rkey', side_effect=AssertionError('Must reuse saved key')):
+            self.pending_publication(existing_key='3jzfcijpj2z2a')
 
 
 if __name__ == '__main__':

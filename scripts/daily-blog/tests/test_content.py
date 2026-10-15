@@ -161,6 +161,16 @@ class WriterSafetyTests(unittest.TestCase):
             self.assertEqual(parts, ['Text'] * 5)
             self.assertEqual(chat.call_count, 1)
 
+    def test_reasoning_tags_quoted_in_article_are_preserved(self):
+        inline = 'Models emit `<think>work through the problem</think>` first.'
+        fenced = '```xml\n<think>plan</think>\n</think>\n<details type="reasoning">x</details>\n```'
+        for body in (inline, fenced):
+            text = self.complete_text().replace('<<<BODY>>>\nText', '<<<BODY>>>\n' + body)
+            with self.subTest(body=body[:10]), patch('llm_gateway.chat', return_value=self.completion(text)) as chat:
+                parts = self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+            self.assertEqual(parts[1], body)
+            self.assertEqual(chat.call_count, 1)
+
     def test_failure_reports_served_model_and_marker_counts_only(self):
         response = self.completion('PRIVATE CONTENT ' + self.complete_text() * 2)
         response['model'] = 'qwen3.8-27b'

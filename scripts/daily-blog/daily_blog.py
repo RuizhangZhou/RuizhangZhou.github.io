@@ -275,14 +275,18 @@ class GenerationError(RuntimeError):
 
 
 # Reasoning models behind the gateway may inline their thinking, which can quote the section markers.
-_REASONING_BLOCK = re.compile(r"<think>.*?</think>|<details\b[^>]*\btype=\"reasoning\"[^>]*>.*?</details>",
-                              re.DOTALL | re.IGNORECASE)
+_REASONING_PREAMBLE = re.compile(r"\s*(?:<think>.*?</think>|<details\b[^>]*\btype=\"reasoning\"[^>]*>.*?</details>)",
+                                 re.DOTALL | re.IGNORECASE)
 
 
-def strip_reasoning(raw: str) -> str:
-    raw = _REASONING_BLOCK.sub("", raw)
-    # Some servers drop the opening <think> tag and only emit the closing one.
-    return raw.rsplit("</think>", 1)[1] if "</think>" in raw else raw
+def strip_reasoning(raw: str, first_marker: str) -> str:
+    """Drop only a reasoning preamble before the answer; tags quoted inside the article stay intact."""
+    match = _REASONING_PREAMBLE.match(raw)
+    if match:
+        return raw[match.end():]
+    # Some servers drop the opening <think> tag; accept the close only when the answer starts right after it.
+    _, closed, rest = raw.partition("</think>")
+    return rest if closed and rest.lstrip().startswith(first_marker) else raw
 
 
 def split_sections(raw: str, markers, model: str | None):
@@ -331,7 +335,7 @@ def complete_sections(messages, *, task, markers, max_tokens, timeout, **kwargs)
         if not isinstance(raw, str):
             raise GenerationError("missing_content", model=model)
         try:
-            return split_sections(strip_reasoning(raw), markers, model)
+            return split_sections(strip_reasoning(raw, markers[0]), markers, model)
         except GenerationError:
             # Malformed sections are sampling noise; one fresh regeneration, then fail closed.
             if not format_retry_left:

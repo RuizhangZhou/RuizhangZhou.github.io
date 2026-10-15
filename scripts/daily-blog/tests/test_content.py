@@ -131,7 +131,7 @@ class WriterSafetyTests(unittest.TestCase):
             with self.assertRaises(self.blog.GenerationError):
                 self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
 
-    def test_missing_unordered_duplicate_and_empty_sections_are_rejected_without_retry(self):
+    def test_missing_unordered_duplicate_and_empty_sections_fail_closed_after_one_regeneration(self):
         invalid = ['PRIVATE CONTENT', self.complete_text().replace('<<<BODY>>>', '<<<HOOK>>>'),
                    self.complete_text() + '<<<TITLE>>>duplicate',
                    self.complete_text().replace('<<<BODY>>>\nText', '<<<BODY>>>')]
@@ -140,7 +140,45 @@ class WriterSafetyTests(unittest.TestCase):
                 with self.assertRaises(self.blog.GenerationError) as error:
                     self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
                 self.assertNotIn('PRIVATE CONTENT', str(error.exception))
-                self.assertEqual(chat.call_count, 1)
+                self.assertEqual(chat.call_count, 2)
+
+    def test_malformed_sections_are_regenerated_once_from_original_prompt(self):
+        messages = [{'role': 'user', 'content': 'Original instructions'}]
+        with patch('llm_gateway.chat', side_effect=[self.completion(self.complete_text() * 2),
+                                                   self.completion(self.complete_text())]) as chat:
+            parts = self.blog.complete_sections(messages, task='youtube_digest', markers=self.sections(),
+                                               max_tokens=16000, timeout=240)
+        self.assertEqual(parts, ['Text'] * 5)
+        self.assertEqual([c.kwargs['messages'] for c in chat.call_args_list], [messages, messages])
+
+    def test_inline_reasoning_quoting_markers_is_ignored(self):
+        thinking = 'I must emit ' + ' '.join(self.sections()) + ' in order.'
+        for text in ('<think>' + thinking + '</think>\n' + self.complete_text(),
+                     thinking + '</think>\n' + self.complete_text(),
+                     '<details type="reasoning" done="true">' + thinking + '</details>\n' + self.complete_text()):
+            with self.subTest(text=text[:20]), patch('llm_gateway.chat', return_value=self.completion(text)) as chat:
+                parts = self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+            self.assertEqual(parts, ['Text'] * 5)
+            self.assertEqual(chat.call_count, 1)
+
+    def test_reasoning_tags_quoted_in_article_are_preserved(self):
+        inline = 'Models emit `<think>work through the problem</think>` first.'
+        fenced = '```xml\n<think>plan</think>\n</think>\n<details type="reasoning">x</details>\n```'
+        for body in (inline, fenced):
+            text = self.complete_text().replace('<<<BODY>>>\nText', '<<<BODY>>>\n' + body)
+            with self.subTest(body=body[:10]), patch('llm_gateway.chat', return_value=self.completion(text)) as chat:
+                parts = self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+            self.assertEqual(parts[1], body)
+            self.assertEqual(chat.call_count, 1)
+
+    def test_failure_reports_served_model_and_marker_counts_only(self):
+        response = self.completion('PRIVATE CONTENT ' + self.complete_text() * 2)
+        response['model'] = 'qwen3.8-27b'
+        with patch('llm_gateway.chat', return_value=response):
+            with self.assertRaises(self.blog.GenerationError) as error:
+                self.blog.complete_sections([], task='blog', markers=self.sections(), max_tokens=12000, timeout=150)
+        self.assertEqual((error.exception.code, error.exception.model, error.exception.marker_counts),
+                         ('duplicate_sections', 'qwen3.8-27b', [2] * 5))
 
     def test_refusal_and_empty_content_are_safe_failures(self):
         for response in [self.completion('PRIVATE CONTENT', 'content_filter'), self.completion(None), {'choices': []}]:

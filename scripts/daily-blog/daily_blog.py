@@ -21,6 +21,7 @@ import json
 import html
 import argparse
 import os
+import re
 import subprocess
 import sys
 import time
@@ -265,13 +266,48 @@ def _escape_braces(s: str) -> str:
 class GenerationError(RuntimeError):
     """Content-free failure codes, safe to expose in public CI diagnostics."""
 
-    def __init__(self, code: str):
+    def __init__(self, code: str, *, model: str | None = None, marker_counts: list[int] | None = None):
         self.code = code
+        # Served model id and per-marker counts say which model broke the format without any article text.
+        self.model = re.sub(r"[^A-Za-z0-9._:/-]", "", model)[:80] if isinstance(model, str) else None
+        self.marker_counts = marker_counts
         super().__init__(code)
 
 
+# Reasoning models behind the gateway may inline their thinking, which can quote the section markers.
+_REASONING_PREAMBLE = re.compile(r"\s*(?:<think>.*?</think>|<details\b[^>]*\btype=\"reasoning\"[^>]*>.*?</details>)",
+                                 re.DOTALL | re.IGNORECASE)
+
+
+def strip_reasoning(raw: str, first_marker: str) -> str:
+    """Drop only a reasoning preamble before the answer; tags quoted inside the article stay intact."""
+    match = _REASONING_PREAMBLE.match(raw)
+    if match:
+        return raw[match.end():]
+    # Some servers drop the opening <think> tag; accept the close only when the answer starts right after it.
+    _, closed, rest = raw.partition("</think>")
+    return rest if closed and rest.lstrip().startswith(first_marker) else raw
+
+
+def split_sections(raw: str, markers, model: str | None):
+    counts = [raw.count(marker) for marker in markers]
+    positions = [raw.find(marker) for marker in markers]
+    if any(pos < 0 for pos in positions) or positions != sorted(set(positions)):
+        raise GenerationError("missing_or_unordered_sections", model=model, marker_counts=counts)
+    if any(count != 1 for count in counts):
+        raise GenerationError("duplicate_sections", model=model, marker_counts=counts)
+    sections = []
+    for index, marker in enumerate(markers):
+        end = positions[index + 1] if index + 1 < len(markers) else len(raw)
+        value = raw[positions[index] + len(marker):end].strip()
+        if not value:
+            raise GenerationError("empty_section", model=model, marker_counts=counts)
+        sections.append(value)
+    return sections
+
+
 def complete_sections(messages, *, task, markers, max_tokens, timeout, **kwargs):
-    """Keep high reasoning, budget for both languages, retry truncation once.
+    """Keep high reasoning, budget for both languages, retry truncation and format errors once each.
 
     A retry regenerates from the original prompt, never joins partial articles.
     Neither attempt publishes anything or logs raw output. Provider/model routing
@@ -279,36 +315,32 @@ def complete_sections(messages, *, task, markers, max_tokens, timeout, **kwargs)
     """
     from llm_gateway import chat
 
-    for budget in (max_tokens, max_tokens * 2):
+    budget, format_retry_left = max_tokens, True
+    while True:
         response = chat(messages=messages, task=task, max_tokens=budget,
                         timeout=timeout, **kwargs)
+        model = response.get("model")
         choices = response.get("choices") or []
         if not choices:
-            raise GenerationError("missing_choices")
+            raise GenerationError("missing_choices", model=model)
         choice = choices[0]
         if choice.get("finish_reason") == "length":
             if budget == max_tokens:
+                budget = max_tokens * 2
                 continue
-            raise GenerationError("output_truncated_after_retry")
+            raise GenerationError("output_truncated_after_retry", model=model)
         if choice.get("finish_reason") != "stop":
-            raise GenerationError("unexpected_finish_reason")
+            raise GenerationError("unexpected_finish_reason", model=model)
         raw = (choice.get("message") or {}).get("content")
         if not isinstance(raw, str):
-            raise GenerationError("missing_content")
-        positions = [raw.find(marker) for marker in markers]
-        if any(pos < 0 for pos in positions) or positions != sorted(set(positions)):
-            raise GenerationError("missing_or_unordered_sections")
-        if any(raw.count(marker) != 1 for marker in markers):
-            raise GenerationError("duplicate_sections")
-        sections = []
-        for index, marker in enumerate(markers):
-            end = positions[index + 1] if index + 1 < len(markers) else len(raw)
-            value = raw[positions[index] + len(marker):end].strip()
-            if not value:
-                raise GenerationError("empty_section")
-            sections.append(value)
-        return sections
-    raise AssertionError("Unreachable generation retry state")
+            raise GenerationError("missing_content", model=model)
+        try:
+            return split_sections(strip_reasoning(raw, markers[0]), markers, model)
+        except GenerationError:
+            # Malformed sections are sampling noise; one fresh regeneration, then fail closed.
+            if not format_retry_left:
+                raise
+            format_retry_left = False
 
 
 # ── LLM generation: video-digest mode (primary) ──────────────────────────────────

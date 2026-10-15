@@ -37,6 +37,11 @@ def failure_summary(exc):
     generation_error = getattr(writer, 'GenerationError', None)
     if isinstance(generation_error, type) and isinstance(exc, generation_error):
         summary['code'] = exc.code
+        if getattr(exc, 'model', None):
+            summary['model'] = exc.model
+        counts = getattr(exc, 'marker_counts', None)
+        if isinstance(counts, list) and all(isinstance(c, int) and not isinstance(c, bool) for c in counts):
+            summary['marker_counts'] = counts
     response = getattr(exc, 'response', None)
     status = getattr(response, 'status_code', None)
     if isinstance(status, int) and not isinstance(status, bool) and 100 <= status <= 599:

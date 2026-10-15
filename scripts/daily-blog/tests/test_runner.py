@@ -145,6 +145,17 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(run_actions.failure_summary(error),
                          {'stage': 'generate_essay', 'error_type': 'HTTPStatusError', 'http_status': 400})
 
+    def test_failure_summary_names_model_and_marker_counts_for_generation_errors(self):
+        class GenerationError(RuntimeError):
+            def __init__(self):
+                super().__init__('PRIVATE ARTICLE')
+                self.code, self.model, self.marker_counts = 'duplicate_sections', 'qwen3.8-27b', [2, 1, 1]
+        run_actions.stage('generate_digest')
+        with patch.dict(sys.modules, {'daily_blog': SimpleNamespace(GenerationError=GenerationError)}):
+            self.assertEqual(run_actions.failure_summary(GenerationError()),
+                             {'stage': 'generate_digest', 'error_type': 'GenerationError', 'code': 'duplicate_sections',
+                              'model': 'qwen3.8-27b', 'marker_counts': [2, 1, 1]})
+
     def test_generation_failure_never_checkpoints_or_publishes(self):
         with self.assertRaises(RuntimeError):
             self.transcript_research(Mock(return_value='Transcript'), dry_run=False,

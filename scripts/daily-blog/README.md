@@ -89,6 +89,12 @@ actual URL and checks both the 300-grapheme and 3000-byte limits, retaining UTF-
 facet offsets. Transcript probes keep the former three-second pacing. Temporary
 Supadata failures abort without publishing an essay or marking videos consumed;
 confirmed unavailable native captions may still use the original fallback.
+Restricted or unavailable individual videos are deferred while other candidates
+are checked. Only verified captions enter a digest; if none remain, a resource
+error stops the run without consuming the inaccessible video.
+
+See [transcript operations and incident record](TRANSCRIPTS.md) for classified
+failures, bounded retries, asynchronous results, and Google integration options.
 
 ## Generation reliability
 

@@ -72,7 +72,7 @@ class WriterSafetyTests(unittest.TestCase):
         for outcome in (response, requests.Timeout('private provider data')):
             kwargs = {'side_effect': outcome} if isinstance(outcome, Exception) else {'return_value': outcome}
             with patch.object(self.blog, 'SUPADATA_API_KEY', 'test'), patch('requests.get', **kwargs), \
-                 patch.object(self.blog, 'log') as log:
+                 patch.object(self.blog, 'log') as log, patch('transcript_client.time.sleep'):
                 with self.assertRaisesRegex(RuntimeError, '^Transcript service failed; playlist item retained for retry$'):
                     self.blog.fetch_transcript('video')
                 log.assert_not_called()
@@ -94,7 +94,8 @@ class WriterSafetyTests(unittest.TestCase):
         for payload in ({'jobId': 'pending'}, {'error': 'unknown'}, {'content': None}):
             response = Mock(status_code=200)
             response.json.return_value = payload
-            with patch.object(self.blog, 'SUPADATA_API_KEY', 'test'), patch('requests.get', return_value=response):
+            with patch.object(self.blog, 'SUPADATA_API_KEY', 'test'), patch('requests.get', return_value=response), \
+                 patch('transcript_client.time.sleep'):
                 with self.assertRaises(RuntimeError):
                     self.blog.fetch_transcript('video')
 

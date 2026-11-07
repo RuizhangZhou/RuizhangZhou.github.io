@@ -13,10 +13,10 @@ import logging
 import os
 from pathlib import Path
 import sys
-import time
 
 import httpx
 from matrix_state import MatrixKV
+from transcript_client import ERROR_CODES, OUTCOME_CODES, TranscriptError, collect_transcripts
 from text_limits import bluesky_text
 from bluesky_keys import daily_post_rkey
 
@@ -33,6 +33,8 @@ def stage(name):
 def failure_summary(exc):
     """Allowlisted diagnostics; never stringify an exception/provider response."""
     summary = {'stage': STAGE, 'error_type': type(exc).__name__}
+    if isinstance(exc, TranscriptError):
+        summary.update(exc.diagnostics())
     writer = sys.modules.get('daily_blog')
     generation_error = getattr(writer, 'GenerationError', None)
     if isinstance(generation_error, type) and isinstance(exc, generation_error):
@@ -47,6 +49,25 @@ def failure_summary(exc):
     if isinstance(status, int) and not isinstance(status, bool) and 100 <= status <= 599:
         summary['http_status'] = status
     return summary
+
+
+def transcript_summary():
+    """Expose only fixed outcomes and numeric diagnostics, including recovered requests."""
+    writer = sys.modules.get('daily_blog')
+    result = []
+    for event in getattr(writer, 'TRANSCRIPT_DIAGNOSTICS', [])[:8]:
+        if (not isinstance(event, dict) or not isinstance(event.get('code'), str)
+                or event['code'] not in ERROR_CODES | OUTCOME_CODES):
+            continue
+        safe = {'provider': 'supadata', 'code': event['code']}
+        for key in ('attempts', 'http_status', 'retry_after_seconds'):
+            value = event.get(key)
+            if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+                safe[key] = value
+        if isinstance(event.get('retryable'), bool):
+            safe['retryable'] = event['retryable']
+        result.append(safe)
+    return result
 
 
 def github_request(method, path, **kwargs):
@@ -144,17 +165,8 @@ def main():
             videos = blog.fetch_playlist_videos()
             digested = blog.load_digested_ids()
             candidates = blog.pick_candidate_videos(videos, digested)
-            usable, transcripts = [], {}
             stage('transcripts')
-            for attempt, video in enumerate(candidates):
-                if attempt:
-                    time.sleep(3)  # Preserve Supadata pacing, including unavailable captions.
-                transcript = blog.fetch_transcript(video['id'])
-                if transcript:
-                    usable.append(video)
-                    transcripts[video['id']] = transcript
-                if len(usable) >= blog.MAX_DIGEST_CANDIDATES:
-                    break
+            usable, transcripts = collect_transcripts(candidates, blog.fetch_transcript, blog.MAX_DIGEST_CANDIDATES)
             if usable:
                 stage('generate_digest')
                 title, body, title_zh, body_zh, hook, used_ids = blog.generate_video_digest(usable, transcripts, posts)
@@ -237,3 +249,7 @@ if __name__ == '__main__':
         print('Daily blog failed: ' + json.dumps(summary, sort_keys=True)
               + '; private state retained, no raw error/credentials printed.')
         sys.exit(1)
+    finally:
+        diagnostics = transcript_summary()
+        if diagnostics:
+            print('Transcript outcomes: ' + json.dumps(diagnostics, sort_keys=True))

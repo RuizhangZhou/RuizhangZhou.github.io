@@ -24,7 +24,6 @@ import os
 import re
 import subprocess
 import sys
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -33,6 +32,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from text_limits import bluesky_text, truncate_text
+from transcript_client import TranscriptError, collect_transcripts, fetch_native_transcript
 
 load_dotenv(Path.home() / ".env", override=False)
 
@@ -130,6 +130,7 @@ MAX_DIGEST_CANDIDATES = int(CONFIG.get("max_digest_videos_per_post", 3))
 # captionless videos permanently blocked every later playlist item.
 MAX_TRANSCRIPT_ATTEMPTS = int(CONFIG.get("max_transcript_attempts_per_run", 8))
 MAX_TRANSCRIPT_CHARS  = 60000  # per-video safety cap (~13k tokens), guards against outlier-length videos
+TRANSCRIPT_DIAGNOSTICS = []  # Fixed codes/counts only; never content, video IDs, or provider messages.
 
 
 def fetch_playlist_videos() -> list[dict]:
@@ -193,36 +194,15 @@ def pick_candidate_videos(videos: list[dict], digested_ids: set[str]) -> list[di
 
 
 def fetch_transcript(video_id: str) -> str | None:
-    """Native transcript or None if unavailable; service errors stop publication.
-
-    Never consume a playlist item or generate a fallback essay because of a
-    temporary rate limit, bad credentials, network error or malformed response.
-    """
-    import requests
-
-    if not SUPADATA_API_KEY:
-        return None
+    """Keep unavailable captions separate from exhausted recovery of a service failure."""
     try:
-        r = requests.get(
-            "https://api.supadata.ai/v1/transcript",
-            # mode=native: only fetch existing captions, never fall back to AI-generated
-            # transcription — that path bills 2 credits/video-minute and can burn the whole
-            # monthly free quota on a single long video.
-            params={"url": f"https://youtu.be/{video_id}", "mode": "native"},
-            headers={"x-api-key": SUPADATA_API_KEY},
-            timeout=30,
-        )
-        payload = r.json()
-        if (r.status_code < 400 or r.status_code == 404) and payload.get('error') == 'transcript-unavailable':
-            return None
-        r.raise_for_status()
-        text = " ".join(seg["text"] for seg in payload['content'])
-    except Exception:
-        # Do not expose provider responses or request headers in public logs.
-        raise RuntimeError('Transcript service failed; playlist item retained for retry') from None
-
+        result = fetch_native_transcript(video_id, SUPADATA_API_KEY)
+    except TranscriptError as exc:
+        TRANSCRIPT_DIAGNOSTICS.append(exc.diagnostics())
+        raise
+    TRANSCRIPT_DIAGNOSTICS.append(result.diagnostics())
+    text = result.text
     if not text:
-        log(f"No usable native transcript for {video_id}; trying the next playlist item.")
         return None
     if len(text) > MAX_TRANSCRIPT_CHARS:
         log(f"Transcript for {video_id} truncated from {len(text)} to {MAX_TRANSCRIPT_CHARS} chars.")
@@ -806,18 +786,7 @@ def main() -> None:
         f"{len(candidates)} undigested candidate(s) queued for transcript checks."
     )
 
-    transcripts: dict[str, str] = {}
-    attempts = 0
-    for v in candidates:
-        if len(transcripts) >= MAX_DIGEST_CANDIDATES:
-            break
-        if attempts > 0:
-            time.sleep(3)  # avoid Supadata free-tier rate limiting on back-to-back calls
-        attempts += 1
-        t = fetch_transcript(v["id"])
-        if t:
-            transcripts[v["id"]] = t
-    usable = [v for v in candidates if v["id"] in transcripts]
+    usable, transcripts = collect_transcripts(candidates, fetch_transcript, MAX_DIGEST_CANDIDATES)
 
     if usable:
         log(f"Digest mode — {len(usable)} candidate video(s): {[v['title'] for v in usable]}")

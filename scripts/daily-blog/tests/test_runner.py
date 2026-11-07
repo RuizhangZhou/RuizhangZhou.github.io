@@ -68,6 +68,7 @@ class PublicationTests(unittest.TestCase):
         store.get.side_effect = data.get
         blog = SimpleNamespace(load_history=lambda: [], load_digested_ids=lambda: set(),
                                fetch_playlist_videos=lambda: [], pick_candidate_videos=lambda *a: [],
+                               fetch_transcript=Mock(), MAX_DIGEST_CANDIDATES=3,
                                generate_post=lambda *a: ('Title', 'English', '标题', '中文', 'finance', 'Hook'))
         env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
                'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
@@ -111,7 +112,7 @@ class PublicationTests(unittest.TestCase):
              patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
              patch.dict(sys.modules, {'daily_blog': blog}), \
              patch.object(sys, 'argv', ['run_actions'] + (['--dry-run'] if dry_run else [])), \
-             patch.object(run_actions.time, 'sleep', side_effect=lambda seconds:
+             patch('transcript_client.time.sleep', side_effect=lambda seconds:
                           events.append('sleep:' + str(seconds)) if events is not None else None) as sleep, \
              patch.object(run_actions, 'github_request') as api:
             try:
@@ -137,6 +138,25 @@ class PublicationTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             self.transcript_research(Mock(side_effect=RuntimeError('Transcript service failed')), dry_run=False)
 
+    def test_classified_transcript_failures_preserve_publication_and_video_state(self):
+        from transcript_client import TranscriptError
+        for code in ('quota_exhausted', 'rate_limited', 'invalid_response', 'job_timeout'):
+            with self.subTest(code=code), self.assertRaises(TranscriptError):
+                self.transcript_research(Mock(side_effect=TranscriptError(code)), dry_run=False)
+
+    def test_restricted_candidate_does_not_block_a_dry_run_or_enter_the_digest(self):
+        from transcript_client import TranscriptError
+        fetch = Mock(side_effect=['First captions', TranscriptError('access_denied'), 'Last captions'])
+        blog, _ = self.transcript_research(fetch)
+        candidates, transcripts, _ = blog.generate_video_digest.call_args.args
+        self.assertEqual([video['id'] for video in candidates], ['0', '2'])
+        self.assertEqual(transcripts, {'0': 'First captions', '2': 'Last captions'})
+
+    def test_only_restricted_candidates_never_generate_publish_or_checkpoint(self):
+        from transcript_client import TranscriptError
+        with self.assertRaises(TranscriptError):
+            self.transcript_research(Mock(side_effect=TranscriptError('access_denied')), dry_run=False)
+
     def test_failure_summary_exposes_stage_and_status_not_raw_provider_data(self):
         response = httpx.Response(400, request=httpx.Request('POST', 'https://private.invalid/secret'),
                                   text='SECRET TOKEN AND ARTICLE')
@@ -155,6 +175,25 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual(run_actions.failure_summary(GenerationError()),
                              {'stage': 'generate_digest', 'error_type': 'GenerationError', 'code': 'duplicate_sections',
                               'model': 'qwen3.8-27b', 'marker_counts': [2, 1, 1]})
+
+    def test_transcript_failure_summary_preserves_category_and_safe_recovery_metadata(self):
+        from transcript_client import TranscriptError
+        run_actions.stage('transcripts')
+        error = TranscriptError('rate_limited', attempts=3, http_status=429, retryable=True, retry_after=10)
+        self.assertEqual(run_actions.failure_summary(error),
+                         {'stage': 'transcripts', 'error_type': 'TranscriptError', 'provider': 'supadata',
+                          'code': 'rate_limited', 'attempts': 3, 'http_status': 429,
+                          'retryable': True, 'retry_after_seconds': 10})
+
+    def test_transcript_outcomes_only_expose_codes_and_numeric_fields(self):
+        events = [{'code': 'ok', 'attempts': 2, 'http_status': 200, 'text': 'PRIVATE TRANSCRIPT',
+                   'video_id': 'PRIVATE ID', 'details': 'PRIVATE TOKEN'},
+                  {'code': 'captions_unavailable', 'attempts': 1}, {'code': 'PRIVATE ERROR'},
+                  {'code': {'details': 'PRIVATE ERROR'}}]
+        with patch.dict(sys.modules, {'daily_blog': SimpleNamespace(TRANSCRIPT_DIAGNOSTICS=events)}):
+            self.assertEqual(run_actions.transcript_summary(),
+                             [{'provider': 'supadata', 'code': 'ok', 'attempts': 2, 'http_status': 200},
+                              {'provider': 'supadata', 'code': 'captions_unavailable', 'attempts': 1}])
 
     def test_generation_failure_never_checkpoints_or_publishes(self):
         with self.assertRaises(RuntimeError):

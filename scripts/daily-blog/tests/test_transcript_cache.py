@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from transcript_cache import CHUNK_CHARS, INDEX_KEY, MAX_TEXT_CHARS, NEGATIVE_TTL, POSITIVE_TTL, TranscriptCache, probe_private_cache
+from transcript_cache import CHUNK_CHARS, INDEX_KEY, MAX_TEXT_CHARS, LEGACY_NEGATIVE_TTL, POSITIVE_TTL, TranscriptCache, probe_private_cache
 from transcript_client import TranscriptError, TranscriptResult, collect_transcripts
 
 
@@ -63,18 +63,16 @@ class TranscriptCacheTests(unittest.TestCase):
         self.assertEqual(result.attempts, 0)
         fetch.assert_called_once()
 
-    def test_negative_result_expires_and_rechecks_instead_of_permanently_discarding_video(self):
+    def test_negative_decision_survives_years_and_cleanup_without_another_request(self):
         for code in ('captions_unavailable', 'empty_transcript'):
             with self.subTest(code=code):
                 self.store = PrivateStore()
-                fetch = Mock(side_effect=[TranscriptResult(None, code, 1, 206),
-                                          TranscriptResult('New caption', 'ok', 1, 200)])
+                fetch = Mock(return_value=TranscriptResult(None, code, 1, 206))
                 self.cache().fetch('candidate', fetch)
-                self.now += NEGATIVE_TTL - 1
+                self.now += 5 * 365 * 86400
+                self.cache().prune({'candidate'})
                 self.assertIsNone(self.cache().fetch('candidate', fetch).text)
-                self.now += 1
-                self.assertEqual(self.cache().fetch('candidate', fetch).text, 'New caption')
-                self.assertEqual(fetch.call_count, 2)
+                fetch.assert_called_once()
 
     def test_cache_hit_does_not_extend_positive_retention(self):
         fetch = Mock(return_value=TranscriptResult('Caption', 'ok', 1, 200))
@@ -90,21 +88,18 @@ class TranscriptCacheTests(unittest.TestCase):
         cache.save('used', 'ok', 'Used caption', 200)
         cache.save('unused', 'ok', 'Keep caption', 200)
         cache.save('missing', 'captions_unavailable', http_status=206)
-        self.now += NEGATIVE_TTL
+        self.now += LEGACY_NEGATIVE_TTL
         self.cache().prune({'used'})
         self.assertEqual(set(self.store.data[INDEX_KEY]['entries']), {'unused'})
         self.assertEqual(self.store.get(cache.chunk_key('used', 0)), {})
         self.assertEqual(self.cache().cached_result('unused').text, 'Keep caption')
 
-    def test_resource_cooldown_preserves_fail_closed_selection(self):
+    def test_remembered_resource_error_does_not_retry_and_permits_metadata_fallback(self):
         fetch = Mock(side_effect=TranscriptError('access_denied', attempts=1, http_status=403))
         for day in range(2):
-            with self.assertRaises(TranscriptError) as raised:
-                collect_transcripts([{'id': 'restricted'}],
-                    lambda video_id: self.cache().fetch(video_id, fetch).text, 3)
-            self.assertEqual(raised.exception.code, 'access_denied')
-            self.assertEqual(raised.exception.cached, day == 1)
-            self.now += 86400
+            self.assertEqual(collect_transcripts([{'id': 'restricted'}],
+                lambda video_id: self.cache().fetch(video_id, fetch).text, 3), ([], {}))
+            self.now += 365 * 86400
         fetch.assert_called_once()
 
     def test_quota_authentication_and_transport_errors_are_not_cached_as_missing(self):
@@ -178,6 +173,39 @@ class TranscriptCacheTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, '^Invalid private transcript cache entry$'):
                 self.cache()
         self.assertEqual(self.store.writes, [])
+
+    def test_expired_legacy_negative_metadata_is_migrated_without_refetch(self):
+        self.store.data[INDEX_KEY] = {'version': 1, 'entries': {
+            'missing': {'code': 'captions_unavailable', 'expires_at': 900, 'chunks': 0, 'http_status': 206}}}
+        fetch = Mock()
+        cache = self.cache()
+        cache.prune()
+        self.assertIsNone(self.cache().fetch('missing', fetch).text)
+        self.assertEqual(self.store.get(INDEX_KEY)['entries'], {})
+        self.assertEqual(cache.decisions.get('missing')['code'], 'captions_unavailable')
+        fetch.assert_not_called()
+
+    def test_nov15_resource_only_candidates_migrate_without_paid_probes_and_allow_metadata(self):
+        codes = ['captions_unavailable'] * 3 + ['empty_transcript', 'access_denied']
+        entries = {str(i): {'code': code, 'expires_at': 900, 'chunks': 0,
+                           'http_status': 403 if code == 'access_denied' else 206}
+                   for i, code in enumerate(codes)}
+        self.store.data[INDEX_KEY] = {'version': 1, 'entries': entries}
+        cache = self.cache()
+        cache.prune()
+        provider = Mock()
+        with patch('transcript_client.time.sleep'):
+            self.assertEqual(collect_transcripts([{'id': str(i)} for i in range(5)],
+                lambda video_id: cache.fetch(video_id, provider).text, 3), ([], {}))
+        self.assertEqual(len(cache.decisions.all_entries()), 5)
+        provider.assert_not_called()
+
+    def test_manual_forget_is_the_only_way_to_recheck_a_remembered_video(self):
+        self.cache().save('candidate', 'captions_unavailable', http_status=206)
+        self.cache().decisions.forget('candidate')
+        fetch = Mock(return_value=TranscriptResult('New caption', 'ok', 1, 200))
+        self.assertEqual(self.cache().fetch('candidate', fetch).text, 'New caption')
+        fetch.assert_called_once()
 
     def test_storage_probe_reuses_a_synthetic_caption_and_clears_it(self):
         probe_private_cache(self.store)

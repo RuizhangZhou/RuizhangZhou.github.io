@@ -87,15 +87,18 @@ still renders math after sanitization. Browser regression tests live in
 Bluesky hooks use grapheme-aware truncation; final text reserves space for the
 actual URL and checks both the 300-grapheme and 3000-byte limits, retaining UTF-8
 facet offsets. Transcript probes keep the former three-second pacing. Temporary
-Supadata failures abort without publishing an essay or marking videos consumed;
-confirmed unavailable native captions may still use the original fallback.
+Supadata service/authentication failures abort without publishing or consuming
+videos. Exhausted allowances and unavailable captions permit a disclosed essay
+from the curated video's available title and description.
 Restricted or unavailable individual videos are deferred while other candidates
-are checked. Only verified captions enter a digest; if none remain, a resource
-error stops the run without consuming the inaccessible video.
+are checked. Only verified captions enter a digest; metadata essays do not claim
+to summarize spoken content or quote a speaker without a transcript.
 
 See [transcript operations and incident record](TRANSCRIPTS.md) for classified
 failures, bounded retries, asynchronous results, and the private Actions cache.
-Captions live for at most 30 days; negative results cool down for 7 days.
+Captions live for at most 30 days; confirmed negative results are remembered
+indefinitely and rechecked only on explicit user request. An optional independent
+second key can be configured as `SUPADATA_SECONDARY_API_KEY` for quota failover.
 The daily worker clears consumed/expired payloads. Caption cache writes never
 publish an article.
 

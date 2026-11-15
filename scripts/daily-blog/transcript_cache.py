@@ -5,11 +5,12 @@ import re
 import time
 
 from transcript_client import TranscriptError, TranscriptResult
+from transcript_decisions import TranscriptDecisions
 
 
 INDEX_KEY = 'transcript_cache.index'
 POSITIVE_TTL = 30 * 24 * 60 * 60
-NEGATIVE_TTL = 7 * 24 * 60 * 60
+LEGACY_NEGATIVE_TTL = 7 * 24 * 60 * 60  # Used only when migrating the old expiring metadata.
 MAX_ENTRIES = 128
 MAX_TEXT_CHARS = 60000
 CHUNK_CHARS = 4000  # Fits below 48 KiB even with JSON-escaped supplementary Unicode.
@@ -33,6 +34,7 @@ class TranscriptCache:
         self.entries = deepcopy(document['entries'])
         for video_id, entry in self.entries.items():
             self.validate_entry(video_id, entry)
+        self.decisions = TranscriptDecisions(self, clock=clock)
 
     @staticmethod
     def validate_entry(video_id, entry):
@@ -78,6 +80,9 @@ class TranscriptCache:
         consumed = set(consumed_ids)
         now = self.clock()
         for video_id, entry in list(self.entries.items()):
+            if entry['code'] in MISSING_CODES | RESOURCE_CODES:
+                self.migrate_decision(video_id, entry)
+                continue
             if video_id in consumed or entry['expires_at'] <= now or entry['code'] == 'writing':
                 self.remove(video_id)
         while len(self.entries) > MAX_ENTRIES:
@@ -85,16 +90,21 @@ class TranscriptCache:
 
     def cached_result(self, video_id):
         entry = self.entries.get(video_id)
+        if entry is not None and entry['code'] in MISSING_CODES | RESOURCE_CODES:
+            self.migrate_decision(video_id, entry)
+        decision = self.decisions.get(video_id)
+        if decision is not None:
+            code, status = decision['code'], decision.get('http_status')
+            if code in RESOURCE_CODES:
+                raise TranscriptError(code, http_status=status, cached=True)
+            return TranscriptResult(None, code, http_status=status, cached=True)
+        entry = self.entries.get(video_id)
         if entry is None:
             return None
         if entry['expires_at'] <= self.clock() or entry['code'] == 'writing':
             self.remove(video_id)
             return None
-        code, status = entry['code'], entry.get('http_status')
-        if code in RESOURCE_CODES:
-            raise TranscriptError(code, http_status=status, cached=True)
-        if code in MISSING_CODES:
-            return TranscriptResult(None, code, http_status=status, cached=True)
+        status = entry.get('http_status')
         parts = [self.get(self.chunk_key(video_id, part)) for part in range(entry['chunks'])]
         if not parts or any(not isinstance(part, dict) or not isinstance(part.get('text'), str)
                             or len(part['text']) > CHUNK_CHARS for part in parts):
@@ -107,9 +117,14 @@ class TranscriptCache:
         return TranscriptResult(text, 'ok', http_status=status, cached=True)
 
     def save(self, video_id, code, text=None, http_status=None):
+        if code in MISSING_CODES | RESOURCE_CODES:
+            self.decisions.remember(video_id, code, http_status)
+            if video_id in self.entries:
+                self.remove(video_id)
+            return
         text = text[:MAX_TEXT_CHARS] if text else ''
         parts = [text[start:start + CHUNK_CHARS] for start in range(0, len(text), CHUNK_CHARS)]
-        entry = {'code': code, 'expires_at': self.clock() + (POSITIVE_TTL if code == 'ok' else NEGATIVE_TTL),
+        entry = {'code': code, 'expires_at': self.clock() + POSITIVE_TTL,
                  'chunks': len(parts), 'http_status': http_status}
         self.validate_entry(video_id, entry)
         if video_id in self.entries:
@@ -124,6 +139,14 @@ class TranscriptCache:
             self.put(self.chunk_key(video_id, part), {'text': content})
         self.entries[video_id] = entry
         self.save_index()
+
+    def migrate_decision(self, video_id, entry):
+        # Write the durable decision before clearing legacy metadata, including
+        # already-expired entries. Upgrading must not trigger another paid probe.
+        if self.decisions.get(video_id) is None:
+            self.decisions.remember(video_id, entry['code'], entry.get('http_status'),
+                                    checked_at=max(0, entry['expires_at'] - LEGACY_NEGATIVE_TTL))
+        self.remove(video_id)
 
     def fetch(self, video_id, fetch_native):
         cached = self.cached_result(video_id)

@@ -13,6 +13,10 @@ on:
         type: boolean
         default: false
         description: 'Verify private caption storage only; no Supadata, model or publication requests'
+      caption_maintenance:
+        type: boolean
+        default: false
+        description: 'Migrate remembered caption decisions and read quota counters; no captions or publication'
 permissions:
   contents: read
   issues: write
@@ -53,14 +57,20 @@ jobs:
           BSKY_IDENTIFIER: ${{ vars.BSKY_IDENTIFIER }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
           SUPADATA_API_KEY: ${{ secrets.SUPADATA_API_KEY }}
+          SUPADATA_SECONDARY_API_KEY: ${{ secrets.SUPADATA_SECONDARY_API_KEY }}
           MATRIX_HOMESERVER: ${{ secrets.MATRIX_HOMESERVER }}
           MATRIX_BOT_TOKEN: ${{ secrets.MATRIX_BOT_TOKEN }}
           MATRIX_RICK_ROOM: ${{ secrets.MATRIX_RICK_ROOM }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
           CACHE_PROBE: ${{ github.event_name == 'workflow_dispatch' && inputs.cache_probe }}
+          CAPTION_MAINTENANCE: ${{ github.event_name == 'workflow_dispatch' && inputs.caption_maintenance }}
         shell: bash
         run: |
           set -euo pipefail
+          if [[ "$CAPTION_MAINTENANCE" == "true" ]]; then
+            python blog/scripts/daily-blog/run_actions.py --caption-maintenance
+            exit 0
+          fi
           if [[ "$CACHE_PROBE" == "true" ]]; then
             python blog/scripts/daily-blog/run_actions.py --cache-probe
             exit 0

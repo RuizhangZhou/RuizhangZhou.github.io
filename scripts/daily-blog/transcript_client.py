@@ -206,9 +206,8 @@ def fetch_native_transcript(video_id, api_key):
 
 
 def collect_transcripts(candidates, fetch, maximum_usable):
-    """Defer inaccessible videos; only verified captions can feed a digest."""
+    """Only verified captions enter a digest; resource misses permit a metadata essay."""
     transcripts = {}
-    deferred_error = None
     for attempt, video in enumerate(candidates):
         if len(transcripts) >= maximum_usable:
             break
@@ -217,14 +216,10 @@ def collect_transcripts(candidates, fetch, maximum_usable):
         try:
             text = fetch(video['id'])
         except TranscriptError as exc:
-            if exc.code not in ('access_denied', 'video_unavailable'):
+            if exc.code not in ('access_denied', 'video_unavailable', 'quota_exhausted'):
                 raise
-            deferred_error = exc
             continue
         if text:
             transcripts[video['id']] = text
-    if not transcripts and deferred_error is not None:
-        # Restricted sources must not become title-only essays or consumed IDs.
-        raise deferred_error
     usable = [video for video in candidates if video['id'] in transcripts]
     return usable, transcripts

@@ -18,6 +18,62 @@ missing/empty captions and an unconfigured provider retain the existing essay
 fallback. Authentication, quota, transport, provider and response-format errors
 still stop the run after any applicable bounded recovery.
 
+## Private persistent cache (Actions)
+
+The production Actions runner reuses the bot's existing private Matrix account
+data, under `com.rickandzoey.dailyblog.v1.transcript_cache.*`. Captions are never
+committed to Git, uploaded as public Actions artifacts, or sent as room messages.
+The next ephemeral runner can read the same cache without depending on FSN.
+
+| Cached result | Retention / next check |
+| --- | --- |
+| Usable native captions | 30 days from retrieval; reading does not extend retention |
+| Confirmed missing or empty captions | 7 days, then allow another native request |
+| Inaccessible / unavailable resource (403/404) | 7 days, preserving the original resource error semantics |
+| Quota, credentials, rate limits, transport or malformed responses | Never cached as absent captions |
+
+Fresh outcomes are saved immediately, before article generation. Captions that
+the model does not select remain reusable; a later generation/publication
+failure also leaves them available. Only article-confirmed IDs are consumed,
+as before. After publication and history checkpointing, their caption payloads
+are cleared. No video becomes consumed merely because its captions were fetched.
+
+At the start of every normal blog run, including an already-published day, the
+worker removes expired, consumed and interrupted entries. It holds at most 128
+entries and evicts the earliest expiry if full. Captions use the writer's existing
+60,000-character cap and small chunks so large/multibyte payloads fit conservative
+per-request size limits. A pending index entry is written before the chunks, so
+an interrupted write can be cleaned up on the next run.
+
+Cleanup replaces current Matrix chunk payloads with `{}` and removes their index
+entries. It does not promise deletion from homeserver backups or physical media.
+It never clears `digested_videos` or article history: the consumed-video ID ledger
+is independent of the temporary caption cache and continues preventing reuse.
+The existing daily workflow owns cleanup; no separate timer is installed, so a
+disabled workflow cannot clean until it runs again. The legacy standalone writer
+does not acquire this Actions-specific remote store automatically.
+
+`--dry-run` reads existing entries and maintains only an in-memory overlay;
+it never saves or cleans production cache entries. Uncached dry-run videos still
+use real native-caption requests. Diagnostics distinguish hits using `cached:
+true` and `attempts: 0`, never caption text or video IDs.
+
+For an ID-by-ID overview, run `video_status.py --output <new-private-file.json>`
+on an authorized personal machine with the existing Matrix credentials. It uses
+GET requests only, separates publication dates from caption-cache outcomes, and
+includes older consumed IDs even when their article dates are no longer in the
+60-entry history. It exports IDs to a new private file, never to public Actions
+logs; expired cache entries are reported without performing cleanup. Before the
+cache is deployed, absent cache data cannot establish whether a video was ever
+checked historically.
+
+After deploying, the workflow's `cache_probe=true` input (or the CLI's
+`--cache-probe`) verifies a synthetic caption in the separate
+`com.rickandzoey.dailyblog.cache_probe.v1` account-data namespace. It reads the
+caption back through a fresh cache instance, verifies reuse without another
+fetch, and clears the synthetic payload. This check does not call Supadata,
+generate an article, read/change publication state or publish a test post.
+
 ## Recovery limits
 
 Each HTTP operation allows at most three attempts. Retryable failures wait 3 and

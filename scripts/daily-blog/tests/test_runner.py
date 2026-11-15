@@ -93,6 +93,22 @@ class PublicationTests(unittest.TestCase):
                 run_actions.main()
         store.put.assert_not_called()
 
+    def test_cache_probe_uses_isolated_state_and_never_loads_writer_or_publication_state(self):
+        store = Mock()
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store) as create_store, \
+             patch.object(run_actions, 'probe_private_cache') as probe, patch.dict(os.environ, env), \
+             patch.object(sys, 'argv', ['run_actions', '--cache-probe']), \
+             patch.object(run_actions, 'github_request') as github:
+            run_actions.main()
+        self.assertEqual(create_store.call_args.args[2], 'com.rickandzoey.dailyblog.cache_probe.v1')
+        probe.assert_called_once_with(store)
+        store.get.assert_not_called()
+        store.send.assert_not_called()
+        github.assert_not_called()
+
     def transcript_research(self, fetch, events=None, dry_run=True, generation_error=None):
         store = Mock()
         data = {'meta': {'version': 1}, 'history': {'posts': []},
@@ -199,6 +215,79 @@ class PublicationTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             self.transcript_research(Mock(return_value='Transcript'), dry_run=False,
                                      generation_error=RuntimeError('output_truncated_after_retry'))
+
+    def test_generation_failure_preserves_only_caption_cache_for_the_next_worker(self):
+        from copy import deepcopy
+        from transcript_client import TranscriptResult
+        data = {'meta': {'version': 1}, 'history': {'posts': []},
+                'digested_videos': {'ids': []}, 'playlist_cache': {'videos': []}}
+        original = deepcopy(data)
+        store = Mock()
+        store.get.side_effect = lambda key: deepcopy(data.get(key))
+        store.put.side_effect = lambda key, value: data.__setitem__(key, deepcopy(value))
+        videos = [{'id': 'missing'}, {'id': 'unused'}]
+        native = Mock(side_effect=[TranscriptResult(None, 'captions_unavailable', 1, 206),
+                                   TranscriptResult('PRIVATE CAPTION', 'ok', 1, 200)])
+        blog = SimpleNamespace(load_history=lambda: [], load_digested_ids=lambda: set(),
+            fetch_playlist_videos=lambda: videos, pick_candidate_videos=lambda *a: videos,
+            MAX_DIGEST_CANDIDATES=3,
+            generate_video_digest=Mock(side_effect=RuntimeError('Simulated generation failure')))
+        blog.fetch_transcript = lambda video_id: blog.TRANSCRIPT_CACHE.fetch(video_id, native).text
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
+             patch.dict(sys.modules, {'daily_blog': blog}), patch.object(sys, 'argv', ['run_actions']), \
+             patch('transcript_client.time.sleep'), patch.object(run_actions, 'github_request') as api:
+            for _ in range(2):
+                with self.assertRaisesRegex(RuntimeError, '^Simulated generation failure$'):
+                    run_actions.main()
+        self.assertEqual(native.call_count, 2)  # The second worker makes zero paid requests.
+        for key, value in original.items():
+            self.assertEqual(data[key], value)
+        self.assertTrue(all(call.args[0].startswith('transcript_cache.') for call in store.put.call_args_list))
+        store.send.assert_not_called()
+        api.assert_not_called()
+
+    def test_cached_diagnostics_show_zero_requests_without_private_content(self):
+        events = [{'code': 'ok', 'attempts': 0, 'cached': True, 'text': 'PRIVATE CAPTION'}]
+        with patch.dict(sys.modules, {'daily_blog': SimpleNamespace(TRANSCRIPT_DIAGNOSTICS=events)}):
+            self.assertEqual(run_actions.transcript_summary(),
+                             [{'provider': 'supadata', 'code': 'ok', 'attempts': 0, 'cached': True}])
+
+    def test_confirmed_publication_clears_only_consumed_caption_payloads(self):
+        from copy import deepcopy
+        from datetime import datetime, timezone
+        from transcript_cache import INDEX_KEY, TranscriptCache
+        today = datetime.now(timezone.utc).date().isoformat()
+        record = {'title': 'Example', 'domain': 'video-digest', 'used_ids': ['used'],
+                  'issue': {'number': 1, 'url': 'existing'}, 'bluesky_done': True,
+                  'matrix_text_done': True, 'matrix_file_done': True}
+        data = {'meta': {'version': 1}, 'history': {'posts': []},
+                'digested_videos': {'ids': []}, 'playlist_cache': {'videos': []},
+                'publication.' + today: record}
+        store = Mock()
+        store.get.side_effect = lambda key: deepcopy(data.get(key))
+        store.put.side_effect = lambda key, value: data.__setitem__(key, deepcopy(value))
+        cache = TranscriptCache(store)
+        cache.save('used', 'ok', 'Consumed caption', 200)
+        cache.save('unused', 'ok', 'Keep caption', 200)
+        blog = SimpleNamespace(load_history=lambda: [], load_digested_ids=lambda: set(),
+                               REPO='example/blog', BLOG_BASE='https://example.org/blog', MAX_HISTORY_KEPT=40)
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token',
+               'MATRIX_RICK_ROOM': 'test-room'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
+             patch.dict(sys.modules, {'daily_blog': blog}), patch.object(sys, 'argv', ['run_actions']), \
+             patch.object(run_actions, 'github_request') as api:
+            run_actions.main()
+        self.assertEqual(set(data[INDEX_KEY]['entries']), {'unused'})
+        self.assertEqual(data[cache.chunk_key('used', 0)], {})
+        self.assertEqual(data['digested_videos']['ids'], ['used'])
+        self.assertEqual(data['history']['posts'][0]['used_video_ids'], ['used'])
+        store.send.assert_not_called()
+        api.assert_not_called()
 
     def test_privileged_workflow_remains_main_only_even_for_dry_runs(self):
         import yaml

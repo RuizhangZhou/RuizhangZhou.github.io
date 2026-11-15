@@ -24,7 +24,7 @@ ERROR_CODES = {
 
 
 class TranscriptError(RuntimeError):
-    def __init__(self, code, *, attempts=0, http_status=None, retryable=False, retry_after=None):
+    def __init__(self, code, *, attempts=0, http_status=None, retryable=False, retry_after=None, cached=False):
         super().__init__('Transcript service failed; playlist item retained for retry')
         if code not in ERROR_CODES:
             raise ValueError('Unknown transcript error code')
@@ -33,6 +33,7 @@ class TranscriptError(RuntimeError):
         self.http_status = http_status
         self.retryable = retryable
         self.retry_after = retry_after
+        self.cached = cached
 
     def diagnostics(self):
         result = {'provider': 'supadata', 'code': self.code, 'attempts': self.attempts,
@@ -41,6 +42,8 @@ class TranscriptError(RuntimeError):
             result['http_status'] = self.http_status
         if self.retry_after is not None:
             result['retry_after_seconds'] = self.retry_after
+        if self.cached:
+            result['cached'] = True
         return result
 
 
@@ -50,11 +53,14 @@ class TranscriptResult:
     code: str
     attempts: int = 0
     http_status: int | None = None
+    cached: bool = False
 
     def diagnostics(self):
         result = {'provider': 'supadata', 'code': self.code, 'attempts': self.attempts}
         if self.http_status is not None:
             result['http_status'] = self.http_status
+        if self.cached:
+            result['cached'] = True
         return result
 
 

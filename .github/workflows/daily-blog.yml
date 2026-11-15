@@ -9,6 +9,10 @@ on:
         type: boolean
         default: true
         description: 'Generate only, without publishing or modifying remote state'
+      cache_probe:
+        type: boolean
+        default: false
+        description: 'Verify private caption storage only; no Supadata, model or publication requests'
 permissions:
   contents: read
   issues: write
@@ -53,9 +57,14 @@ jobs:
           MATRIX_BOT_TOKEN: ${{ secrets.MATRIX_BOT_TOKEN }}
           MATRIX_RICK_ROOM: ${{ secrets.MATRIX_RICK_ROOM }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          CACHE_PROBE: ${{ github.event_name == 'workflow_dispatch' && inputs.cache_probe }}
         shell: bash
         run: |
           set -euo pipefail
+          if [[ "$CACHE_PROBE" == "true" ]]; then
+            python blog/scripts/daily-blog/run_actions.py --cache-probe
+            exit 0
+          fi
           args=()
           if [[ "$DRY_RUN" == "true" ]]; then
             python blog/scripts/daily-blog/run_actions.py --probe

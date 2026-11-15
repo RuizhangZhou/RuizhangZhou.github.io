@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 
 from matrix_state import MatrixKV
-from transcript_cache import TranscriptCache
+from transcript_cache import LEGACY_NEGATIVE_TTL, MISSING_CODES, RESOURCE_CODES, TranscriptCache
 
 
 def read_video_status(store, *, now=None):
@@ -23,13 +23,21 @@ def read_video_status(store, *, now=None):
         for video_id in post.get('used_video_ids', []):
             dates.setdefault(video_id, []).append(post['date'])
     cache = TranscriptCache(store, readonly=True)
+    decisions = cache.decisions.all_entries()
+    for video_id, entry in cache.entries.items():
+        if entry['code'] in MISSING_CODES | RESOURCE_CODES:
+            decisions.setdefault(video_id, {'code': entry['code'],
+                'checked_at': max(0, entry['expires_at'] - LEGACY_NEGATIVE_TTL)})
     playlist_ids = {video['id'] for video in playlist['videos']}
-    video_ids = consumed | dates.keys() | playlist_ids | cache.entries.keys()
+    video_ids = consumed | dates.keys() | playlist_ids | cache.entries.keys() | decisions.keys()
     rows = []
     for video_id in sorted(video_ids):
         entry = cache.entries.get(video_id)
         status, expires_at = 'not_cached', None
-        if entry is not None:
+        decision = decisions.get(video_id)
+        if decision is not None:
+            status = decision['code']
+        elif entry is not None:
             status = entry['code']
             expires_at = datetime.fromtimestamp(entry['expires_at'], timezone.utc).isoformat()
             if entry['expires_at'] <= now:
@@ -38,7 +46,10 @@ def read_video_status(store, *, now=None):
                      'used_in_article': video_id in consumed or video_id in dates,
                      'publication_dates': sorted(dates.get(video_id, [])),
                      'in_latest_playlist': video_id in playlist_ids,
-                     'caption_cache_status': status, 'cache_expires_at': expires_at})
+                     'caption_cache_status': status, 'cache_expires_at': expires_at,
+                     'caption_decision_persistent': decision is not None,
+                     'caption_checked_at': (datetime.fromtimestamp(decision['checked_at'], timezone.utc).isoformat()
+                                            if decision is not None else None)})
     return rows
 
 

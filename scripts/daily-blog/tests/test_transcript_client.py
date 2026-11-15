@@ -219,19 +219,18 @@ class TranscriptSelectionTests(unittest.TestCase):
         self.assertEqual(usable, [{'id': '0'}])
         self.assertEqual(transcripts, {'0': 'Available'})
 
-    def test_no_usable_caption_and_any_inaccessible_video_raises_instead_of_essay_fallback(self):
+    def test_resource_only_candidates_allow_metadata_essay_without_entering_a_digest(self):
         for responses in ([TranscriptError('access_denied'), None],
                           [None, TranscriptError('video_unavailable')]):
             with self.subTest(responses=responses), patch('transcript_client.time.sleep'):
-                with self.assertRaises(TranscriptError):
-                    collect_transcripts(self.candidates(2), Mock(side_effect=responses), 3)
+                self.assertEqual(collect_transcripts(self.candidates(2), Mock(side_effect=responses), 3), ([], {}))
 
     def test_confirmed_missing_captions_preserve_existing_fallback(self):
         with patch('transcript_client.time.sleep'):
             self.assertEqual(collect_transcripts(self.candidates(2), lambda _: None, 3), ([], {}))
 
     def test_account_and_service_errors_still_abort_even_with_usable_captions(self):
-        for code in ('authentication_failed', 'quota_exhausted', 'rate_limited', 'provider_unavailable',
+        for code in ('authentication_failed', 'rate_limited', 'provider_unavailable',
                      'timeout', 'invalid_response'):
             fetch = Mock(side_effect=['Available', TranscriptError(code), 'Never fetched'])
             with self.subTest(code=code), patch('transcript_client.time.sleep'):

@@ -109,7 +109,7 @@ class PublicationTests(unittest.TestCase):
         store.send.assert_not_called()
         github.assert_not_called()
 
-    def transcript_research(self, fetch, events=None, dry_run=True, generation_error=None):
+    def transcript_research(self, fetch, events=None, dry_run=True, generation_error=None, allow_fallback=False):
         store = Mock()
         data = {'meta': {'version': 1}, 'history': {'posts': []},
                 'digested_videos': {'ids': []}, 'playlist_cache': {'videos': []}}
@@ -119,7 +119,7 @@ class PublicationTests(unittest.TestCase):
             fetch_playlist_videos=lambda: videos, pick_candidate_videos=lambda *a: videos,
             fetch_transcript=fetch, MAX_DIGEST_CANDIDATES=2,
             generate_video_digest=Mock(return_value=('Title', 'English', '标题', '中文', 'Hook', ['1', '2'])),
-            generate_post=Mock())
+            generate_post=Mock(return_value=('Title', 'English', '标题', '中文', 'finance', 'Hook')))
         if generation_error is not None:
             blog.generate_video_digest.side_effect = generation_error
         env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
@@ -137,7 +137,10 @@ class PublicationTests(unittest.TestCase):
                 store.put.assert_not_called()
                 store.send.assert_not_called()
                 api.assert_not_called()
-                blog.generate_post.assert_not_called()
+                if allow_fallback:
+                    blog.generate_post.assert_called_once()
+                else:
+                    blog.generate_post.assert_not_called()
         return blog, sleep
 
     def test_transcript_requests_keep_three_second_pacing_including_missing_captions(self):
@@ -156,7 +159,7 @@ class PublicationTests(unittest.TestCase):
 
     def test_classified_transcript_failures_preserve_publication_and_video_state(self):
         from transcript_client import TranscriptError
-        for code in ('quota_exhausted', 'rate_limited', 'invalid_response', 'job_timeout'):
+        for code in ('rate_limited', 'invalid_response', 'job_timeout'):
             with self.subTest(code=code), self.assertRaises(TranscriptError):
                 self.transcript_research(Mock(side_effect=TranscriptError(code)), dry_run=False)
 
@@ -168,10 +171,43 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual([video['id'] for video in candidates], ['0', '2'])
         self.assertEqual(transcripts, {'0': 'First captions', '2': 'Last captions'})
 
-    def test_only_restricted_candidates_never_generate_publish_or_checkpoint(self):
+    def test_only_restricted_candidates_allow_a_metadata_essay_dry_run_without_publishing(self):
         from transcript_client import TranscriptError
-        with self.assertRaises(TranscriptError):
-            self.transcript_research(Mock(side_effect=TranscriptError('access_denied')), dry_run=False)
+        blog, _ = self.transcript_research(Mock(side_effect=TranscriptError('access_denied')), allow_fallback=True)
+        self.assertEqual(blog.generate_post.call_args.args[1], {'id': '0'})
+        blog.generate_video_digest.assert_not_called()
+
+    def test_exhausted_caption_allowance_can_use_a_metadata_essay_without_publishing(self):
+        from transcript_client import TranscriptError
+        blog, _ = self.transcript_research(Mock(side_effect=TranscriptError('quota_exhausted')),
+                                            allow_fallback=True)
+        self.assertEqual(blog.generate_post.call_args.args[1], {'id': '0'})
+        blog.generate_video_digest.assert_not_called()
+
+    def test_maintenance_migrates_old_negative_records_without_caption_model_or_publication_requests(self):
+        from copy import deepcopy
+        from transcript_cache import INDEX_KEY
+        from transcript_decisions import TranscriptDecisions
+        data = {'meta': {'version': 1}, 'digested_videos': {'ids': []},
+                INDEX_KEY: {'version': 1, 'entries': {
+                    'missing': {'code': 'captions_unavailable', 'expires_at': 1, 'chunks': 0, 'http_status': 206}}}}
+        store = Mock()
+        store.get.side_effect = lambda key: deepcopy(data.get(key))
+        store.put.side_effect = lambda key, value: data.__setitem__(key, deepcopy(value))
+        env = {'DAILY_BLOG_CONFIG_JSON': '{}', 'DAILY_BLOG_CREATORS_JSON': '{}',
+               'MATRIX_HOMESERVER': 'https://example.org', 'MATRIX_BOT_TOKEN': 'test-token'}
+        with tempfile.TemporaryDirectory() as directory, patch.object(run_actions, 'BASE', Path(directory)), \
+             patch.object(run_actions, 'MatrixKV', return_value=store), patch.dict(os.environ, env), \
+             patch.object(sys, 'argv', ['run_actions', '--caption-maintenance']), \
+             patch.object(run_actions, 'NativeCaptionProvider') as provider, \
+             patch.object(run_actions, 'github_request') as github:
+            provider.return_value.usage_summary.return_value = {'accounts': []}
+            run_actions.main()
+        self.assertEqual(TranscriptDecisions(store).get('missing')['code'], 'captions_unavailable')
+        self.assertEqual(data[INDEX_KEY]['entries'], {})
+        provider.return_value.fetch.assert_not_called()
+        store.send.assert_not_called()
+        github.assert_not_called()
 
     def test_failure_summary_exposes_stage_and_status_not_raw_provider_data(self):
         response = httpx.Response(400, request=httpx.Request('POST', 'https://private.invalid/secret'),
@@ -245,7 +281,8 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(native.call_count, 2)  # The second worker makes zero paid requests.
         for key, value in original.items():
             self.assertEqual(data[key], value)
-        self.assertTrue(all(call.args[0].startswith('transcript_cache.') for call in store.put.call_args_list))
+        self.assertTrue(all(call.args[0].startswith(('transcript_cache.', 'transcript_decisions.'))
+                            for call in store.put.call_args_list))
         store.send.assert_not_called()
         api.assert_not_called()
 

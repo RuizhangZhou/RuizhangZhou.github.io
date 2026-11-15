@@ -33,10 +33,12 @@ class VideoStatusTests(unittest.TestCase):
         self.assertEqual(rows['new']['caption_cache_status'], 'not_cached')
         store.put.assert_not_called()
 
-    def test_expired_caption_result_does_not_erase_its_id_or_clean_remote_state(self):
+    def test_legacy_missing_result_remains_a_permanent_decision_without_remote_writes(self):
         store = self.store()
         rows = {row['video_id']: row for row in read_video_status(store, now=1000)}
-        self.assertEqual(rows['missing']['caption_cache_status'], 'expired')
+        self.assertEqual(rows['missing']['caption_cache_status'], 'captions_unavailable')
+        self.assertTrue(rows['missing']['caption_decision_persistent'])
+        self.assertIsNone(rows['missing']['cache_expires_at'])
         self.assertFalse(rows['missing']['used_in_article'])
         store.put.assert_not_called()
 

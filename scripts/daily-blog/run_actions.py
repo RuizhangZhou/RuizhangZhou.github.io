@@ -17,6 +17,7 @@ import sys
 import httpx
 from matrix_state import MatrixKV
 from transcript_cache import TranscriptCache, probe_private_cache
+from caption_provider import NativeCaptionProvider
 from transcript_client import ERROR_CODES, OUTCOME_CODES, TranscriptError, collect_transcripts
 from text_limits import bluesky_text
 from bluesky_keys import daily_post_rkey
@@ -122,6 +123,8 @@ def main():
     parser.add_argument('--probe', action='store_true', help='Read-only service/auth probe; no article or post')
     parser.add_argument('--cache-probe', action='store_true',
                         help='Synthetic private-cache storage check; no Supadata, model or publication requests')
+    parser.add_argument('--caption-maintenance', action='store_true',
+                        help='Migrate saved caption decisions and read quota counters; no captions or publication')
     args = parser.parse_args()
     logging.disable(logging.CRITICAL)
     for name in ('config', 'creators'):
@@ -138,6 +141,20 @@ def main():
         return
     if store.get('meta') != {'version': 1}:
         raise RuntimeError('Private blog state must be explicitly migrated first')
+    if args.caption_maintenance:
+        stage('caption_maintenance')
+        cache = TranscriptCache(store)
+        consumed = store.get('digested_videos')
+        if not isinstance(consumed, dict) or not isinstance(consumed.get('ids'), list):
+            raise RuntimeError('Missing migrated video IDs')
+        cache.prune(consumed['ids'])
+        from collections import Counter
+        counts = dict(Counter(entry['code'] for entry in cache.decisions.all_entries().values()))
+        provider = NativeCaptionProvider(os.environ.get('SUPADATA_API_KEY'),
+                                         os.environ.get('SUPADATA_SECONDARY_API_KEY'), state=cache)
+        print('Caption maintenance: ' + json.dumps({'remembered_outcomes': counts,
+              **provider.usage_summary()}, sort_keys=True))
+        return
     for name in ('history', 'digested_videos', 'playlist_cache'):
         value = store.get(name)
         if value is None:
@@ -167,6 +184,8 @@ def main():
     stage('transcript_cache')
     blog.TRANSCRIPT_CACHE = TranscriptCache(store, readonly=args.dry_run)
     blog.TRANSCRIPT_CACHE.prune(blog.load_digested_ids())
+    blog.TRANSCRIPT_PROVIDER = NativeCaptionProvider(getattr(blog, 'SUPADATA_API_KEY', None),
+        getattr(blog, 'SUPADATA_SECONDARY_API_KEY', None), state=blog.TRANSCRIPT_CACHE)
     if any(post.get('date') == today for post in posts):
         print('Today already published according to migrated history; skipped safely.')
         return

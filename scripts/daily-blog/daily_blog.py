@@ -32,7 +32,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from text_limits import bluesky_text, truncate_text
-from transcript_client import TranscriptError, collect_transcripts, fetch_native_transcript
+from transcript_client import TranscriptError, collect_transcripts
+from caption_provider import NativeCaptionProvider
 
 load_dotenv(Path.home() / ".env", override=False)
 
@@ -70,6 +71,8 @@ MASTO_TOKEN    = os.environ.get("MASTODON_ACCESS_TOKEN")
 MASTODON_ENABLED = False
 
 SUPADATA_API_KEY  = os.environ.get("SUPADATA_API_KEY")
+SUPADATA_SECONDARY_API_KEY = os.environ.get("SUPADATA_SECONDARY_API_KEY")
+TRANSCRIPT_PROVIDER = None  # Actions supplies persisted key preference; standalone retains in-process preference.
 MATRIX_HOMESERVER = os.environ.get("MATRIX_HOMESERVER")
 MATRIX_BOT_TOKEN  = os.environ.get("MATRIX_BOT_TOKEN")
 MATRIX_RICK_ROOM  = os.environ.get("MATRIX_RICK_ROOM")
@@ -196,10 +199,12 @@ def pick_candidate_videos(videos: list[dict], digested_ids: set[str]) -> list[di
 
 def fetch_transcript(video_id: str) -> str | None:
     """Keep unavailable captions separate from exhausted recovery of a service failure."""
+    global TRANSCRIPT_PROVIDER
+    if TRANSCRIPT_PROVIDER is None:
+        TRANSCRIPT_PROVIDER = NativeCaptionProvider(SUPADATA_API_KEY, SUPADATA_SECONDARY_API_KEY)
     try:
-        fetch_native = lambda candidate: fetch_native_transcript(candidate, SUPADATA_API_KEY)
-        result = (TRANSCRIPT_CACHE.fetch(video_id, fetch_native) if TRANSCRIPT_CACHE is not None
-                  else fetch_native(video_id))
+        result = (TRANSCRIPT_CACHE.fetch(video_id, TRANSCRIPT_PROVIDER.fetch) if TRANSCRIPT_CACHE is not None
+                  else TRANSCRIPT_PROVIDER.fetch(video_id))
     except TranscriptError as exc:
         TRANSCRIPT_DIAGNOSTICS.append(exc.diagnostics())
         raise
@@ -528,7 +533,7 @@ def generate_post(posts: list[dict], inspiration_video: dict | None = None):
     if inspiration_video:
         description = inspiration_video.get("description", "").strip() or "(No description supplied.)"
         playlist_inspiration = f"""\
-Fresh playlist signal (native captions were unavailable):
+Fresh curated playlist signal (a transcript was not retrieved):
 - Title: {inspiration_video['title']}
 - Creator: {inspiration_video['author']}
 - Creator-supplied description: {_escape_braces(description)}
@@ -561,6 +566,12 @@ general knowledge."""
 
     # Enforce Bluesky 300-char limit on hook (leave ~80 chars for URL + newlines)
     hook = truncate_text(hook)
+
+    if inspiration_video:
+        body += ("\n\n_Source note: This essay is inspired by the available title and description of a "
+                 "video from the curated playlist. A transcript was not retrieved; this is an essay, "
+                 "not a summary of the video's spoken content._")
+        body_zh += "\n\n_来源说明：本文由自选视频的标题及可用简介启发。未取得视频字幕，属于延伸思考，不是对视频口述内容的摘要。_"
 
     body += f"\n\n---\n\n_Published by bot · {TODAY}_\n\n<!-- daily-blog-{TODAY} -->"
     return title, body, title_zh, body_zh, domain, hook

@@ -48,6 +48,9 @@ class WriterSafetyTests(unittest.TestCase):
         with patch('dotenv.load_dotenv'), patch.dict(os.environ, {'BSKY_APP_PASSWORD': 'test'}):
             spec.loader.exec_module(cls.blog)
 
+    def setUp(self):
+        self.blog.TRANSCRIPT_PROVIDER = None
+
     def test_private_markdown_strips_active_html_but_keeps_tables(self):
         result = self.blog._markdown_to_html('<script>alert(1)</script>\n\n' +
             '<img src=x onerror="alert(1)"><a href="javascript:alert(1)">link</a>\n\n' +
@@ -99,8 +102,9 @@ class WriterSafetyTests(unittest.TestCase):
         store.get.side_effect = lambda key: deepcopy(data.get(key))
         store.put.side_effect = lambda key, value: data.__setitem__(key, deepcopy(value))
         with patch.object(self.blog, 'TRANSCRIPT_CACHE', TranscriptCache(store)), \
+             patch.object(self.blog, 'SUPADATA_API_KEY', 'test-key'), \
              patch.object(self.blog, 'TRANSCRIPT_DIAGNOSTICS', []), \
-             patch.object(self.blog, 'fetch_native_transcript',
+             patch('caption_provider.fetch_native_transcript',
                           return_value=TranscriptResult('Reusable caption', 'ok', 1, 200)) as fetch:
             self.assertEqual(self.blog.fetch_transcript('video'), 'Reusable caption')
             self.blog.TRANSCRIPT_CACHE = TranscriptCache(store)
@@ -109,6 +113,19 @@ class WriterSafetyTests(unittest.TestCase):
                              {'provider': 'supadata', 'code': 'ok', 'attempts': 0,
                               'http_status': 200, 'cached': True})
         fetch.assert_called_once()
+
+    def test_playlist_essay_identifies_metadata_inspiration_and_never_claims_transcript_access(self):
+        video = {'id': 'example', 'title': 'A careful idea', 'author': 'A selected creator',
+                 'description': 'A supplied topic note'}
+        with patch.object(self.blog, 'load_creators', return_value=[]), \
+             patch.object(self.blog, 'complete_sections',
+                          return_value=('Title', 'finance', 'English', '标题', '中文', 'Hook')) as generate:
+            result = self.blog.generate_post([], video)
+        prompt = generate.call_args.kwargs['messages'][0]['content']
+        self.assertIn('A careful idea', prompt)
+        self.assertIn('do not claim to have watched the video', prompt)
+        self.assertIn('A transcript was not retrieved', result[1])
+        self.assertIn('未取得视频字幕', result[3])
 
     def test_async_or_malformed_payload_is_not_treated_as_missing_captions(self):
         for payload in ({'jobId': 'pending'}, {'error': 'unknown'}, {'content': None}):

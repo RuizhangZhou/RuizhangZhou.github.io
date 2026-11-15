@@ -94,7 +94,10 @@ are checked. Only verified captions enter a digest; if none remain, a resource
 error stops the run without consuming the inaccessible video.
 
 See [transcript operations and incident record](TRANSCRIPTS.md) for classified
-failures, bounded retries, asynchronous results, and Google integration options.
+failures, bounded retries, asynchronous results, and the private Actions cache.
+Captions live for at most 30 days; negative results cool down for 7 days.
+The daily worker clears consumed/expired payloads. Caption cache writes never
+publish an article.
 
 ## Generation reliability
 

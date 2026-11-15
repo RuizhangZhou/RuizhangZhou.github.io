@@ -90,6 +90,26 @@ class WriterSafetyTests(unittest.TestCase):
         with patch.object(self.blog, 'SUPADATA_API_KEY', 'test'), patch('requests.get', return_value=response):
             self.assertEqual(self.blog.fetch_transcript('video'), 'Hello world')
 
+    def test_writer_reuses_the_injected_persistent_cache_and_reports_hits(self):
+        from copy import deepcopy
+        from transcript_cache import TranscriptCache
+        from transcript_client import TranscriptResult
+        data = {}
+        store = Mock()
+        store.get.side_effect = lambda key: deepcopy(data.get(key))
+        store.put.side_effect = lambda key, value: data.__setitem__(key, deepcopy(value))
+        with patch.object(self.blog, 'TRANSCRIPT_CACHE', TranscriptCache(store)), \
+             patch.object(self.blog, 'TRANSCRIPT_DIAGNOSTICS', []), \
+             patch.object(self.blog, 'fetch_native_transcript',
+                          return_value=TranscriptResult('Reusable caption', 'ok', 1, 200)) as fetch:
+            self.assertEqual(self.blog.fetch_transcript('video'), 'Reusable caption')
+            self.blog.TRANSCRIPT_CACHE = TranscriptCache(store)
+            self.assertEqual(self.blog.fetch_transcript('video'), 'Reusable caption')
+            self.assertEqual(self.blog.TRANSCRIPT_DIAGNOSTICS[-1],
+                             {'provider': 'supadata', 'code': 'ok', 'attempts': 0,
+                              'http_status': 200, 'cached': True})
+        fetch.assert_called_once()
+
     def test_async_or_malformed_payload_is_not_treated_as_missing_captions(self):
         for payload in ({'jobId': 'pending'}, {'error': 'unknown'}, {'content': None}):
             response = Mock(status_code=200)

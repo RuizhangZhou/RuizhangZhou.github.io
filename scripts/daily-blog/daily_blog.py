@@ -131,6 +131,7 @@ MAX_DIGEST_CANDIDATES = int(CONFIG.get("max_digest_videos_per_post", 3))
 MAX_TRANSCRIPT_ATTEMPTS = int(CONFIG.get("max_transcript_attempts_per_run", 8))
 MAX_TRANSCRIPT_CHARS  = 60000  # per-video safety cap (~13k tokens), guards against outlier-length videos
 TRANSCRIPT_DIAGNOSTICS = []  # Fixed codes/counts only; never content, video IDs, or provider messages.
+TRANSCRIPT_CACHE = None  # The Actions runner supplies its private persistent cache.
 
 
 def fetch_playlist_videos() -> list[dict]:
@@ -196,7 +197,9 @@ def pick_candidate_videos(videos: list[dict], digested_ids: set[str]) -> list[di
 def fetch_transcript(video_id: str) -> str | None:
     """Keep unavailable captions separate from exhausted recovery of a service failure."""
     try:
-        result = fetch_native_transcript(video_id, SUPADATA_API_KEY)
+        fetch_native = lambda candidate: fetch_native_transcript(candidate, SUPADATA_API_KEY)
+        result = (TRANSCRIPT_CACHE.fetch(video_id, fetch_native) if TRANSCRIPT_CACHE is not None
+                  else fetch_native(video_id))
     except TranscriptError as exc:
         TRANSCRIPT_DIAGNOSTICS.append(exc.diagnostics())
         raise

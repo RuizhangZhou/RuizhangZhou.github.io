@@ -16,6 +16,7 @@ import sys
 
 import httpx
 from matrix_state import MatrixKV
+from transcript_cache import TranscriptCache, probe_private_cache
 from transcript_client import ERROR_CODES, OUTCOME_CODES, TranscriptError, collect_transcripts
 from text_limits import bluesky_text
 from bluesky_keys import daily_post_rkey
@@ -66,6 +67,8 @@ def transcript_summary():
                 safe[key] = value
         if isinstance(event.get('retryable'), bool):
             safe['retryable'] = event['retryable']
+        if event.get('cached') is True:
+            safe['cached'] = True
         result.append(safe)
     return result
 
@@ -117,14 +120,22 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--probe', action='store_true', help='Read-only service/auth probe; no article or post')
+    parser.add_argument('--cache-probe', action='store_true',
+                        help='Synthetic private-cache storage check; no Supadata, model or publication requests')
     args = parser.parse_args()
     logging.disable(logging.CRITICAL)
     for name in ('config', 'creators'):
         value = json.loads(os.environ['DAILY_BLOG_' + name.upper() + '_JSON'])
         (BASE / (name + '.json')).write_text(json.dumps(value, ensure_ascii=False))
     stage('private_state')
-    store = MatrixKV(os.environ['MATRIX_HOMESERVER'], os.environ['MATRIX_BOT_TOKEN'],
-                     'com.rickandzoey.dailyblog.v1')
+    namespace = ('com.rickandzoey.dailyblog.cache_probe.v1' if args.cache_probe
+                 else 'com.rickandzoey.dailyblog.v1')
+    store = MatrixKV(os.environ['MATRIX_HOMESERVER'], os.environ['MATRIX_BOT_TOKEN'], namespace)
+    if args.cache_probe:
+        stage('transcript_cache_probe')
+        probe_private_cache(store)
+        print('Private caption cache persistence, reuse and cleanup passed; no Supadata, model or publication requests.')
+        return
     if store.get('meta') != {'version': 1}:
         raise RuntimeError('Private blog state must be explicitly migrated first')
     for name in ('history', 'digested_videos', 'playlist_cache'):
@@ -153,6 +164,9 @@ def main():
     blog.TODAY = datetime.now(timezone.utc).date().isoformat()
     today = blog.TODAY
     posts = blog.load_history()
+    stage('transcript_cache')
+    blog.TRANSCRIPT_CACHE = TranscriptCache(store, readonly=args.dry_run)
+    blog.TRANSCRIPT_CACHE.prune(blog.load_digested_ids())
     if any(post.get('date') == today for post in posts):
         print('Today already published according to migrated history; skipped safely.')
         return
@@ -234,6 +248,8 @@ def main():
     posts.insert(0, {'date': today, 'title': record['title'], 'domain': record['domain'],
                      'url': blog_url, 'used_video_ids': record['used_ids']})
     store.put('history', {'posts': posts[:blog.MAX_HISTORY_KEPT]})
+    stage('transcript_cache_cleanup')
+    blog.TRANSCRIPT_CACHE.prune(digested)
     print('Publication confirmed: GitHub issue, Bluesky, Matrix text and private HTML; history checkpointed.')
 
 

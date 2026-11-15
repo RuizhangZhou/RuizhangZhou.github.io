@@ -1,33 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ruizhangzhou.github.io/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://rick-zhou.com/</loc>
   </url>
   <url>
-    <loc>https://ruizhangzhou.github.io/blog.html</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <loc>https://rick-zhou.com/de/</loc>
   </url>
   <url>
-    <loc>https://ruizhangzhou.github.io/ml-ai-engineer.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://rick-zhou.com/blog.html</loc>
   </url>
   <url>
-    <loc>https://ruizhangzhou.github.io/fullstack-engineer.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://rick-zhou.com/ml-ai-engineer.html</loc>
   </url>
   <url>
-    <loc>https://ruizhangzhou.github.io/data-engineer.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://rick-zhou.com/fullstack-engineer.html</loc>
   </url>
   <url>
-    <loc>https://ruizhangzhou.github.io/ml-research.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://rick-zhou.com/data-engineer.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/ml-research.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/notes/aufgaben-statt-modelle.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/notes/lange-besprechungen.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/notes/long-meeting-queues.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/notes/route-the-task.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/notes/streaming-retries.html</loc>
+  </url>
+  <url>
+    <loc>https://rick-zhou.com/notes/streaming-wiederholungen.html</loc>
   </url>
 </urlset>

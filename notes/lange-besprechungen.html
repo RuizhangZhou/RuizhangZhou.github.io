@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      Lange Besprechungen sind auch ein Warteschlangenproblem — Ruizhang Zhou
+    </title>
+    <meta
+      name="description"
+      content="Menschen sprechen weiter, während Anfragen noch verarbeitet werden. Ein Untertitelwerkzeug muss mit diesem Unterschied umgehen."
+    />
+    <link
+      rel="canonical"
+      href="https://rick-zhou.com/notes/lange-besprechungen.html"
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="icon" href="/assets/portfolio/favicon.svg" />
+    <script src="/assets/portfolio/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/de/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Oder einfach Rick.</span></span
+          ></a
+        >
+
+        <nav id="site-navigation" class="site-nav" aria-label="Hauptnavigation">
+          <a href="/de/#work">Projekte</a><a href="/de/#approach">Arbeitsweise</a
+          ><a href="/de/#about">Über mich</a><a href="/de/#notes">Notizen</a>
+        </nav>
+
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/notes/long-meeting-queues.html"
+            lang="en"
+            aria-label="Read in English"
+            >EN</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Dunkles Design einschalten"
+            aria-pressed="false"
+          >
+            <svg
+              viewbox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z"></path>
+            </svg></button
+          ><a class="nav-contact" href="/de/#contact"
+            >Kontakt <span aria-hidden="true">↗</span></a
+          >
+        </div>
+
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Navigation öffnen"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main" class="reading shell">
+      <a class="back-link" href="/de/#notes">← Zurück zu den Notizen</a>
+      <article>
+        <p class="eyebrow">TECHNISCHE NOTIZEN</p>
+        <h1>Lange Besprechungen sind auch ein Warteschlangenproblem</h1>
+        <div class="prose">
+          <p>
+            Eine kurze Spracherkennungsdemo wirkt übersichtlich: Audio
+            aufnehmen, transkribieren, Text an ein Sprachmodell senden und das
+            Ergebnis anzeigen. In einem längeren Gespräch kommt der nächste
+            Abschnitt an, bevor diese Folge fertig ist.
+          </p>
+          <h2>Menschen warten nicht auf die API</h2>
+          <p>
+            Wenn jeder neue Abschnitt eine eigene Anfrage startet, kann sich
+            Arbeit aufstauen. Eine feste Warteschlangenobergrenze führt zu einer
+            anderen Frage: Was passiert mit den Wörtern jenseits der Grenze?
+            Verzögerung, Speicherbedarf, Anfragevolumen und verlorener Kontext
+            hängen zusammen.
+          </p>
+          <p>
+            Meine Änderungen an TalkEcho verwenden einen aktiven Audiobatch und
+            einen wartenden Batch, der neue Abschnitte aufnehmen kann. Wenn der
+            wartende Batch aktiv wird, werden seine Transkripte zu einer
+            KI-Anfrage zusammengefasst. So soll die Verarbeitung aufholen, ohne
+            für jeden neuen Abschnitt eine eigene Anfrage anzulegen.
+          </p>
+          <h2>Wiederholungen brauchen einen Grund</h2>
+          <p>
+            Ein vorübergehender Verbindungsfehler ist etwas anderes als ein
+            ungültiger API-Schlüssel. Das Projekt wiederholt vorübergehende
+            Spracherkennungsfehler einmal und begrenzt die Laufzeit von
+            Anfragen. Beim KI-Streaming gibt es einen neuen Versuch nur, wenn
+            noch kein Antworttext erschienen ist.
+          </p>
+          <p>
+            Diese Grenzen sollen das Werkzeug auch unter Last verständlich
+            halten. Untertitel sind hilfreich, wenn sie das Folgen eines
+            Gesprächs erleichtern. Die interne Warteschlange sollte nicht zu
+            einer zusätzlichen Aufgabe werden.
+          </p>
+          <p>
+            TalkEcho ist mein persönlicher Fork von Pluely. Das ursprüngliche
+            Projekt liefert die Grundlage; das öffentliche Repository nennt die
+            ursprünglichen Autoren und dokumentiert die Arbeit an
+            Windows-Abläufen, Diktat und Anfrageverarbeitung.
+          </p>
+          <p>
+            Implementierungskontext:
+            <a
+              href="https://github.com/RuizhangZhou/talkecho#meeting-request-resilience"
+              >Robuste Besprechungsanfragen in TalkEcho</a
+            >.
+          </p>
+        </div>
+        <p class="editorial-note">Mit KI-Unterstützung aus den öffentlichen Projektbeschreibungen für dieses Portfolio aufbereitet.</p>
+      </article>
+    </main>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/de/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Deutschland. Neugierig aus Überzeugung.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note"
+        >Mit Sorgfalt entwickelt. © 2026 Ruizhang Zhou</span
+      >
+    </footer>
+  </body>
+</html>

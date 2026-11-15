@@ -1,396 +1,807 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ruizhang Zhou – Applied AI / AI Platform Engineer</title>
-
-    <!-- SEO: description shown in Google snippets -->
-    <meta name="description" content="Ruizhang Zhou is an applied AI and AI platform engineer working on production LLM systems, OpenAI-compatible APIs, usage metering, and backend infrastructure at RWTH IT Center." />
+    <meta name="theme-color" content="#faf8f3" />
+    <title>Ruizhang (Rick) Zhou — Applied AI & Platform Engineering</title>
+    <meta
+      name="description"
+      content="Ruizhang (Rick) Zhou is a software engineer working on AI platforms at RWTH IT Center. Explore real projects, engineering decisions, research and the person behind the work."
+    />
     <meta name="author" content="Ruizhang Zhou" />
-    <link rel="canonical" href="https://ruizhangzhou.github.io/" />
-    <meta name="google-site-verification" content="w5nK5EY_xRBn9Dah0-q449nI172iED7ZARUN4QjwETI" />
-
-    <!-- Open Graph (social sharing, Bing, some AI crawlers) -->
+    <meta
+      name="google-site-verification"
+      content="w5nK5EY_xRBn9Dah0-q449nI172iED7ZARUN4QjwETI"
+    />
+    <link rel="canonical" href="https://rick-zhou.com/" />
+    <link rel="alternate" hreflang="en" href="https://rick-zhou.com/" />
+    <link rel="alternate" hreflang="de" href="https://rick-zhou.com/de/" />
+    <link rel="alternate" hreflang="x-default" href="https://rick-zhou.com/" />
     <meta property="og:type" content="profile" />
-    <meta property="og:title" content="Ruizhang Zhou – Applied AI / AI Platform Engineer" />
-    <meta property="og:description" content="Production LLM systems, backend and infrastructure, and ML engineering. Explore AI platform work and open-source projects." />
-    <meta property="og:url" content="https://ruizhangzhou.github.io/" />
-    <meta property="og:image" content="https://ruizhangzhou.github.io/avatar.jpg" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="profile:first_name" content="Ruizhang" />
-    <meta property="profile:last_name" content="Zhou" />
-
-    <!-- Twitter / X card -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Ruizhang Zhou – Applied AI / AI Platform Engineer" />
-    <meta name="twitter:description" content="Production LLM systems, backend and infrastructure, and ML engineering." />
-    <meta name="twitter:image" content="https://ruizhangzhou.github.io/avatar.jpg" />
-
-    <!-- Structured data: Person schema (used by Google Knowledge Graph and AI search) -->
+    <meta
+      property="og:title"
+      content="Ruizhang (Rick) Zhou — Human curiosity. Real-world AI."
+    />
+    <meta
+      property="og:description"
+      content="Applied AI, platform engineering and a curiosity that connects languages, research and useful software."
+    />
+    <meta property="og:url" content="https://rick-zhou.com/" />
+    <meta property="og:image" content="https://rick-zhou.com/avatar.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link
+      rel="icon"
+      href="/assets/portfolio/favicon.svg"
+      type="image/svg+xml"
+    />
+    <link
+      rel="preload"
+      href="/assets/portfolio/manrope-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <script src="/assets/portfolio/site.js" defer></script>
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Ruizhang Zhou",
-      "url": "https://ruizhangzhou.github.io/",
-      "image": "https://ruizhangzhou.github.io/avatar.jpg",
-      "jobTitle": "AI Platform Engineer",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "RWTH IT Center",
-        "url": "https://www.itc.rwth-aachen.de/"
-      },
-      "alumniOf": [
-        {
-          "@type": "CollegeOrUniversity",
-          "name": "RWTH Aachen University",
-          "url": "https://www.rwth-aachen.de/"
-        },
-        {
-          "@type": "CollegeOrUniversity",
-          "name": "Tongji University",
-          "url": "https://www.tongji.edu.cn/"
-        }
-      ],
-      "description": "Applied AI and AI platform engineer working on production LLM systems, OpenAI-compatible APIs, usage metering, and backend infrastructure at RWTH IT Center.",
-      "knowsAbout": [
-        "Applied AI", "AI Platforms", "Large Language Models",
-        "OpenAI-compatible APIs", "Usage Metering", "Backend Engineering",
-        "Machine Learning", "Python", "C#", ".NET", "Vue.js", "PyTorch"
-      ],
-      "sameAs": [
-        "https://github.com/RuizhangZhou",
-        "https://www.linkedin.com/in/ruizhang-zhou/",
-        "https://bsky.app/profile/rickzrz.bsky.social"
-      ],
-      "email": "ruizhang.zhou@mail.com"
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Ruizhang Zhou",
+        "alternateName": "Rick Zhou",
+        "url": "https://rick-zhou.com/",
+        "image": "https://rick-zhou.com/avatar.jpg",
+        "jobTitle": "Software Engineer (AI Platform)",
+        "worksFor": { "@type": "Organization", "name": "RWTH IT Center" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "RWTH Aachen University" },
+          { "@type": "CollegeOrUniversity", "name": "Tongji University" }
+        ],
+        "sameAs": [
+          "https://github.com/RuizhangZhou",
+          "https://www.linkedin.com/in/ruizhang-zhou/"
+        ]
+      }
     </script>
-    <style>
-      body {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
-          Arial, sans-serif;
-        margin: 0;
-        color: #111;
-      }
-      header {
-        padding: 48px 20px;
-        background: #f6f7fb;
-      }
-      .wrap {
-        max-width: 920px;
-        margin: 0 auto;
-      }
-      main.wrap {
-        box-sizing: border-box;
-        padding: 0 16px;
-      }
-      .profile {
-        display: grid;
-        grid-template-columns: 120px 1fr;
-        gap: 20px;
-        align-items: center;
-      }
-      .profile img {
-        border-radius: 50%;
-        object-fit: cover;
-        border: 1px solid #e7e7e7;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        width: 120px;
-        height: 120px;
-      }
-      @media (max-width: 600px) {
-        .profile {
-          grid-template-columns: 1fr;
-          justify-items: center;
-          text-align: center;
-        }
-      }
-      h1 {
-        margin: 0 0 6px 0;
-        font-size: 32px;
-      }
-      h2 {
-        font-size: 20px;
-        margin-top: 32px;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-      }
-      @media (max-width: 800px) {
-        .grid {
-          grid-template-columns: 1fr;
-        }
-      }
-      a {
-        color: #0a66c2;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-      .card {
-        border: 1px solid #e7e7e7;
-        border-radius: 14px;
-        padding: 16px;
-        background: white;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-      }
-      footer {
-        padding: 24px 20px;
-        color: #666;
-      }
-      .pill {
-        display: inline-block;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #eef3f8;
-        font-size: 12px;
-        margin-right: 6px;
-      }
-      .btn {
-        display: inline-block;
-        padding: 10px 14px;
-        border-radius: 10px;
-        background: #0a66c2;
-        color: white;
-        font-weight: 600;
-      }
-      .btn:visited {
-        color: white;
-      }
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      .contact-links {
-        overflow-wrap: anywhere;
-        line-height: 1.6;
-      }
-      .muted {
-        color: #666;
-        font-size: 14px;
-      }
-      .headline {
-        font-size: 22px;
-        font-weight: 700;
-        margin: 4px 0;
-      }
-      .tagline {
-        color: #555;
-        margin: 0 0 16px;
-      }
-      ul {
-        margin-top: 8px;
-      }
-      code {
-        background: #f3f3f3;
-        padding: 2px 6px;
-        border-radius: 6px;
-      }
-      .role-card {
-        border: 1px solid #e7e7e7;
-        border-radius: 14px;
-        padding: 24px;
-        background: white;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-        text-decoration: none;
-        color: #111;
-        display: flex;
-        flex-direction: column;
-        transition: all 0.2s ease;
-      }
-      .role-card:hover {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        transform: translateY(-4px);
-        border-color: #0a66c2;
-      }
-      .role-icon {
-        font-size: 48px;
-        margin-bottom: 16px;
-      }
-      .role-card h3 {
-        margin: 0 0 12px 0;
-        font-size: 22px;
-        color: #111;
-      }
-      .role-desc {
-        color: #666;
-        margin-bottom: 16px;
-        flex-grow: 1;
-        line-height: 1.5;
-      }
-      .role-tech {
-        margin-bottom: 16px;
-      }
-      .role-tech .pill {
-        font-size: 11px;
-        padding: 4px 8px;
-      }
-      .role-btn {
-        color: #0a66c2;
-        font-weight: 600;
-        margin-top: auto;
-      }
-      .role-card:hover .role-btn {
-        text-decoration: underline;
-      }
-      .project-label {
-        color: #0a66c2;
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 12px;
-      }
-      .supporting-links a {
-        display: inline-block;
-        margin: 0 18px 8px 0;
-      }
-    </style>
   </head>
   <body>
-    <header>
-      <div class="wrap profile">
-        <img
-          src="./avatar.jpg"
-          alt="Ruizhang Zhou"
-          width="120"
-          height="120"
-          loading="lazy"
-        />
-        <div>
-          <h1>Ruizhang Zhou</h1>
-          <p class="headline">Applied AI / AI Platform Engineer</p>
-          <p class="tagline">Production LLM Systems · Backend &amp; Infrastructure · ML Engineering</p>
-          <p>
-            <span class="pill">C#/.NET</span>
-            <span class="pill">Python</span>
-            <span class="pill">OpenAI-compatible APIs</span>
-            <span class="pill">LLM Infrastructure</span>
-            <span class="pill">Vue 3</span>
-            <span class="pill">PyTorch</span>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Rick, for short.</span></span
+          ></a
+        >
+        <nav id="site-navigation" class="site-nav" aria-label="Main navigation">
+          <a href="#work">Work</a><a href="#approach">Approach</a
+          ><a href="#about">About</a><a href="#notes">Notebook</a>
+        </nav>
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/de/"
+            lang="de"
+            aria-label="Auf Deutsch lesen"
+            >DE</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Use dark theme"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z" />
+            </svg></button
+          ><a class="nav-contact" href="#contact"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main">
+      <section class="hero shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="status-dot" aria-hidden="true"></span> APPLIED AI &
+            PLATFORM ENGINEERING
           </p>
-          <div class="actions">
-            <a class="btn" href="./Resume_EN.pdf">Download CV (EN, PDF)</a>
-            <a class="btn" href="./Lebenslauf_DE.pdf">Download CV (DE, PDF)</a>
-            <a class="btn" href="./blog.html" style="background: #28a745"
-              >Blog</a
-            >
+          <h1 id="hero-title">Human curiosity.<br /><em>Real-world AI.</em></h1>
+          <p class="hero-intro">
+            Hi, I’m <strong>Rick.</strong> I build useful AI systems, and care
+            about the people who use them.
+          </p>
+          <p class="hero-description">
+            At RWTH IT Center, I work on KI:connect: model APIs, backend
+            engineering and the details that make an AI platform work in
+            practice.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#work"
+              >Explore my work
+              <span class="arrow" aria-hidden="true">↘</span></a
+            ><a class="link-line" href="/Resume_EN.pdf">Read my CV ↗</a>
           </div>
-          <p class="muted contact-links">
-            Email:
-            <a href="mailto:ruizhang.zhou@mail.com">ruizhang.zhou@mail.com</a> |
-            GitHub: <a href="https://github.com/RuizhangZhou">RuizhangZhou</a> |
-            LinkedIn:
-            <a href="https://www.linkedin.com/in/ruizhang-zhou/"
-              >ruizhang-zhou</a
+          <p class="hero-location">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
             >
+              <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" />
+              <circle cx="12" cy="10" r="2.5" /></svg
+            >Aachen, Germany <span aria-hidden="true">·</span> Chinese roots. An
+            international outlook.
           </p>
         </div>
-      </div>
-    </header>
-
-    <main class="wrap">
-      <section class="card" style="margin-bottom: 24px">
-        <h2>About</h2>
-        <p>
-          I build applied AI systems that connect LLM capabilities to reliable products.
-          At RWTH IT Center, I work on a multi-tenant AI platform spanning model APIs,
-          streaming, usage and cost metering, and backend operations.
-        </p>
-        <p>
-          I also investigate deployment and authentication failures, validate
-          provider behavior, and work through web-search and RAG integration
-          requirements. This combines C#/.NET engineering with ML experience.
-        </p>
-        <p><strong>Education:</strong></p>
-        <ul style="margin-top: 8px;">
-          <li><strong>M.Sc. Computer Science</strong> (AI/ML focus) - RWTH Aachen University<br>
-              Master's Thesis: <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI">AI-Based Generation of Testing Scenarios for Motion Planners on Connected and Automated Vehicles</a></li>
-          <li><strong>B.Sc. Computer Science</strong> - RWTH Aachen University</li>
-          <li><strong>B.A. German Language and Literature</strong> - Tongji University</li>
-        </ul>
-
+        <figure class="hero-visual">
+          <div class="hero-photo">
+            <img
+              src="/avatar.jpg"
+              width="1772"
+              height="1772"
+              alt="Ruizhang Zhou"
+              fetchpriority="high"
+            />
+          </div>
+          <span class="hero-spark" aria-hidden="true">✳</span>
+          <div class="portrait-note">
+            <span aria-hidden="true">↗</span>
+            <div>
+              <small>CURRENTLY BUILDING</small
+              ><strong>KI:connect · RWTH IT Center</strong>
+            </div>
+          </div>
+          <figcaption class="portrait-caption">
+            Engineer. Always a learner.
+          </figcaption>
+        </figure>
       </section>
 
-      <h2 style="margin-bottom: 16px">Selected Work</h2>
-      <div class="grid">
-        <a href="./ml-ai-engineer.html" class="role-card">
-          <div class="project-label">PROFESSIONAL · RWTH IT CENTER</div>
-          <h3>KI:connect AI Platform</h3>
-          <p class="role-desc">
-            Multi-tenant LLM platform work across APIs, usage metering,
-            agent-tool and search integration reviews, RAG, and service operations.
-          </p>
-          <div class="role-tech">
-            <span class="pill">.NET</span>
-            <span class="pill">LLM APIs</span>
-            <span class="pill">Metering</span>
+      <div class="credentials shell" aria-label="Background at a glance">
+        <div class="credential">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.25"
+            aria-hidden="true"
+          >
+            <rect x="3" y="5" width="18" height="14" rx="3" />
+            <path d="m9 9-3 3 3 3m6-6 3 3-3 3" />
+          </svg>
+          <div>
+            <strong>Engineering AI platforms</strong
+            ><span>KI:connect / RWTH IT Center</span>
           </div>
-          <span class="role-btn">Explore platform work →</span>
-        </a>
-
-        <a href="https://github.com/RuizhangZhou/talkecho" class="role-card">
-          <div class="project-label">PERSONAL FORK · ACTIVE DEVELOPMENT</div>
-          <h3>TalkEcho</h3>
-          <p class="role-desc">
-            Meeting captions and dictation with configurable STT/LLM providers;
-            my changes cover request resilience, Windows workflows, and credentials.
-          </p>
-          <div class="role-tech">
-            <span class="pill">TypeScript</span>
-            <span class="pill">Tauri</span>
-            <span class="pill">Speech-to-Text</span>
+        </div>
+        <div class="credential">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.25"
+            aria-hidden="true"
+          >
+            <path d="m2 8 10-5 10 5-10 5L2 8Zm4 3v6l6 3 6-3v-6m4-3v8" />
+          </svg>
+          <div>
+            <strong>M.Sc. Computer Science</strong
+            ><span>RWTH Aachen University</span>
           </div>
-          <span class="role-btn">View repository →</span>
-        </a>
-
-        <a href="https://github.com/RuizhangZhou/llm-gateway" class="role-card">
-          <div class="project-label">OPEN SOURCE · PYTHON</div>
-          <h3>LLM Gateway</h3>
-          <p class="role-desc">
-            Task-aware model routing with live catalog refresh, provider fallback,
-            and careful handling of failures during streaming.
-          </p>
-          <div class="role-tech">
-            <span class="pill">Python</span>
-            <span class="pill">Routing</span>
-            <span class="pill">Reliability</span>
+        </div>
+        <div class="credential">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.25"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18Z" />
+          </svg>
+          <div>
+            <strong>From languages to systems</strong
+            ><span>Shanghai → Aachen</span>
           </div>
-          <span class="role-btn">View repository →</span>
-        </a>
-
-        <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI" class="role-card">
-          <div class="project-label">MASTER'S THESIS · RWTH AACHEN</div>
-          <h3>Generative Traffic Scenarios</h3>
-          <p class="role-desc">
-            Time-series generative modeling and trajectory data processing for
-            autonomous-vehicle testing research.
-          </p>
-          <div class="role-tech">
-            <span class="pill">PyTorch</span>
-            <span class="pill">TimeGAN</span>
-            <span class="pill">Diffusion-TS</span>
-          </div>
-          <span class="role-btn">View thesis project →</span>
-        </a>
+        </div>
       </div>
 
-      <section class="card" style="margin: 24px 0">
-        <h2>More Experience</h2>
-        <p class="supporting-links">
-          <a href="./fullstack-engineer.html">Backend &amp; Full-stack Engineering →</a>
-          <a href="./data-engineer.html">Data Engineering →</a>
-          <a href="./ml-research.html">ML Research →</a>
-        </p>
+      <section id="work" class="section shell" aria-labelledby="work-title">
+        <div class="section-heading" data-reveal>
+          <div>
+            <p class="eyebrow">01 / SELECTED WORK</p>
+            <h2 id="work-title">
+              Ideas are a start.<br /><em>Making them useful is the work.</em>
+            </h2>
+          </div>
+          <p>
+            Real projects, clear contributions, and a few of the decisions
+            behind them.
+          </p>
+        </div>
+        <article class="featured-project" data-reveal>
+          <div class="featured-copy">
+            <p class="eyebrow">PROFESSIONAL WORK · TEAM CONTRIBUTION</p>
+            <h3>AI that works<br /><em>across a platform.</em></h3>
+            <p class="project-subtitle">KI:connect / RWTH IT Center</p>
+            <p class="featured-description">
+              Connecting model capabilities to real users takes APIs, usage
+              metering, access controls and careful handling of failure. That is
+              where much of my work happens.
+            </p>
+            <div class="tags">
+              <span>C# / .NET</span><span>LLM APIs</span><span>Vue 3</span
+              ><span>Operations</span>
+            </div>
+            <div class="project-links">
+              <button class="case-button" data-case="case-platform" hidden>
+                Inside my contribution</button
+              ><a href="/ml-ai-engineer.html">Detailed experience ↗</a>
+            </div>
+          </div>
+          <div
+            class="featured-art"
+            role="img"
+            aria-label="Conceptual illustration: applications connect through a shared AI platform to several model providers."
+          >
+            <div class="canvas-bar">
+              <span class="window-dots" aria-hidden="true"
+                ><i></i><i></i><i></i></span
+              ><span>THE SPACE BETWEEN MODEL & PRODUCT</span>
+            </div>
+            <div class="platform-map">
+              <div class="map-users">
+                <span>People</span><span>Applications</span><span>Tools</span>
+              </div>
+              <div class="map-line" aria-hidden="true"></div>
+              <div class="map-core">
+                <strong>One shared AI platform</strong
+                ><span>Streaming · Access · Usage</span>
+              </div>
+              <div class="map-line" aria-hidden="true"></div>
+              <div class="map-models">
+                <span>Provider A</span><span>Provider B</span
+                ><span>Provider C</span>
+              </div>
+            </div>
+            <div class="canvas-caption">
+              <span>Conceptual illustration</span
+              ><span>Different models. A coherent experience. ↗</span>
+            </div>
+          </div>
+        </article>
+        <div class="project-grid">
+          <article class="project-card" data-reveal>
+            <div class="project-art voice-art" aria-hidden="true">
+              <div class="caption-window">
+                <div class="caption-window-top">
+                  <span>TalkEcho / meeting captions</span><i></i>
+                </div>
+                <div class="waveform">
+                  <span style="--height: 15px; --delay: 0s"></span
+                  ><span style="--height: 23px; --delay: 0.12s"></span
+                  ><span style="--height: 39px; --delay: 0.24s"></span
+                  ><span style="--height: 27px; --delay: 0.36s"></span
+                  ><span style="--height: 47px; --delay: 0.48s"></span
+                  ><span style="--height: 58px; --delay: 0.6s"></span
+                  ><span style="--height: 34px; --delay: 0.72s"></span
+                  ><span style="--height: 48px; --delay: 0.84s"></span
+                  ><span style="--height: 66px; --delay: 0.96s"></span
+                  ><span style="--height: 53px; --delay: 1.08s"></span
+                  ><span style="--height: 37px; --delay: 1.2s"></span
+                  ><span
+                    style="--height: 56px; --delay: 1.3199999999999998s"
+                  ></span
+                  ><span style="--height: 42px; --delay: 1.44s"></span
+                  ><span style="--height: 25px; --delay: 1.56s"></span
+                  ><span style="--height: 44px; --delay: 1.68s"></span
+                  ><span
+                    style="--height: 59px; --delay: 1.7999999999999998s"
+                  ></span
+                  ><span style="--height: 37px; --delay: 1.92s"></span
+                  ><span style="--height: 21px; --delay: 2.04s"></span
+                  ><span style="--height: 38px; --delay: 2.16s"></span
+                  ><span style="--height: 25px; --delay: 2.28s"></span
+                  ><span style="--height: 13px; --delay: 2.4s"></span>
+                </div>
+                <div class="caption-text">
+                  <small>DE</small> Verstehen. Verbinden. Weiterdenken.
+                </div>
+                <div class="caption-text">
+                  <small>EN</small> Understand. Connect. Think further.
+                </div>
+              </div>
+              <span class="art-footnote">INTERFACE ILLUSTRATION</span>
+            </div>
+            <div class="project-copy">
+              <p class="eyebrow">PERSONAL PROJECT · COMMUNITY FORK</p>
+              <h3>TalkEcho <span aria-hidden="true">↗</span></h3>
+              <p>
+                Meeting captions and dictation for a multilingual working day.
+                My changes focus on Windows workflows, request resilience and
+                provider-key handling.
+              </p>
+              <div class="tags">
+                <span>TypeScript</span><span>Tauri / Rust</span
+                ><span>Speech-to-text</span>
+              </div>
+              <div class="project-links">
+                <button class="case-button" data-case="case-talkecho" hidden>
+                  What I changed</button
+                ><a href="https://github.com/RuizhangZhou/talkecho">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card" data-reveal>
+            <div class="project-art gateway-art" aria-hidden="true">
+              <div class="route-preview">
+                <div class="route-task">task = “reasoning”</div>
+                <div class="route-item">
+                  <span>01</span><strong>Primary model</strong><span>429</span>
+                </div>
+                <div class="route-item active">
+                  <span>02</span><strong>Next provider</strong><span>↗</span>
+                </div>
+                <div class="route-item">
+                  <span>03</span><strong>Fallback</strong><span>···</span>
+                </div>
+              </div>
+              <span class="art-footnote">ROUTING ILLUSTRATION</span>
+            </div>
+            <div class="project-copy">
+              <p class="eyebrow">INDEPENDENT PROJECT · OPEN SOURCE</p>
+              <h3>LLM Gateway <span aria-hidden="true">↗</span></h3>
+              <p>
+                Choose the job, not a hard-coded model. Task-aware routing with
+                model discovery, provider fallback and a deliberate boundary
+                around streaming retries.
+              </p>
+              <div class="tags">
+                <span>Python</span><span>Model routing</span
+                ><span>Reliability</span>
+              </div>
+              <div class="project-links">
+                <button class="case-button" data-case="case-gateway" hidden>
+                  The key decision</button
+                ><a href="https://github.com/RuizhangZhou/llm-gateway"
+                  >GitHub ↗</a
+                >
+              </div>
+            </div>
+          </article>
+          <article class="thesis-card" data-reveal>
+            <div class="thesis-copy">
+              <p class="eyebrow">MASTER’S THESIS · RWTH AACHEN</p>
+              <h3>Learning to generate<br />traffic scenarios.</h3>
+              <p>
+                TimeGAN, diffusion models and real-world trajectory datasets for
+                research into autonomous-vehicle testing. The research
+                foundation behind my applied AI work.
+              </p>
+              <div class="tags">
+                <span>PyTorch</span><span>TimeGAN</span
+                ><span>Diffusion-TS</span>
+              </div>
+              <div class="project-links">
+                <a href="https://github.com/RuizhangZhou/ScenarioGenerationAI"
+                  >Explore the research ↗</a
+                ><a href="/ml-research.html">Research experience ↗</a>
+              </div>
+            </div>
+            <div
+              class="trajectory-art"
+              role="img"
+              aria-label="Decorative illustration of vehicle trajectories, not measured research results."
+            >
+              <svg
+                viewBox="0 0 500 300"
+                preserveAspectRatio="xMidYMid slice"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M-20 45C180 45 170 285 520 285M-20 85C160 85 150 325 520 325M-20 110C200 110 160-30 520-30M-20 160C230 160 170 25 520 25"
+                  stroke="#d1cdbb"
+                  stroke-width="32"
+                />
+                <path
+                  d="M-20 65C175 65 160 305 520 305M-20 135C200 135 170-5 520-5"
+                  stroke="#faf7ec"
+                  stroke-width="1.5"
+                  stroke-dasharray="9 10"
+                />
+                <path
+                  class="trajectory"
+                  d="M-20 65C175 65 160 305 520 305"
+                  stroke="#cb7953"
+                  stroke-width="3"
+                />
+                <path
+                  class="trajectory"
+                  d="M-20 135C200 135 170-5 520-5"
+                  stroke="#798c56"
+                  stroke-width="3"
+                />
+                <circle cx="165" cy="164" r="6" fill="#cb7953" />
+                <circle cx="306" cy="49" r="6" fill="#798c56" /></svg
+              ><span class="art-footnote">TRAJECTORY ILLUSTRATION</span>
+            </div>
+          </article>
+        </div>
+        <div class="supporting-links">
+          <span>More experience:</span
+          ><a href="/fullstack-engineer.html">Backend & full-stack ↗</a
+          ><a href="/data-engineer.html">Data engineering ↗</a
+          ><a href="/ml-research.html">ML research ↗</a>
+        </div>
+      </section>
+
+      <section id="approach" class="approach" aria-labelledby="approach-title">
+        <div class="shell">
+          <div class="section-heading" data-reveal>
+            <div>
+              <p class="eyebrow">02 / HOW I WORK</p>
+              <h2 id="approach-title">Care is in <em>the details.</em></h2>
+            </div>
+            <p>
+              Good engineering is a sequence of decisions you can explain, test
+              and stand behind.
+            </p>
+          </div>
+          <div class="approach-grid">
+            <article data-reveal>
+              <span class="approach-number">01.</span>
+              <h3>Start with the real problem.</h3>
+              <p>
+                What does someone need to do? What gets in their way? I want the
+                answer before choosing the model, framework or abstraction.
+              </p>
+            </article>
+            <article data-reveal>
+              <span class="approach-number">02.</span>
+              <h3>Make failure understandable.</h3>
+              <p>
+                A timeout, a broken stream and a wrong usage count are different
+                problems. I trace the path, reproduce what I can and keep
+                assumptions visible.
+              </p>
+            </article>
+            <article data-reveal>
+              <span class="approach-number">03.</span>
+              <h3>Leave something others can use.</h3>
+              <p>
+                Readable code, clear explanations and honest boundaries matter.
+                I care about the person using the software and the person
+                maintaining it next.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="about"
+        class="about section shell"
+        aria-labelledby="about-title"
+      >
+        <div class="about-heading" data-reveal>
+          <p class="eyebrow">03 / THE PERSON BEHIND THE WORK</p>
+          <h2 id="about-title">
+            Languages first.<br />Then code.<br /><em>Always curiosity.</em>
+          </h2>
+          <div class="about-small">
+            <span class="spark" aria-hidden="true">✳</span>
+            <p>
+              A route from Shanghai to Aachen, and from understanding language
+              to building systems.
+            </p>
+          </div>
+          <div class="interest-pills">
+            <span>Languages</span><span>Forecasting</span><span>Diving</span
+            ><span>Learning by building</span>
+          </div>
+        </div>
+        <div class="about-story" data-reveal>
+          <p class="lead">
+            My route into engineering started with languages. I studied German
+            language and literature at Tongji University before studying
+            computer science at RWTH Aachen.
+          </p>
+          <p>
+            That background still shapes what interests me: how people
+            understand things, where communication breaks down and how a useful
+            tool can close the gap. AI brings those questions into my daily
+            engineering work.
+          </p>
+          <p>
+            Outside work, I’m interested in forecasting, learning languages and
+            diving. Different ways to stay curious, think carefully and pay
+            attention.
+          </p>
+          <div class="timeline">
+            <div class="timeline-row">
+              <span>2024 — now</span>
+              <div>
+                <strong>RWTH IT Center</strong>
+                <p>Software engineering · KI:connect AI platform</p>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <span>2022 — 2024</span>
+              <div>
+                <strong>RWTH Aachen University</strong>
+                <p>M.Sc. Computer Science</p>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <span>2019 — 2022</span>
+              <div>
+                <strong>RWTH Aachen University</strong>
+                <p>B.Sc. Computer Science</p>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <span>2014 — 2018</span>
+              <div>
+                <strong>Tongji University</strong>
+                <p>B.A. German Language and Literature</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section shell" aria-labelledby="playground-title">
+        <div class="section-heading" data-reveal>
+          <div>
+            <p class="eyebrow">A SMALL ENGINEERING PLAYGROUND</p>
+            <h2 id="playground-title">
+              One choice.<br /><em>A different experience.</em>
+            </h2>
+          </div>
+          <p>A tiny example of the decisions behind the projects.</p>
+        </div>
+        <div class="playground" data-reveal>
+          <div class="playground-copy">
+            <p class="eyebrow">TRY THE ROUTING LOGIC</p>
+            <h3>When should an AI request switch providers?</h3>
+            <p>
+              Before an answer starts, a fallback can help. After the first text
+              appears, silently switching models could mix two different
+              answers.
+            </p>
+            <div
+              class="mode-buttons"
+              role="group"
+              aria-label="Select when the failure happens"
+            >
+              <button data-routing-mode="before" aria-pressed="true">
+                Before the first text</button
+              ><button data-routing-mode="after" aria-pressed="false">
+                After output starts
+              </button>
+            </div>
+            <button class="demo-button" data-routing-demo>
+              Run an example ↗
+            </button>
+            <p class="demo-label">
+              Interactive illustration. No API requests or personal data.
+            </p>
+          </div>
+          <div class="playground-visual">
+            <div class="routing-step" data-route="primary">
+              <span>01</span><strong>Primary provider</strong>
+            </div>
+            <div class="routing-step" data-route="fallback">
+              <span>02</span><strong>Next provider</strong>
+            </div>
+            <p
+              class="routing-status"
+              data-routing-status
+              role="status"
+              aria-live="polite"
+            >
+              Ready for an example.
+            </p>
+            <a
+              class="link-line"
+              href="https://github.com/RuizhangZhou/llm-gateway#routing-policy"
+              >See the actual routing policy ↗</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="notes"
+        class="notes section shell"
+        aria-labelledby="notes-title"
+      >
+        <div class="section-heading" data-reveal>
+          <div>
+            <p class="eyebrow">04 / FROM THE NOTEBOOK</p>
+            <h2 id="notes-title">
+              Things worth<br /><em>thinking through.</em>
+            </h2>
+          </div>
+          <a class="link-line" href="/blog.html">Browse the full notebook ↗</a>
+        </div>
+        <div class="notes-list" data-reveal>
+          <a class="note-link" href="/notes/streaming-retries.html"
+            ><span>ENGINEERING NOTE</span>
+            <h3>Why a streaming retry needs a boundary</h3>
+            <span aria-hidden="true">↗</span></a
+          ><a class="note-link" href="/notes/long-meeting-queues.html"
+            ><span>PRODUCT NOTE</span>
+            <h3>Long meetings are a queueing problem, too</h3>
+            <span aria-hidden="true">↗</span></a
+          ><a class="note-link" href="/notes/route-the-task.html"
+            ><span>SYSTEMS NOTE</span>
+            <h3>Choose the task before you choose the model</h3>
+            <span aria-hidden="true">↗</span></a
+          >
+        </div>
+      </section>
+
+      <section id="contact" class="contact" aria-labelledby="contact-title">
+        <div class="shell">
+          <p class="eyebrow">A GOOD CONVERSATION IS A START</p>
+          <h2 id="contact-title">
+            What are you<br /><em>trying to build?</em>
+          </h2>
+          <div class="contact-bottom">
+            <p>
+              If your team is working through a difficult AI engineering
+              problem, I’d be glad to hear about it.
+            </p>
+            <a class="contact-email" href="mailto:ruizhang.zhou@mail.com"
+              >ruizhang.zhou@mail.com <span aria-hidden="true">↗</span></a
+            >
+          </div>
+        </div>
       </section>
     </main>
-
-    <footer>
-      <div class="wrap">&copy; Ruizhang Zhou</div>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Germany. Curious by nature.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note">Built with care. © 2026 Ruizhang Zhou</span>
     </footer>
+    <dialog id="project-dialog" aria-labelledby="case-title">
+      <form method="dialog">
+        <button class="dialog-close" aria-label="Close project details">
+          ×
+        </button>
+      </form>
+      <div class="case-content" data-dialog-body></div>
+    </dialog>
+    <template id="case-platform"
+      ><p class="eyebrow">KI:CONNECT / TEAM CONTRIBUTION</p>
+      <h2 id="case-title">The work between<br />model and product.</h2>
+      <p>
+        I contribute to a multi-tenant AI platform at RWTH IT Center. My focus
+        spans provider integration, API behaviour, usage metering and service
+        diagnostics.
+      </p>
+      <h3>What I work on</h3>
+      <ul>
+        <li>
+          OpenAI-compatible Chat Completions and Responses APIs, including
+          streaming and provider-specific behaviour.
+        </li>
+        <li>
+          Token estimation, usage and cost metering, quotas and Vue-based
+          administration interfaces.
+        </li>
+        <li>
+          Web-search and retrieval integration reviews, including access and
+          authentication boundaries.
+        </li>
+        <li>
+          Investigating release, login and request failures across application
+          and infrastructure components.
+        </li>
+      </ul>
+      <h3>Why it matters</h3>
+      <p>
+        Useful AI platforms need consistent behaviour across providers and
+        enough evidence to understand failures. I contribute as part of the
+        platform team.
+      </p>
+      <p>
+        <a href="/ml-ai-engineer.html"
+          >Read the detailed public experience overview ↗</a
+        >
+      </p></template
+    >
+    <template id="case-talkecho"
+      ><p class="eyebrow">TALKECHO / PERSONAL COMMUNITY FORK</p>
+      <h2 id="case-title">A tool for a multilingual<br />working day.</h2>
+      <p>
+        TalkEcho builds on Pluely. My changes focus on making captions and
+        dictation work more reliably in everyday Windows workflows. The public
+        repository credits the original project and authors.
+      </p>
+      <h3>My contribution</h3>
+      <ul>
+        <li>
+          Dictation, hotkeys, system tray and window behaviour on Windows.
+        </li>
+        <li>
+          Coalescing pending audio batches instead of creating a separate
+          request for every new segment.
+        </li>
+        <li>
+          Timeouts, bounded retries and explicit handling of interrupted
+          streams.
+        </li>
+        <li>
+          Provider credentials stored through the operating system’s credential
+          store.
+        </li>
+      </ul>
+      <p>
+        <a href="https://github.com/RuizhangZhou/talkecho"
+          >Explore the source and upstream credits ↗</a
+        >
+      </p></template
+    >
+    <template id="case-gateway"
+      ><p class="eyebrow">LLM GATEWAY / INDEPENDENT PROJECT</p>
+      <h2 id="case-title">Route the work.<br />Keep the intent.</h2>
+      <p>
+        A caller chooses a task, and the routing policy selects from a refreshed
+        model catalogue. The project keeps the previous catalogue when discovery
+        fails and can fall back across providers.
+      </p>
+      <h3>A deliberate boundary</h3>
+      <p>
+        For streaming requests, failover stops being transparent once output
+        reaches the user. Switching models after that point could splice
+        together independently generated answers. The gateway therefore limits
+        automatic streaming failover to the period before the first output
+        chunk.
+      </p>
+      <h3>What this demonstrates</h3>
+      <p>
+        Task policy, availability, cost and response semantics need to work
+        together. The interactive example on this page illustrates that
+        boundary; the public repository contains the implementation.
+      </p>
+      <p>
+        <a href="https://github.com/RuizhangZhou/llm-gateway"
+          >Inspect the source and routing policy ↗</a
+        >
+      </p></template
+    >
   </body>
 </html>

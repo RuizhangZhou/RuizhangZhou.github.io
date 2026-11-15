@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Choose the task before you choose the model — Ruizhang Zhou</title>
+    <meta
+      name="description"
+      content="A model name is a changing dependency. The job an application needs done is a more useful starting point."
+    />
+    <link
+      rel="canonical"
+      href="https://rick-zhou.com/notes/route-the-task.html"
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="icon" href="/assets/portfolio/favicon.svg" />
+    <script src="/assets/portfolio/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Rick, for short.</span></span
+          ></a
+        >
+        <nav id="site-navigation" class="site-nav" aria-label="Main navigation">
+          <a href="/#work">Work</a><a href="/#approach">Approach</a
+          ><a href="/#about">About</a><a href="/#notes">Notebook</a>
+        </nav>
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/notes/aufgaben-statt-modelle.html"
+            lang="de"
+            aria-label="Auf Deutsch lesen"
+            >DE</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Use dark theme"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z" />
+            </svg></button
+          ><a class="nav-contact" href="/#contact"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main" class="reading shell">
+      <a class="back-link" href="/#notes">← Back to the notebook</a>
+      <article>
+        <p class="eyebrow">ENGINEERING NOTES</p>
+        <h1>Choose the task before you choose the model</h1>
+        <div class="prose">
+          <p>
+            A summary, a structured classification and a difficult technical
+            analysis have different needs. Putting the same model name into
+            every caller makes those differences harder to manage.
+          </p>
+          <h2>Keep the caller’s intent visible</h2>
+          <p>
+            In my LLM Gateway project, a caller selects a task. A routing policy
+            maps that task to an ordered set of models. The catalogue can
+            refresh as model availability changes, while the caller continues to
+            say what kind of work it needs.
+          </p>
+          <p>
+            The policy can put cost and speed first for some jobs and reasoning
+            quality first for others. This is a design choice, not a universal
+            ranking of model quality. The right policy still needs evaluation
+            against the actual task.
+          </p>
+          <h2>Discovery should not erase the last working state</h2>
+          <p>
+            A failed catalogue refresh should not replace a useful configuration
+            with an empty one. The project retains the previous catalogue if
+            discovery fails or returns no text models. Clients also keep a
+            last-successful configuration cache.
+          </p>
+          <p>
+            The broader idea is to separate a changing dependency from a stable
+            expression of intent. That leaves room to change providers without
+            scattering routing decisions through every application.
+          </p>
+          <p>
+            Implementation context:
+            <a href="https://github.com/RuizhangZhou/llm-gateway"
+              >LLM Gateway source and design notes</a
+            >.
+          </p>
+        </div>
+        <p class="editorial-note">Prepared for this portfolio with AI assistance, based on the public project descriptions.</p>
+      </article>
+    </main>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Germany. Curious by nature.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note">Built with care. © 2026 Ruizhang Zhou</span>
+    </footer>
+  </body>
+</html>

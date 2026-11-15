@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Erst die Aufgabe, dann das Modell — Ruizhang Zhou</title>
+    <meta
+      name="description"
+      content="Ein Modellname ist eine veränderliche Abhängigkeit. Die Aufgabe der Anwendung ist ein nützlicherer Ausgangspunkt."
+    />
+    <link
+      rel="canonical"
+      href="https://rick-zhou.com/notes/aufgaben-statt-modelle.html"
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="icon" href="/assets/portfolio/favicon.svg" />
+    <script src="/assets/portfolio/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/de/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Oder einfach Rick.</span></span
+          ></a
+        >
+
+        <nav id="site-navigation" class="site-nav" aria-label="Hauptnavigation">
+          <a href="/de/#work">Projekte</a><a href="/de/#approach">Arbeitsweise</a
+          ><a href="/de/#about">Über mich</a><a href="/de/#notes">Notizen</a>
+        </nav>
+
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/notes/route-the-task.html"
+            lang="en"
+            aria-label="Read in English"
+            >EN</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Dunkles Design einschalten"
+            aria-pressed="false"
+          >
+            <svg
+              viewbox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z"></path>
+            </svg></button
+          ><a class="nav-contact" href="/de/#contact"
+            >Kontakt <span aria-hidden="true">↗</span></a
+          >
+        </div>
+
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Navigation öffnen"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main" class="reading shell">
+      <a class="back-link" href="/de/#notes">← Zurück zu den Notizen</a>
+      <article>
+        <p class="eyebrow">TECHNISCHE NOTIZEN</p>
+        <h1>Erst die Aufgabe, dann das Modell</h1>
+        <div class="prose">
+          <p>
+            Eine Zusammenfassung, eine strukturierte Klassifikation und eine
+            schwierige technische Analyse stellen unterschiedliche
+            Anforderungen. Wenn jeder Aufrufer denselben Modellnamen enthält,
+            lassen sich diese Unterschiede schwerer berücksichtigen.
+          </p>
+          <h2>Die Absicht des Aufrufers sichtbar halten</h2>
+          <p>
+            In meinem Projekt LLM Gateway wählt der Aufrufer eine Aufgabe.
+            Routing-Regeln ordnen ihr eine Reihenfolge von Modellen zu. Der
+            Katalog kann sich mit der Modellverfügbarkeit ändern, während der
+            Aufrufer weiter beschreibt, welche Arbeit er braucht.
+          </p>
+          <p>
+            Für manche Aufgaben kann die Regel Kosten und Geschwindigkeit
+            priorisieren, für andere die Qualität komplexer Schlussfolgerungen.
+            Das ist eine Gestaltungsentscheidung, keine allgemeingültige
+            Rangliste. Die passende Regel muss weiterhin an der tatsächlichen
+            Aufgabe geprüft werden.
+          </p>
+          <h2>
+            Eine fehlgeschlagene Abfrage darf den letzten brauchbaren Stand
+            nicht löschen
+          </h2>
+          <p>
+            Wenn die Katalogabfrage fehlschlägt, sollte eine nützliche
+            Konfiguration nicht durch eine leere ersetzt werden. Das Projekt
+            behält den bisherigen Katalog bei, wenn die Abfrage scheitert oder
+            keine Textmodelle liefert. Clients speichern außerdem die letzte
+            erfolgreich geladene Konfiguration zwischen.
+          </p>
+          <p>
+            Dahinter steht die Trennung einer veränderlichen Abhängigkeit von
+            einer stabilen Aufgabenbeschreibung. Dadurch können Anbieter
+            wechseln, ohne dass Routing-Entscheidungen in jeder Anwendung
+            verteilt werden.
+          </p>
+          <p>
+            Implementierungskontext:
+            <a href="https://github.com/RuizhangZhou/llm-gateway"
+              >Quellcode und Entwurfsnotizen von LLM Gateway</a
+            >.
+          </p>
+        </div>
+        <p class="editorial-note">Mit KI-Unterstützung aus den öffentlichen Projektbeschreibungen für dieses Portfolio aufbereitet.</p>
+      </article>
+    </main>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/de/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Deutschland. Neugierig aus Überzeugung.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note"
+        >Mit Sorgfalt entwickelt. © 2026 Ruizhang Zhou</span
+      >
+    </footer>
+  </body>
+</html>

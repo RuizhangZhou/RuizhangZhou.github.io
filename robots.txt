@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ruizhangzhou.github.io/sitemap.xml
+Sitemap: https://rick-zhou.com/sitemap.xml

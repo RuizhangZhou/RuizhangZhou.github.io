@@ -101,24 +101,60 @@
         margin: 12px 0;
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115"><link rel="icon" href="/assets/portfolio/favicon.svg"><script src="/assets/portfolio/site.js" defer></script></head>
   <body>
-    <header>
-      <div class="wrap">
-        <div class="nav">
-          <a href="./index.html">← Home</a>
-          <a href="./ml-ai-engineer.html">AI Platform Engineer</a>
-          <a href="./fullstack-engineer.html">Backend &amp; Full-stack</a>
-          <a href="./ml-research.html">ML Research</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Rick, for short.</span></span
+          ></a
+        >
+        <nav id="site-navigation" class="site-nav" aria-label="Main navigation">
+          <a href="/#work">Work</a><a href="/#approach">Approach</a
+          ><a href="/#about">About</a><a href="/#notes">Notebook</a>
+        </nav>
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/de/"
+            lang="de"
+            aria-label="Auf Deutsch lesen"
+            >DE</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Use dark theme"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z" />
+            </svg></button
+          ><a class="nav-contact" href="/#contact"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
         </div>
-        <h1>Data Engineer</h1>
-        <p class="subtitle">
-          Data processing and usage analysis supporting ML and AI systems
-        </p>
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
       </div>
+      <div class="reading-progress" aria-hidden="true"></div>
     </header>
 
-    <main class="wrap">
+    <main class="wrap support-content" id="main"><div class="support-heading"><p class="eyebrow">EXPERIENCE / RUIZHANG ZHOU</p><h1>Data Engineer</h1></div>
       <!-- Traffic Data Pipeline for ML -->
       <div class="project">
         <h2>Traffic Trajectory Data Pipeline for ML Models</h2>
@@ -531,19 +567,18 @@
       </div>
     </main>
 
-    <footer
-      style="
-        padding: 24px 20px;
-        color: #666;
-        text-align: center;
-        background: white;
-        border-top: 1px solid #e7e7e7;
-      "
-    >
-      <div class="wrap">
-        &copy; Ruizhang Zhou |
-        <a href="./index.html" class="link">Back to Home</a>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Germany. Curious by nature.</p>
       </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note">Built with care. © 2026 Ruizhang Zhou</span>
     </footer>
   </body>
 </html>

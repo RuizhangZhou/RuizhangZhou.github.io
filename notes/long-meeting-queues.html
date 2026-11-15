@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Long meetings are a queueing problem, too — Ruizhang Zhou</title>
+    <meta
+      name="description"
+      content="Live captions have to handle a simple mismatch: people keep speaking while requests are still being processed."
+    />
+    <link
+      rel="canonical"
+      href="https://rick-zhou.com/notes/long-meeting-queues.html"
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="icon" href="/assets/portfolio/favicon.svg" />
+    <script src="/assets/portfolio/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Rick, for short.</span></span
+          ></a
+        >
+        <nav id="site-navigation" class="site-nav" aria-label="Main navigation">
+          <a href="/#work">Work</a><a href="/#approach">Approach</a
+          ><a href="/#about">About</a><a href="/#notes">Notebook</a>
+        </nav>
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/notes/lange-besprechungen.html"
+            lang="de"
+            aria-label="Auf Deutsch lesen"
+            >DE</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Use dark theme"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z" />
+            </svg></button
+          ><a class="nav-contact" href="/#contact"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main" class="reading shell">
+      <a class="back-link" href="/#notes">← Back to the notebook</a>
+      <article>
+        <p class="eyebrow">ENGINEERING NOTES</p>
+        <h1>Long meetings are a queueing problem, too</h1>
+        <div class="prose">
+          <p>
+            A short speech-to-text demo can look straightforward: capture audio,
+            transcribe it, send text to a language model and show the result. In
+            a long conversation, the next piece of speech arrives before that
+            sequence has finished.
+          </p>
+          <h2>People do not wait for the API</h2>
+          <p>
+            If every new segment starts another request, work can pile up. A
+            fixed queue limit creates another problem: what happens to the words
+            beyond the limit? Latency, memory, request volume and lost context
+            are connected.
+          </p>
+          <p>
+            My TalkEcho changes use one active audio batch and one pending batch
+            that can grow as new segments arrive. When the pending batch becomes
+            active, its transcripts are combined into one AI request. This is an
+            attempt to catch up without creating a separate request for every
+            arriving segment.
+          </p>
+          <h2>Retries need to have a reason</h2>
+          <p>
+            A temporary connection failure is different from an invalid API key.
+            The project retries transient speech-to-text failures once and puts
+            bounds on request duration. For AI streaming, retrying is limited to
+            failures before any response text appears.
+          </p>
+          <p>
+            Those limits are a way of keeping the tool understandable under
+            pressure. A captioning tool is useful when it helps someone follow a
+            conversation, not when its internal queue becomes another thing to
+            manage.
+          </p>
+          <p>
+            TalkEcho is my personal fork of Pluely. The original project
+            provides the foundation; the public repository records the upstream
+            credits and the Windows, dictation and request-handling work.
+          </p>
+          <p>
+            Implementation context:
+            <a
+              href="https://github.com/RuizhangZhou/talkecho#meeting-request-resilience"
+              >TalkEcho meeting request resilience</a
+            >.
+          </p>
+        </div>
+        <p class="editorial-note">Prepared for this portfolio with AI assistance, based on the public project descriptions.</p>
+      </article>
+    </main>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Germany. Curious by nature.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note">Built with care. © 2026 Ruizhang Zhou</span>
+    </footer>
+  </body>
+</html>

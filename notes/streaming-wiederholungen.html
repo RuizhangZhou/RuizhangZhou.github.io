@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      Warum Streaming-Wiederholungen eine Grenze brauchen — Ruizhang Zhou
+    </title>
+    <meta
+      name="description"
+      content="Ein Anbieterwechsel kann eine Anfrage retten. Nach dem ersten sichtbaren Text kann er aber auch die Bedeutung der Antwort verändern."
+    />
+    <link
+      rel="canonical"
+      href="https://rick-zhou.com/notes/streaming-wiederholungen.html"
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="icon" href="/assets/portfolio/favicon.svg" />
+    <script src="/assets/portfolio/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Zum Inhalt</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/de/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Oder einfach Rick.</span></span
+          ></a
+        >
+
+        <nav id="site-navigation" class="site-nav" aria-label="Hauptnavigation">
+          <a href="/de/#work">Projekte</a><a href="/de/#approach">Arbeitsweise</a
+          ><a href="/de/#about">Über mich</a><a href="/de/#notes">Notizen</a>
+        </nav>
+
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/notes/streaming-retries.html"
+            lang="en"
+            aria-label="Read in English"
+            >EN</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Dunkles Design einschalten"
+            aria-pressed="false"
+          >
+            <svg
+              viewbox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z"></path>
+            </svg></button
+          ><a class="nav-contact" href="/de/#contact"
+            >Kontakt <span aria-hidden="true">↗</span></a
+          >
+        </div>
+
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Navigation öffnen"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main" class="reading shell">
+      <a class="back-link" href="/de/#notes">← Zurück zu den Notizen</a>
+      <article>
+        <p class="eyebrow">TECHNISCHE NOTIZEN</p>
+        <h1>Warum Streaming-Wiederholungen eine Grenze brauchen</h1>
+        <div class="prose">
+          <p>
+            Wenn ein KI-Anbieter nicht rechtzeitig antwortet oder keine
+            Kapazität hat, kann ein anderer Anbieter die Anfrage übernehmen. Bei
+            einer Streaming-Antwort ändert sich die Entscheidung: Ein Teil der
+            Antwort steht vielleicht bereits auf dem Bildschirm.
+          </p>
+          <h2>Der erste sichtbare Text verändert die Situation</h2>
+          <p>
+            Vor dem ersten Ausgabestück ist ein fehlgeschlagener Versuch noch
+            kein Teil der Antwort des Nutzers geworden. Das Routing kann zum
+            nächsten Modell wechseln und eine zusammenhängende Antwort liefern.
+          </p>
+          <p>
+            Nach Beginn der Ausgabe kann ein stiller Wechsel zwei unabhängig
+            erzeugte Antworten vermischen. Das zweite Modell weiß nicht
+            automatisch, was das erste zugesagt, erklärt oder vorausgesetzt hat.
+            Die Verbindung funktioniert wieder, aber die Antwort wird
+            möglicherweise weniger verlässlich.
+          </p>
+          <h2>Eine kleine Regel mit einer nützlichen Folge</h2>
+          <p>
+            In meinem Projekt LLM Gateway ist ein Wechsel beim Streaming nur vor
+            dem ersten Ausgabestück erlaubt. Danach muss ein Fehler für die
+            aufrufende Anwendung sichtbar bleiben. Diese kann die Unterbrechung
+            erklären oder eine ausdrückliche Wiederholung anbieten.
+          </p>
+          <p>
+            Das macht das Netzwerk nicht zuverlässiger. Es macht die Grenze
+            einer Antwort nachvollziehbar. Verfügbarkeit ist wichtig. Ebenso
+            wichtig ist zu wissen, welche Antwort tatsächlich beim Nutzer
+            angekommen ist.
+          </p>
+          <h2>Was ich bei der Integration prüfen würde</h2>
+          <ul>
+            <li>
+              Welche Fehler rechtfertigen einen neuen Versuch, welche deuten auf
+              ungültige Zugangsdaten oder eine fehlerhafte Anfrage hin?
+            </li>
+            <li>
+              Hat die aufrufende Anwendung bereits Antwortinhalt erhalten?
+            </li>
+            <li>Lässt sich der laufende Versuch sauber abbrechen?</li>
+            <li>Macht die Anwendung eine unterbrochene Antwort erkennbar?</li>
+          </ul>
+          <p>
+            Das sind Produktentscheidungen, die sich in der Fehlerbehandlung
+            ausdrücken. Das Ziel sind nicht einfach weniger Fehlermeldungen,
+            sondern ein Verhalten, das Nutzer und spätere Entwickler verstehen
+            können.
+          </p>
+          <p>
+            Implementierungskontext:
+            <a href="https://github.com/RuizhangZhou/llm-gateway#routing-policy"
+              >Routing-Regeln und öffentlicher Quellcode von LLM Gateway</a
+            >.
+          </p>
+        </div>
+        <p class="editorial-note">Mit KI-Unterstützung aus den öffentlichen Projektbeschreibungen für dieses Portfolio aufbereitet.</p>
+      </article>
+    </main>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/de/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Deutschland. Neugierig aus Überzeugung.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note"
+        >Mit Sorgfalt entwickelt. © 2026 Ruizhang Zhou</span
+      >
+    </footer>
+  </body>
+</html>

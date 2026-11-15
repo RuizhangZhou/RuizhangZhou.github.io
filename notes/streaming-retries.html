@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Why a streaming retry needs a boundary — Ruizhang Zhou</title>
+    <meta
+      name="description"
+      content="A fallback can recover a failed request. After the first visible output, it can also change the meaning of the answer."
+    />
+    <link
+      rel="canonical"
+      href="https://rick-zhou.com/notes/streaming-retries.html"
+    />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="icon" href="/assets/portfolio/favicon.svg" />
+    <script src="/assets/portfolio/site.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Rick, for short.</span></span
+          ></a
+        >
+        <nav id="site-navigation" class="site-nav" aria-label="Main navigation">
+          <a href="/#work">Work</a><a href="/#approach">Approach</a
+          ><a href="/#about">About</a><a href="/#notes">Notebook</a>
+        </nav>
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/notes/streaming-wiederholungen.html"
+            lang="de"
+            aria-label="Auf Deutsch lesen"
+            >DE</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Use dark theme"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z" />
+            </svg></button
+          ><a class="nav-contact" href="/#contact"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+    <main id="main" class="reading shell">
+      <a class="back-link" href="/#notes">← Back to the notebook</a>
+      <article>
+        <p class="eyebrow">ENGINEERING NOTES</p>
+        <h1>Why a streaming retry needs a boundary</h1>
+        <div class="prose">
+          <p>
+            When an AI provider times out or runs out of capacity, trying
+            another provider can keep an application useful. But a streaming
+            response changes the decision: some of the answer may already be on
+            the screen.
+          </p>
+          <h2>The first visible output changes the contract</h2>
+          <p>
+            Before the first output chunk, a failed attempt has not yet become
+            part of the user’s answer. The router can move to the next model and
+            return one coherent response.
+          </p>
+          <p>
+            After output starts, switching silently can splice together two
+            independently generated answers. The second model does not
+            automatically know what the first model promised, explained or
+            assumed. A connection may recover while the answer becomes less
+            trustworthy.
+          </p>
+          <h2>A small rule with a useful consequence</h2>
+          <p>
+            In my LLM Gateway project, streaming failover is allowed only before
+            the first output chunk. After that point, a failure needs to stay
+            visible to the calling application. The application can explain the
+            interruption or offer an explicit retry.
+          </p>
+          <p>
+            This does not make the network more reliable. It makes the response
+            boundary easier to reason about. Availability matters, but so does
+            knowing which answer the user actually received.
+          </p>
+          <h2>What I would inspect when integrating a provider</h2>
+          <ul>
+            <li>
+              Which errors justify retrying, and which indicate invalid
+              credentials or a bad request?
+            </li>
+            <li>Has any response content already reached the caller?</li>
+            <li>Can cancellation stop the current attempt cleanly?</li>
+            <li>
+              Does the application surface an interrupted response honestly?
+            </li>
+          </ul>
+          <p>
+            These are product decisions expressed through error handling. The
+            useful result is not simply fewer error messages. It is behaviour a
+            user and the next developer can understand.
+          </p>
+          <p>
+            Implementation context:
+            <a href="https://github.com/RuizhangZhou/llm-gateway#routing-policy"
+              >LLM Gateway routing policy and public source</a
+            >.
+          </p>
+        </div>
+        <p class="editorial-note">Prepared for this portfolio with AI assistance, based on the public project descriptions.</p>
+      </article>
+    </main>
+    <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Germany. Curious by nature.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note">Built with care. © 2026 Ruizhang Zhou</span>
+    </footer>
+  </body>
+</html>

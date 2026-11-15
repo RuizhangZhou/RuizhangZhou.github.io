@@ -330,24 +330,65 @@
         text-decoration: none;
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115"><link rel="icon" href="/assets/portfolio/favicon.svg"><script src="/assets/portfolio/site.js" defer></script></head>
   <body>
-    <header>
-      <div class="wrap">
-        <h1>Blog</h1>
-        <div class="nav">
-          <a href="./index.html">Home</a>
-          <a href="https://github.com/RuizhangZhou/RuizhangZhou.github.io/issues/new?labels=blog" target="_blank" rel="noopener noreferrer" class="btn">+ New Post</a>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label="Ruizhang Zhou — Home"
+          ><span class="brand-mark" aria-hidden="true">rz.</span
+          ><span class="brand-name"
+            >Ruizhang Zhou<span>Rick, for short.</span></span
+          ></a
+        >
+        <nav id="site-navigation" class="site-nav" aria-label="Main navigation">
+          <a href="/#work">Work</a><a href="/#approach">Approach</a
+          ><a href="/#about">About</a><a href="/#notes">Notebook</a>
+        </nav>
+        <div class="header-actions">
+          <a
+            class="language-switch"
+            href="/de/"
+            lang="de"
+            aria-label="Auf Deutsch lesen"
+            >DE</a
+          ><button
+            class="icon-button"
+            data-theme-toggle
+            aria-label="Use dark theme"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M20 14a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z" />
+            </svg></button
+          ><a class="nav-contact" href="/#contact"
+            >Let’s talk <span aria-hidden="true">↗</span></a
+          >
         </div>
-        <div class="filters" id="filters" style="display:none">
+        <button
+          class="menu-button"
+          data-menu-toggle
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+        >
+          ☰
+        </button>
+      </div>
+      <div class="reading-progress" aria-hidden="true"></div>
+    </header>
+<section class="shell support-blog-heading"><p class="eyebrow">A WORKING NOTEBOOK</p><h1 data-blog-title>Notes, ideas & things I’m learning.</h1><p>Personal posts and AI-generated reading notes, labelled separately.</p><div class="filters" id="filters" style="display:none">
           <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="bot">AI Generated</button>
           <button class="filter-btn" data-filter="manual">Manual</button>
-        </div>
-      </div>
-    </header>
+        </div></section>
 
-    <main class="wrap posts" id="main">
+    <main class="wrap support-content posts" id="main">
       <div class="loading">Loading posts...</div>
     </main>
 
@@ -420,7 +461,8 @@
       function renderLabels(issue) {
         return issue.labels.map(label => {
           const color = /^[0-9a-f]{6}$/i.test(label.color) ? label.color : 'e7e7e7';
-          return `<span class="label" style="background: #${color}; color: ${getContrastColor(color)}">${escapeHtml(label.name)}</span>`;
+          const name = label.name === 'bot' ? 'AI-generated reading note' : label.name;
+          return `<span class="label" style="background: #${color}; color: ${getContrastColor(color)}">${escapeHtml(name)}</span>`;
         }).join('');
       }
 
@@ -764,5 +806,18 @@
         return brightness > 155 ? '#000' : '#fff';
       }
     </script>
-  </body>
+  <footer class="site-footer shell">
+      <div>
+        <a class="footer-brand" href="/">Ruizhang (Rick) Zhou</a>
+        <p>Aachen, Germany. Curious by nature.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/RuizhangZhou">GitHub ↗</a
+        ><a href="https://www.linkedin.com/in/ruizhang-zhou/">LinkedIn ↗</a
+        ><a href="/Resume_EN.pdf">CV / EN</a
+        ><a href="/Lebenslauf_DE.pdf">CV / DE</a>
+      </div>
+      <span class="footer-note">Built with care. © 2026 Ruizhang Zhou</span>
+    </footer>
+</body>
 </html>

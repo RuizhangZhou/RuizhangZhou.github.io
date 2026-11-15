@@ -16,6 +16,7 @@ class NativeCaptionProvider:
             self.keys.pop('secondary')
         self.state = state
         self.exhausted = False
+        self.exhausted_slots = set()
         saved = state.get(PREFERENCE_KEY) if state is not None and len(self.keys) > 1 else None
         preferred = saved.get('slot') if isinstance(saved, dict) else None
         self.preferred = preferred if preferred in self.keys else next(iter(self.keys), None)
@@ -25,7 +26,8 @@ class NativeCaptionProvider:
             raise TranscriptError('quota_exhausted')
         if not self.keys:
             return TranscriptResult(None, 'not_configured')
-        slots = [self.preferred] + [slot for slot in self.keys if slot != self.preferred]
+        ordered = [self.preferred] + [slot for slot in self.keys if slot != self.preferred]
+        slots = [slot for slot in ordered if slot not in self.exhausted_slots]
         attempts = 0
         for index, slot in enumerate(slots):
             try:
@@ -34,6 +36,7 @@ class NativeCaptionProvider:
                 exc.attempts += attempts
                 if exc.code != 'quota_exhausted':
                     raise
+                self.exhausted_slots.add(slot)
                 if index == len(slots) - 1:
                     self.exhausted = True
                     raise

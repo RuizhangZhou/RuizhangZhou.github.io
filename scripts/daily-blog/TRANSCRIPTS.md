@@ -99,7 +99,8 @@ share the same allowance; maintenance reports whether two keys share a pool.
 Only an explicitly classified `quota_exhausted` switches keys. The preferred
 slot (never the key) is stored privately and reused next run. When that allowance
 exhausts, the other slot is tried again, allowing a monthly reset to restore it.
-Each configured key is tried at most once per video; after all are exhausted,
+Once a key exhausts it is skipped for the rest of that run; the next worker can
+check it again for a refilled allowance. After all configured keys are exhausted,
 this provider instance makes no further caption requests during the run. Cached
 captions remain usable and a metadata essay remains possible. No video is marked
 captionless because credits ran out. Dry-runs never persist key preference.

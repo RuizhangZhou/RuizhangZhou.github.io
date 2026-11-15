@@ -67,6 +67,19 @@ class CaptionProviderTests(unittest.TestCase):
         self.assertEqual(fetch.call_count, 2)
         self.assertEqual(cache.decisions.all_entries(), {})
 
+    def test_later_video_does_not_retry_a_key_already_exhausted_in_this_run(self):
+        provider = NativeCaptionProvider('key1', 'key2')
+        with patch('caption_provider.fetch_native_transcript', side_effect=[
+                TranscriptError('quota_exhausted', attempts=1), TranscriptResult('Caption', 'ok', 1),
+                TranscriptError('quota_exhausted', attempts=1)]) as fetch:
+            self.assertEqual(provider.fetch('first').text, 'Caption')
+            with self.assertRaises(TranscriptError):
+                provider.fetch('second')
+            with self.assertRaises(TranscriptError) as third:
+                provider.fetch('third')
+        self.assertEqual([call.args[1] for call in fetch.call_args_list], ['key1', 'key2', 'key2'])
+        self.assertEqual(third.exception.attempts, 0)
+
     def test_dry_run_key_switch_is_not_persisted(self):
         from transcript_cache import TranscriptCache
         from test_transcript_cache import PrivateStore

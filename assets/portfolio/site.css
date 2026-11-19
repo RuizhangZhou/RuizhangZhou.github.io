@@ -2439,3 +2439,152 @@ dialog::backdrop {
   color: #fff;
   border-color: var(--blue);
 }
+
+.portfolio-home .hero {
+  min-height: auto;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: clamp(28px, 6vw, 84px);
+  padding-block: clamp(42px, 6vw, 84px);
+  border-bottom: 1px solid var(--line);
+}
+.portfolio-home .hero h1 {
+  font-size: clamp(42px, 6.4vw, 88px);
+  letter-spacing: -0.065em;
+  text-wrap: balance;
+}
+.portfolio-home .hero .eyebrow {
+  font-size: 11px;
+  margin-bottom: 16px;
+}
+.portfolio-home .hero-intro {
+  max-width: 52ch;
+  margin-top: 21px;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.65;
+  letter-spacing: 0;
+}
+.portfolio-home .hero-actions {
+  flex-wrap: wrap;
+  gap: 12px 25px;
+  margin-top: 25px;
+}
+.portfolio-home .hero-visual {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 0;
+}
+.portfolio-home .hero-visual::before {
+  content: none;
+}
+.portfolio-home .hero-photo {
+  aspect-ratio: 1.12;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: none;
+}
+.portfolio-home .portrait-caption {
+  margin-top: 8px;
+  padding: 0;
+  font-size: 12px;
+}
+.portfolio-home .section,
+.portfolio-home .approach,
+.portfolio-home .contact {
+  padding-block: clamp(40px, 6vw, 78px);
+}
+.portfolio-home .section-heading {
+  margin-bottom: clamp(20px, 3vw, 34px);
+}
+.portfolio-home .section-heading h2,
+.portfolio-home .about-heading h2,
+.portfolio-home .contact h2 {
+  font-size: clamp(32px, 4.5vw, 56px);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+.portfolio-home .section-heading > p {
+  max-width: 34ch;
+  font-size: 14px;
+}
+.portfolio-home .about-story > p,
+.portfolio-home .approach-grid p,
+.portfolio-home .project-copy > p:not(.eyebrow) {
+  font-size: 15px;
+  line-height: 1.75;
+}
+.portfolio-home .about-story > .lead {
+  font-size: 18px;
+}
+.portfolio-home .approach-grid h3 {
+  margin-top: 0;
+}
+.portfolio-home .contact {
+  background: var(--soft);
+  color: var(--ink);
+}
+.portfolio-home .contact::after {
+  content: none;
+}
+.portfolio-home .contact h2 {
+  margin-top: 0;
+}
+.portfolio-home .contact-bottom {
+  margin-top: 22px;
+}
+.portfolio-home .contact-bottom p,
+.portfolio-home .contact-email {
+  color: var(--ink);
+}
+.portfolio-home .orbit-star,
+.portfolio-home .waveform span,
+.portfolio-home .trajectory {
+  animation: none;
+}
+.portfolio-home .project-card,
+.portfolio-home .project-card:hover {
+  transform: none;
+}
+.portfolio-home .button:hover {
+  transform: none;
+}
+.portfolio-home .note-link:hover h3,
+.portfolio-home .note-link:hover > span:last-child {
+  transform: none;
+}
+.compatibility-card {
+  margin-top: 20px;
+}
+.compatibility-card .project-copy > p:not(.eyebrow) {
+  max-width: 66ch;
+}
+.routing-disclosure {
+  margin-top: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.routing-disclosure summary {
+  padding: 14px 20px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.routing-disclosure summary::marker {
+  color: var(--blue);
+}
+.routing-disclosure .playground {
+  margin: 0 10px 10px;
+  border-radius: 12px;
+}
+@media (max-width: 680px) {
+  .portfolio-home .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .portfolio-home .hero-visual {
+    max-width: 310px;
+    margin-left: 0;
+  }
+}

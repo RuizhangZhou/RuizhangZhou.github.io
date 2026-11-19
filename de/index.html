@@ -36,7 +36,7 @@
 
     <meta
       property="og:title"
-      content="Ruizhang (Rick) Zhou — Menschliche Neugier. KI für den Alltag."
+      content="Ruizhang (Rick) Zhou — Softwareentwickler für KI-Plattformen"
     />
 
     <meta
@@ -64,7 +64,7 @@
       crossorigin
     />
 
-    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261115" />
+    <link rel="stylesheet" href="/assets/portfolio/site.css?v=20261119-editorial" />
 
     <script src="/assets/portfolio/site.js" defer></script>
 
@@ -90,7 +90,7 @@
     </script>
   </head>
 
-  <body>
+  <body class="portfolio-home">
     <a class="skip-link" href="#main">Zum Inhalt</a>
 
     <header class="site-header">
@@ -150,24 +150,12 @@
     <main id="main">
       <section class="hero shell" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">
-            <span class="status-dot" aria-hidden="true"></span> ANGEWANDTE KI
-            &amp; PLATTFORMENTWICKLUNG
-          </p>
-
-          <h1 id="hero-title">
-            Menschliche Neugier.<br /><em>KI für den Alltag.</em>
-          </h1>
-
+          <p class="eyebrow">Softwareentwickler für KI-Plattformen</p>
+          <h1 id="hero-title">Ruizhang Zhou</h1>
           <p class="hero-intro">
-            Ich bin <strong>Rick.</strong> Ich entwickle nützliche KI-Systeme
-            und denke an die Menschen, die sie nutzen.
-          </p>
-
-          <p class="hero-description">
-            Am RWTH IT Center arbeite ich an KI:connect: Modell-APIs,
-            Backend-Entwicklung und den Details, die eine KI-Plattform in der
-            Praxis nutzbar machen.
+            Ich bin Rick und arbeite am RWTH IT Center an KI:connect.
+            Dort entwickle ich Schnittstellen zu KI-Modellen und helfe dabei,
+            die Plattform zuverlässig zu betreiben und Fehler zu untersuchen.
           </p>
 
           <div class="hero-actions">
@@ -177,128 +165,45 @@
               >Mein Lebenslauf ↗</a
             >
           </div>
-
-          <p class="hero-location">
-            <svg
-              viewbox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              aria-hidden="true"
-            >
-              <path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"></path>
-              <circle cx="12" cy="10" r="2.5"></circle></svg
-            >Aachen, Deutschland <span aria-hidden="true">·</span> Chinesische
-            Wurzeln. Internationaler Blick.
-          </p>
         </div>
 
         <figure class="hero-visual">
           <div class="hero-photo">
             <img
-              src="/avatar.jpg"
+              src="/assets/portfolio/portrait-768.webp"
+              srcset="/assets/portfolio/portrait-480.webp 480w, /assets/portfolio/portrait-768.webp 768w"
+              sizes="(max-width: 680px) 310px, 390px"
               width="1772"
               height="1772"
               alt="Ruizhang Zhou"
               fetchpriority="high"
             />
           </div>
-
-          <span class="hero-spark" aria-hidden="true">✳</span>
-
-          <div class="portrait-note">
-            <span aria-hidden="true">↗</span>
-            <div>
-              <small>AKTUELLE ARBEIT</small
-              ><strong>KI:connect · RWTH IT Center</strong>
-            </div>
-          </div>
-
-          <figcaption class="portrait-caption">
-            Entwickler. Immer auch Lernender.
-          </figcaption>
+          <figcaption class="portrait-caption">Aachen, Deutschland</figcaption>
         </figure>
       </section>
 
-      <div class="credentials shell" aria-label="Mein Hintergrund">
-        <div class="credential">
-          <svg
-            viewbox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.25"
-            aria-hidden="true"
-          >
-            <rect x="3" y="5" width="18" height="14" rx="3"></rect>
-            <path d="m9 9-3 3 3 3m6-6 3 3-3 3"></path>
-          </svg>
-          <div>
-            <strong>KI-Plattformen entwickeln</strong
-            ><span>KI:connect / RWTH IT Center</span>
-          </div>
-        </div>
-
-        <div class="credential">
-          <svg
-            viewbox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.25"
-            aria-hidden="true"
-          >
-            <path d="m2 8 10-5 10 5-10 5L2 8Zm4 3v6l6 3 6-3v-6m4-3v8"></path>
-          </svg>
-          <div>
-            <strong>M.Sc. Computer Science</strong
-            ><span>RWTH Aachen University</span>
-          </div>
-        </div>
-
-        <div class="credential">
-          <svg
-            viewbox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.25"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18Z"></path>
-          </svg>
-          <div>
-            <strong>Von Sprachen zu Systemen</strong
-            ><span>Shanghai → Aachen</span>
-          </div>
-        </div>
-      </div>
-
       <section id="work" class="section shell" aria-labelledby="work-title">
-        <div class="section-heading" data-reveal>
+        <div class="section-heading">
           <div>
-            <p class="eyebrow">01 / AUSGEWÄHLTE PROJEKTE</p>
-            <h2 id="work-title">
-              Ideen sind der Anfang.<br /><em
-                >Die Arbeit macht sie nützlich.</em
-              >
-            </h2>
+            <h2 id="work-title">Ausgewählte Projekte</h2>
           </div>
           <p>
-            Echte Projekte, konkrete Beiträge und einige der Entscheidungen
-            dahinter.
+            Plattformentwicklung an der RWTH, eigene Werkzeuge und Forschung
+            aus meiner Masterarbeit.
           </p>
         </div>
 
-        <article class="featured-project" data-reveal>
+        <article class="featured-project">
           <div class="featured-copy">
             <p class="eyebrow">BERUFLICHE ARBEIT · TEAMBEITRAG</p>
-            <h3>
-              KI, die auf einer<br /><em>ganzen Plattform funktioniert.</em>
-            </h3>
-            <p class="project-subtitle">KI:connect / RWTH IT Center</p>
+            <h3>KI:connect</h3>
+            <p class="project-subtitle">RWTH IT Center</p>
             <p class="featured-description">
-              Damit Modellfunktionen bei echten Nutzern ankommen, braucht es
-              APIs, Verbrauchserfassung, Zugriffsregeln und einen sorgfältigen
-              Umgang mit Fehlern. Hier liegt ein großer Teil meiner Arbeit.
+              Ich arbeite an Modellschnittstellen und der Verbrauchserfassung
+              und prüfe das Streaming-Verhalten der Anbieter. Wenn Anfragen
+              scheitern, untersuche ich, wo der Fehler auftritt und wie
+              aufrufende Anwendungen darauf reagieren können.
             </p>
             <div class="tags">
               <span>C# / .NET</span><span>LLM APIs</span><span>Vue 3</span
@@ -345,7 +250,7 @@
         </article>
 
         <div class="project-grid">
-          <article class="project-card" data-reveal>
+          <article class="project-card">
             <div class="project-art voice-art" aria-hidden="true">
               <div class="caption-window">
                 <div class="caption-window-top">
@@ -389,12 +294,8 @@
             </div>
             <div class="project-copy">
               <p class="eyebrow">PERSÖNLICHES PROJEKT · COMMUNITY-FORK</p>
-              <h3>TalkEcho <span aria-hidden="true">↗</span></h3>
-              <p>
-                Besprechungsuntertitel und Diktat für einen mehrsprachigen
-                Arbeitsalltag. Meine Änderungen betreffen Windows-Abläufe,
-                robuste Anfragen und den Umgang mit Anbieter-Schlüsseln.
-              </p>
+              <h3>TalkEcho</h3>
+              <p>Untertitel für mehrsprachige Gespräche und Diktat unter Windows. In meinem Fork bündele ich wartende Audioblöcke, damit bei längeren Gesprächen weniger einzelne Anfragen entstehen.</p>
               <div class="tags">
                 <span>TypeScript</span><span>Tauri / Rust</span
                 ><span>Speech-to-text</span>
@@ -407,7 +308,7 @@
             </div>
           </article>
 
-          <article class="project-card" data-reveal>
+          <article class="project-card">
             <div class="project-art gateway-art" aria-hidden="true">
               <div class="route-preview">
                 <div class="route-task">task = “reasoning”</div>
@@ -427,12 +328,8 @@
             </div>
             <div class="project-copy">
               <p class="eyebrow">EIGENES PROJEKT · OPEN SOURCE</p>
-              <h3>LLM Gateway <span aria-hidden="true">↗</span></h3>
-              <p>
-                Die Aufgabe wählen statt ein Modell fest verdrahten.
-                Aufgabenbezogenes Routing mit Modellabfrage, Anbieterwechsel und
-                einer klaren Grenze für Wiederholungen beim Streaming.
-              </p>
+              <h3>LLM Gateway</h3>
+              <p>Ein Python-Gateway, das KI-Anfragen je nach Aufgabe an ein Modell weiterleitet. Bei einem Ausfall darf es den Anbieter wechseln, solange noch kein Teil der Antwort ausgegeben wurde.</p>
               <div class="tags">
                 <span>Python</span><span>Modell-Routing</span
                 ><span>Zuverlässigkeit</span>
@@ -447,10 +344,10 @@
             </div>
           </article>
 
-          <article class="thesis-card" data-reveal>
+          <article class="thesis-card">
             <div class="thesis-copy">
               <p class="eyebrow">MASTERARBEIT · RWTH AACHEN</p>
-              <h3>Verkehrsszenarien<br />generieren lernen.</h3>
+              <h3>Verkehrsszenarien generieren</h3>
               <p>
                 TimeGAN, Diffusionsmodelle und reale Trajektoriendaten für die
                 Forschung zum Testen autonomer Fahrzeuge. Die
@@ -507,6 +404,67 @@
           </article>
         </div>
 
+        <article class="project-card compatibility-card">
+          <div class="project-copy">
+            <p class="eyebrow">EIGENES PROJEKT · OPEN SOURCE</p>
+            <h3>CompatBench</h3>
+            <p>Ein Python-Werkzeug, das überprüft, was Anbieter mit einer OpenAI-kompatiblen API tatsächlich unterstützen. Die Tests prüfen unter anderem Streaming, Tool-Aufrufe und strukturierte Ausgaben. Berichte lassen sich zwischen Anbietern oder Versionen vergleichen.</p>
+            <div class="project-links">
+              <a href="https://github.com/RuizhangZhou/CompatBench">Quellcode und Tests <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+        </article>
+        <details class="routing-disclosure">
+          <summary>Anbieterwechsel im LLM Gateway ausprobieren</summary>
+        <div class="playground">
+          <div class="playground-copy">
+            <h3>Wann sollte eine KI-Anfrage den Anbieter wechseln?</h3>
+            <p>
+              Vor Beginn einer Antwort kann ein Anbieterwechsel helfen. Nach dem
+              ersten Text könnte ein stiller Wechsel zwei unterschiedliche
+              Antworten vermischen.
+            </p>
+            <div
+              class="mode-buttons"
+              role="group"
+              aria-label="Zeitpunkt des Fehlers auswählen"
+            >
+              <button data-routing-mode="before" aria-pressed="true">
+                Vor dem ersten Text</button
+              ><button data-routing-mode="after" aria-pressed="false">
+                Nach Beginn der Ausgabe
+              </button>
+            </div>
+            <button class="demo-button" data-routing-demo>
+              Beispiel starten ↗
+            </button>
+            <p class="demo-label">
+              Interaktive Darstellung. Ohne API-Anfragen oder persönliche Daten.
+            </p>
+          </div>
+          <div class="playground-visual">
+            <div class="routing-step" data-route="primary">
+              <span>01</span><strong>Primärer Anbieter</strong>
+            </div>
+            <div class="routing-step" data-route="fallback">
+              <span>02</span><strong>Nächster Anbieter</strong>
+            </div>
+            <p
+              class="routing-status"
+              data-routing-status
+              role="status"
+              aria-live="polite"
+            >
+              Bereit für ein Beispiel.
+            </p>
+            <a
+              class="link-line"
+              href="https://github.com/RuizhangZhou/llm-gateway#routing-policy"
+              >Zu den tatsächlichen Routing-Regeln ↗</a
+            >
+          </div>
+        </div>
+        </details>
         <div class="supporting-links">
           <span>Weitere Erfahrungen:</span
           ><a href="/fullstack-engineer.html">Backend &amp; Full-Stack ↗</a
@@ -517,10 +475,9 @@
 
       <section id="approach" class="approach" aria-labelledby="approach-title">
         <div class="shell">
-          <div class="section-heading" data-reveal>
+          <div class="section-heading">
             <div>
-              <p class="eyebrow">02 / MEINE ARBEITSWEISE</p>
-              <h2 id="approach-title">Sorgfalt steckt <em>im Detail.</em></h2>
+              <h2 id="approach-title">Wie ich arbeite</h2>
             </div>
             <p>
               Gute Entwicklung besteht aus Entscheidungen, die sich erklären,
@@ -528,8 +485,7 @@
             </p>
           </div>
           <div class="approach-grid">
-            <article data-reveal>
-              <span class="approach-number">01.</span>
+            <article>
               <h3>Mit dem echten Problem beginnen.</h3>
               <p>
                 Was muss jemand erledigen? Was steht im Weg? Diese Fragen kommen
@@ -537,8 +493,7 @@
                 Abstraktion.
               </p>
             </article>
-            <article data-reveal>
-              <span class="approach-number">02.</span>
+            <article>
               <h3>Fehler verständlich machen.</h3>
               <p>
                 Ein Timeout, ein abgebrochener Stream und eine falsche
@@ -546,8 +501,7 @@
                 Ablauf, versuche Fehler zu reproduzieren und benenne Annahmen.
               </p>
             </article>
-            <article data-reveal>
-              <span class="approach-number">03.</span>
+            <article>
               <h3>Etwas hinterlassen, das andere nutzen können.</h3>
               <p>
                 Lesbarer Code, klare Erklärungen und ehrliche Grenzen sind
@@ -564,24 +518,10 @@
         class="about section shell"
         aria-labelledby="about-title"
       >
-        <div class="about-heading" data-reveal>
-          <p class="eyebrow">03 / DER MENSCH HINTER DER ARBEIT</p>
-          <h2 id="about-title">
-            Erst Sprachen.<br />Dann Code.<br /><em>Immer Neugier.</em>
-          </h2>
-          <div class="about-small">
-            <span class="spark" aria-hidden="true">✳</span>
-            <p>
-              Ein Weg von Shanghai nach Aachen, vom Verstehen von Sprache zum
-              Entwickeln von Systemen.
-            </p>
-          </div>
-          <div class="interest-pills">
-            <span>Sprachen</span><span>Prognosen</span><span>Tauchen</span
-            ><span>Lernen durch Entwickeln</span>
-          </div>
+        <div class="about-heading">
+          <h2 id="about-title">Von Shanghai nach Aachen</h2>
         </div>
-        <div class="about-story" data-reveal>
+        <div class="about-story">
           <p class="lead">
             Mein Weg in die Softwareentwicklung begann mit Sprachen. An der
             Tongji-Universität habe ich Germanistik studiert, danach Informatik
@@ -631,84 +571,18 @@
         </div>
       </section>
 
-      <section class="section shell" aria-labelledby="playground-title">
-        <div class="section-heading" data-reveal>
-          <div>
-            <p class="eyebrow">EIN KLEINES TECHNISCHES EXPERIMENT</p>
-            <h2 id="playground-title">
-              Eine Entscheidung.<br /><em>Ein anderes Erlebnis.</em>
-            </h2>
-          </div>
-          <p>
-            Ein kleines Beispiel für die Entscheidungen hinter den Projekten.
-          </p>
-        </div>
-        <div class="playground" data-reveal>
-          <div class="playground-copy">
-            <p class="eyebrow">DIE ROUTING-LOGIK AUSPROBIEREN</p>
-            <h3>Wann sollte eine KI-Anfrage den Anbieter wechseln?</h3>
-            <p>
-              Vor Beginn einer Antwort kann ein Anbieterwechsel helfen. Nach dem
-              ersten Text könnte ein stiller Wechsel zwei unterschiedliche
-              Antworten vermischen.
-            </p>
-            <div
-              class="mode-buttons"
-              role="group"
-              aria-label="Zeitpunkt des Fehlers auswählen"
-            >
-              <button data-routing-mode="before" aria-pressed="true">
-                Vor dem ersten Text</button
-              ><button data-routing-mode="after" aria-pressed="false">
-                Nach Beginn der Ausgabe
-              </button>
-            </div>
-            <button class="demo-button" data-routing-demo>
-              Beispiel starten ↗
-            </button>
-            <p class="demo-label">
-              Interaktive Darstellung. Ohne API-Anfragen oder persönliche Daten.
-            </p>
-          </div>
-          <div class="playground-visual">
-            <div class="routing-step" data-route="primary">
-              <span>01</span><strong>Primärer Anbieter</strong>
-            </div>
-            <div class="routing-step" data-route="fallback">
-              <span>02</span><strong>Nächster Anbieter</strong>
-            </div>
-            <p
-              class="routing-status"
-              data-routing-status
-              role="status"
-              aria-live="polite"
-            >
-              Bereit für ein Beispiel.
-            </p>
-            <a
-              class="link-line"
-              href="https://github.com/RuizhangZhou/llm-gateway#routing-policy"
-              >Zu den tatsächlichen Routing-Regeln ↗</a
-            >
-          </div>
-        </div>
-      </section>
-
       <section
         id="notes"
         class="notes section shell"
         aria-labelledby="notes-title"
       >
-        <div class="section-heading" data-reveal>
+        <div class="section-heading">
           <div>
-            <p class="eyebrow">04 / AUS DEM NOTIZBUCH</p>
-            <h2 id="notes-title">
-              Dinge, die sich<br /><em>zu durchdenken lohnen.</em>
-            </h2>
+            <h2 id="notes-title">Technische Notizen</h2>
           </div>
           <a class="link-line" href="/blog.html">Alle Notizen ansehen ↗</a>
         </div>
-        <div class="notes-list" data-reveal>
+        <div class="notes-list">
           <a class="note-link" href="/notes/streaming-wiederholungen.html"
             ><span>TECHNISCHE NOTIZ</span>
             <h3>Warum Streaming-Wiederholungen eine Grenze brauchen</h3>
@@ -727,10 +601,7 @@
 
       <section id="contact" class="contact" aria-labelledby="contact-title">
         <div class="shell">
-          <p class="eyebrow">EIN GUTES GESPRÄCH IST EIN ANFANG</p>
-          <h2 id="contact-title">
-            Was möchten Sie<br /><em>möglich machen?</em>
-          </h2>
+          <h2 id="contact-title">Kontakt</h2>
           <div class="contact-bottom">
             <p>
               Wenn Ihr Team an einer anspruchsvollen KI-Entwicklungsaufgabe

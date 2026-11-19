@@ -41,11 +41,21 @@
 
   function closeMenu() {
     menuButton?.setAttribute("aria-expanded", "false");
+    menuButton?.setAttribute(
+      "aria-label",
+      german ? "Navigation öffnen" : "Open navigation",
+    );
     navigation?.classList.remove("is-open");
   }
   menuButton?.addEventListener("click", () => {
     const open = menuButton.getAttribute("aria-expanded") !== "true";
     menuButton.setAttribute("aria-expanded", String(open));
+    menuButton.setAttribute(
+      "aria-label",
+      german
+        ? open ? "Navigation schließen" : "Navigation öffnen"
+        : open ? "Close navigation" : "Open navigation",
+    );
     navigation?.classList.toggle("is-open", open);
   });
   navigation?.addEventListener("click", (event) => {

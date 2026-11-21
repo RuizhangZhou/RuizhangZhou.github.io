@@ -344,6 +344,14 @@ Source material — transcript(s) of today's candidate video(s), listed in prior
 {transcripts_block}
 
 Instructions:
+Evidence and authorship rules for every section, title and hook: never invent or imply Rick's personal \
+experiences, relationships, opinions, transactions or first-person anecdotes. Use only experiences \
+explicitly supplied by Rick, and otherwise omit them. Treat the transcript as the speaker's claims, \
+not independently verified facts; attribute substantive claims to the speaker. Do not invent quotes, \
+numbers, events, citations or details. Independently verify factual claims outside the transcript \
+against supplied reliable sources before stating them as fact; if no such sources are provided, omit \
+those factual claims. Clearly distinguish inference from evidence and label it as inference. \
+The same rules apply to the Chinese version and the Bluesky hook.
 1. If there is more than one video and they share a genuine connecting theme, synthesize across all of \
    them into one digest that draws out the connection. If they are unrelated, focus entirely on the \
    FIRST (primary) video and ignore the others — they'll get their own digest another day.
@@ -351,8 +359,8 @@ Instructions:
    never "the speaker discusses various aspects of X."
 3. Structure: ## section headers, at least one table or numbered breakdown of key points.
 4. Open with the single most surprising or useful claim from the source, not a throat-clearing intro.
-5. Close with your own one- or two-sentence take — where you agree, disagree, or want to apply this.
-6. Length: 700-900 words for the English version.
+5. Close with a brief analysis or an open question, clearly distinguished from the source's claims.
+6. Aim for 700-900 words in English only when the evidence supports it; otherwise write less.
 7. Write for a global reader — no assumed regional context.
 8. Use math sparingly. Prefer plain language and concrete numbers over notation. If a formula truly is \
    the clearest way to say something, keep it short and explain it in words right after. Use `$$...$$` \
@@ -462,12 +470,20 @@ Recent post titles — avoid repeating these angles or framings:
 {playlist_inspiration}
 
 Write today's essay following these rules:
+Evidence and authorship rules for every section, title and hook: never invent or imply Rick's personal
+experiences, relationships, opinions, transactions or first-person anecdotes. Use only experiences
+explicitly supplied by Rick, and otherwise omit them. A video title or description is a topic cue, not
+evidence for its spoken contents or for external events. Independently verify specific factual claims
+against supplied reliable sources before stating them as fact; if no such sources are provided, omit
+those factual claims. Label inference as inference. Never invent quotes, numbers, events, citations
+or details. Clearly distinguish inference from evidence. These rules also apply to the Chinese version
+and the Bluesky hook. Prefer a shorter, honest essay to unsupported details.
 1. Title: a specific, surprising thesis — not a listicle headline, not a generic question
 2. Opening: a concrete scenario, counterintuitive claim, or dissonant real-world observation that pulls the reader in
 3. Structure: ## section headers, at least one table or numbered breakdown
-4. Section "Personal Glimpse": a brief first-person anecdote that connects theory to lived experience
+4. Connect the idea to an explicitly hypothetical example, clearly labeled as hypothetical, when useful.
 5. Closing: a *bold question* that opens rather than closes the thought
-6. Length: 900–1300 words for the English version
+6. Aim for 900–1300 words in English only when the evidence supports it; otherwise write less
 7. Cross-pollinate domains when it sharpens the argument (e.g. poker EV applied to career risk-sizing)
 8. Write for a global reader — no regional assumed context, no jargon tied to one subculture
 9. Use math sparingly. Most essays should have zero formulas, maybe one if it genuinely sharpens the point.

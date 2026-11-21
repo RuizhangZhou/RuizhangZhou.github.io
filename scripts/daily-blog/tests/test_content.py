@@ -124,8 +124,21 @@ class WriterSafetyTests(unittest.TestCase):
         prompt = generate.call_args.kwargs['messages'][0]['content']
         self.assertIn('A careful idea', prompt)
         self.assertIn('do not claim to have watched the video', prompt)
+        self.assertNotIn('a brief first-person anecdote', prompt)
+        self.assertIn("never invent or imply Rick's personal", prompt)
+        self.assertIn('if no such sources are provided, omit', prompt)
         self.assertIn('A transcript was not retrieved', result[1])
         self.assertIn('未取得视频字幕', result[3])
+
+    def test_digest_prompt_attributes_speaker_claims_and_protects_personal_history(self):
+        video = {'id': 'example', 'title': 'A careful idea', 'author': 'A creator'}
+        with patch.object(self.blog, 'complete_sections',
+                          return_value=('Title', 'English', '标题', '中文', 'Hook', 'example')) as generate:
+            self.blog.generate_video_digest([video], {'example': 'A transcript'}, [])
+        prompt = generate.call_args.kwargs['messages'][0]['content']
+        self.assertIn("never invent or imply Rick's personal", prompt)
+        self.assertIn("attribute substantive claims to the speaker", prompt)
+        self.assertIn('if no such sources are provided, omit', prompt)
 
     def test_async_or_malformed_payload_is_not_treated_as_missing_captions(self):
         for payload in ({'jobId': 'pending'}, {'error': 'unknown'}, {'content': None}):
